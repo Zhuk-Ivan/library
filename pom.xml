@@ -19,6 +19,7 @@
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <cobertura-maven-plugin.version>${cobertura-maven-plugin2.version}</cobertura-maven-plugin.version>
         <cobertura-maven-plugin2.version>2.7</cobertura-maven-plugin2.version>
     </properties>

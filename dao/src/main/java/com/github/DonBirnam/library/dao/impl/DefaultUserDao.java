@@ -4,11 +4,15 @@ import com.github.DonBirnam.library.dao.MyDataBase;
 import com.github.DonBirnam.library.dao.UserDao;
 import com.github.DonBirnam.library.model.Role;
 import com.github.DonBirnam.library.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.List;
 
 public class DefaultUserDao implements UserDao {
+
+    private static Logger logger = LoggerFactory.getLogger(DefaultUserDao.class);
 
     private static class SingletonHolder {
         static final UserDao HOLDER_INSTANCE = new DefaultUserDao();
@@ -33,7 +37,7 @@ public class DefaultUserDao implements UserDao {
             ps.setString(7, user.getPassword());
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("Unable to save user", e);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -56,7 +60,7 @@ public class DefaultUserDao implements UserDao {
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Unable to delete user", e);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -90,7 +94,7 @@ public class DefaultUserDao implements UserDao {
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Unable to show user", e);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

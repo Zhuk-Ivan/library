@@ -4,6 +4,8 @@ import com.github.DonBirnam.library.model.User;
 
 import com.github.DonBirnam.library.service.UserService;
 import com.github.DonBirnam.library.service.DefaultUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +19,7 @@ import static com.github.DonBirnam.library.web.WebUtils.forward;
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
     private UserService userService = DefaultUserService.getInstance();
-
+    private static final Logger log = LoggerFactory.getLogger(RegistrationServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,6 +40,7 @@ public class RegistrationServlet extends HttpServlet {
         if (!userService.isExist(login, password)) {
             userService.saveUser(new User(null,firstName,lastName,phone,email,login,password,role));
             req.setAttribute("login", login);
+            log.info("user {} was created with the following fields {},{},{},{}", login, firstName, lastName, email, phone);
             forward("login", req, resp);
         }
         else {

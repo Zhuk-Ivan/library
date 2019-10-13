@@ -1,10 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 
        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
        <html>
        <body>
+       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
        <h1>Вход в систему</h1><br>
        <form method="post" action="${pageContext.request.contextPath}/login">
 
