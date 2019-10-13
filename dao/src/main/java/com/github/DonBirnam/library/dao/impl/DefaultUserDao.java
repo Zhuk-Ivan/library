@@ -1,0 +1,106 @@
+package com.github.DonBirnam.library.dao.impl;
+
+import com.github.DonBirnam.library.dao.MyDataBase;
+import com.github.DonBirnam.library.dao.UserDao;
+import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User;
+
+import java.sql.*;
+import java.util.List;
+
+public class DefaultUserDao implements UserDao {
+
+    private static class SingletonHolder {
+        static final UserDao HOLDER_INSTANCE = new DefaultUserDao();
+    }
+
+    public static UserDao getInstance() {
+        return DefaultUserDao.SingletonHolder.HOLDER_INSTANCE;
+    }
+
+
+    @Override
+    public void saveUser(User user) {
+        final String sql = "insert into user(first_name, last_name, phone, email,role,login,password) values(?,?,?,?,?,?,?)";
+        try (Connection connection = MyDataBase.getInstance().connect();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getPhone());
+            ps.setString(4, user.getEmail());
+            ps.setString(5, user.getRole());
+            ps.setString(6, user.getLogin());
+            ps.setString(7, user.getPassword());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        final String sql = "delete * from user where name = ?";
+        try (Connection connection = MyDataBase.getInstance().connect();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1,user.getLogin());
+            ps.executeUpdate();
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public User showUser(String login) {
+//        User libraryUser = new User();
+        final String sql = "select * from user where login = ?";
+        try (Connection connection = MyDataBase.getInstance().connect();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, login);
+            try (ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    return new User(
+                            rs.getLong("id"),
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getString("phone"),
+                            rs.getString("email"),
+                            rs.getString("login"),
+                            rs.getString("password"),
+                            rs.getString("role"));
+                }
+                else {
+                    return null;
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    @Override
+    public List<User> getAllUsers() {
+        return null;
+    }
+}
