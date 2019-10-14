@@ -1,9 +1,8 @@
 package com.github.DonBirnam.library.web.Servlet;
 
 
-import com.github.DonBirnam.library.model.User;
-import com.github.DonBirnam.library.service.UserService;
 import com.github.DonBirnam.library.service.DefaultUserService;
+import com.github.DonBirnam.library.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
 import static com.github.DonBirnam.library.web.WebUtils.forward;
 import static com.github.DonBirnam.library.web.WebUtils.redirect;
 
@@ -25,9 +25,6 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setCharacterEncoding("UTF-8");
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html");
         Object authUser = req.getSession().getAttribute("authUser");
         if (authUser == null) {
             forward("login", req, resp);
@@ -43,10 +40,14 @@ public class LoginServlet extends HttpServlet {
 
         if (userService.isExist(login, password)) {
             req.getSession().setAttribute("authUser", userService.getByLogin(login));
+            req.getSession().setAttribute("role",userService.getByLogin(login).getRole());
             log.info("user {} logged", userService.getByLogin(login).getLogin());
-            forward("home", req, resp);
+            redirect("home",req,resp);
         } else {
-            forward("registration", req, resp);
+            log.warn("user {} couldn't log in with password {}", login, password);
+            forward("login", req, resp);
+            String error = "Incorrect login or password";
+            req.setAttribute("errorLoginPassMessage",error);
         }
 
     }

@@ -14,7 +14,6 @@
     <a href="/library/registration">Регистация</a>
             </br>
             <a href="/library/login">Вход</a>
-
     </form>
 </div>
 </body>

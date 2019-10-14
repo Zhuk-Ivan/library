@@ -44,7 +44,7 @@ public class RegistrationServlet extends HttpServlet {
             forward("login", req, resp);
         }
         else {
-            forward("home", req, resp);
+            forward("registration", req, resp);
         }
     }
 }

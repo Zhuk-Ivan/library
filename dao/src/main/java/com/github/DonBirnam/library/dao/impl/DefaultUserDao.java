@@ -2,12 +2,15 @@ package com.github.DonBirnam.library.dao.impl;
 
 import com.github.DonBirnam.library.dao.MyDataBase;
 import com.github.DonBirnam.library.dao.UserDao;
-import com.github.DonBirnam.library.model.Role;
 import com.github.DonBirnam.library.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultUserDao implements UserDao {
@@ -38,43 +41,80 @@ public class DefaultUserDao implements UserDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error("Unable to save user", e);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
     @Override
-    public void deleteUser(User user) {
-        final String sql = "delete * from user where name = ?";
+    public void deleteUser(String login) {
+        final String sql = "delete from user where login = ?";
         try (Connection connection = MyDataBase.getInstance().connect();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1,user.getLogin());
+            ps.setString(1, login);
             ps.executeUpdate();
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             logger.error("Unable to delete user", e);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
     @Override
+    public List<User> getAllUsers() {
+        final String sql = "select * from user where role='user'";
+        List<User> users = new ArrayList<>();
+        User user;
+        try (Connection connection = MyDataBase.getInstance().connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            try {
+                ResultSet rs = statement.executeQuery();
+                while (rs.next()) {
+                    user = new User(
+                            rs.getString("login"),
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getString("phone"),
+                            rs.getString("email"));
+                    users.add(user);
+                }
+                return users;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        logger.warn("There are no users in data base");
+        return users;
+    }
+
+    @Override
+    public void changePersonalData(User user) {
+        final String sql = "update user set fist_name=?,last_name=?,phone=?,email=? where login=? & password=?";
+
+        try (Connection connection = MyDataBase.getInstance().connect();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getPhone());
+            ps.setString(4, user.getEmail());
+            ps.setString(5, user.getLogin());
+            ps.setString(6, user.getPassword());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Unable to update user", e);
+        }
+    }
+
+
+
+
+        @Override
     public User showUser(String login) {
-//        User libraryUser = new User();
         final String sql = "select * from user where login = ?";
         try (Connection connection = MyDataBase.getInstance().connect();
-            PreparedStatement ps = connection.prepareStatement(sql)) {
+             PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, login);
-            try (ResultSet rs = ps.executeQuery()){
-                if(rs.next()){
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
                     return new User(
                             rs.getLong("id"),
                             rs.getString("first_name"),
@@ -84,27 +124,14 @@ public class DefaultUserDao implements UserDao {
                             rs.getString("login"),
                             rs.getString("password"),
                             rs.getString("role"));
-                }
-                else {
+                } else {
                     return null;
                 }
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             logger.error("Unable to show user", e);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
-        return null;
-    }
-
-
-    @Override
-    public List<User> getAllUsers() {
         return null;
     }
 }

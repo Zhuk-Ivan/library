@@ -7,6 +7,8 @@ import com.github.DonBirnam.library.dao.impl.DefaultUserDao;
 import com.github.DonBirnam.library.model.Role;
 import com.github.DonBirnam.library.model.User;
 
+import java.util.List;
+
 public class DefaultUserService implements UserService {
 
     private Role role;
@@ -25,6 +27,12 @@ public class DefaultUserService implements UserService {
     @Override
     public void saveUser(User user) {
         userDao.saveUser(user);
+
+    }
+
+    @Override
+    public void deleteUser(String login) {
+        userDao.deleteUser(login);
 
     }
 
@@ -63,6 +71,16 @@ public class DefaultUserService implements UserService {
         else {
             return user;
     }
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userDao.getAllUsers();
+    }
+
+    @Override
+    public void updateUser(User user) {
+        userDao.changePersonalData(user);
     }
 }
 

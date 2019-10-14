@@ -9,10 +9,12 @@ public interface UserDao {
 
     void saveUser(User user);
 
-    void deleteUser(User user);
+    void deleteUser(String login);
 
     User showUser(String login);
 
     List <User> getAllUsers();
+
+    void changePersonalData(User user);
 
 }
