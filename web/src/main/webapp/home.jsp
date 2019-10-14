@@ -9,15 +9,16 @@
 
      <a href="/library/">Главная</a>
      <div class="container">
-                <h2>Welcome</h2>
-                Добро пожаловать,
+                <h2>Добро пожаловать, ${user.firstName}</h2>
+
                 <c:if test="${authUser.role =='user'}">
-                    <c:out value="пользователь"/>
+                    <c:out value="Ваши личные данные"/>
                 </c:if>
                 <c:if test="${authUser.role =='librarian'}">
-                            <c:out value="администратор"/>
+                            <c:out value="Ваши личные данные"/>
                             <a href="/library/librarian">Информация о пользователях</a>
                 </c:if>
+
 
                  <table>
                                <tr>

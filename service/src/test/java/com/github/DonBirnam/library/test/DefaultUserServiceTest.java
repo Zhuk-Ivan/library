@@ -26,7 +26,18 @@ public class DefaultUserServiceTest {
     @InjectMocks
     DefaultUserService service;
 
-
+    private User testUser() {
+        User user=new User();
+        user.setId(1L);
+        user.setFirstName("Лера");
+        user.setLastName("Покрышкина");
+        user.setPhone("+375296571894");
+        user.setEmail("Lera@samsabaka.com");
+        user.setLogin("Lera");
+        user.setPassword("123");
+        user.setRole("user");
+        return user;
+    }
     @Test
     void getAllUsers() {
         when(dao.getAllUsers()).thenReturn(new ArrayList<User>());
@@ -40,6 +51,14 @@ public class DefaultUserServiceTest {
     }
 
     @Test
+    public void saveUser() {
+        User user= testUser();
+        service.saveUser(user);
+        when(service.getByLogin(user.getLogin())).thenReturn(user);
+        assertEquals("Lera",service.getByLogin(user.getLogin()).getLogin());
+    }
+
+    @Test
     void testLoginNotExist() {
         when(dao.showUser("DonBirnam")).thenReturn(null);
         User user = service.getByLogin("DonBirnam");
@@ -48,11 +67,27 @@ public class DefaultUserServiceTest {
 
     @Test
     void testLoginCorrect() {
-        when(dao.showUser("DonBirnam")).thenReturn(new User("DonBirnam", "Ivan", "Zhuk", "+375336559237", "ivan.zhuk94@gmail.com"));
-        User user = service.getByLogin("DonBirnam");
+        when(dao.showUser("Lera")).thenReturn(new User("Lera", "Лера", "Покрышкина", "+375296571894", "ivan.zhuk94@gmail.com"));
+        User user = service.getByLogin("Lera");
         assertNotNull(user);
-        assertEquals(user.getLogin(), "DonBirnam");
-        assertNotNull(user.getFirstName(), "Ivan");
+        assertEquals(user.getLogin(), "Lera");
+        assertNotNull(user.getFirstName(), "Лера");
+    }
+
+    @Test
+    public void deleteUser() {
+        User user= testUser();
+        service.deleteUser(user.getLogin());
+        when(service.getByLogin(user.getLogin())).thenReturn(null);
+        assertNull(service.getByLogin(user.getLogin()));
+    }
+
+    @Test
+    public void getByLogin() {
+        User user=testUser();
+        when(service.getByLogin(user.getLogin())).thenReturn(user);
+        assertNotNull(service.getByLogin(user.getLogin()));
+        assertEquals("Lera",service.getByLogin(user.getLogin()).getLogin());
     }
 
 
