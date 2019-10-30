@@ -28,6 +28,7 @@ public class DefaultUserDaoTest {
     }
 
 
+
     @Test
     void getUserAdmin() {
         assertEquals("DonBirnam", DefaultUserDao.getInstance().showUser("DonBirnam").getLogin());
