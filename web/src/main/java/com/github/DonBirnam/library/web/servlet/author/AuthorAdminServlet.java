@@ -1,4 +1,4 @@
-package com.github.DonBirnam.library.web.Servlet.author;
+package com.github.DonBirnam.library.web.servlet.author;
 
 
 import com.github.DonBirnam.library.model.Author;
@@ -11,24 +11,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-import static com.github.DonBirnam.library.web.WebUtils.redirect;
+import static com.github.DonBirnam.library.web.WebUtils.forward;
 
-@WebServlet(urlPatterns = "/updateAuthor")
-public class AuthorUpdateServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/libr_page")
+public class AuthorAdminServlet extends HttpServlet {
     private AuthorService authorService = DefaultAuthorService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<Author> authors = authorService.getAuthors();
+        req.setAttribute("authors",authors);
+        forward("libr_page", req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long id = Long.valueOf(req.getParameter("id"));
-        String firstName = req.getParameter("firstName");
-        String lastName = req.getParameter("lastName");
-        Author author = new Author(id,firstName,lastName);
-        authorService.update(author);
-        redirect("libr_page",req,resp);
     }
 }

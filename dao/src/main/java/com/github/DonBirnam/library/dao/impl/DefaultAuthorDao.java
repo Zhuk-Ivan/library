@@ -138,7 +138,7 @@ public class DefaultAuthorDao implements AuthorDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        logger.warn("There are no users in data base");
+        logger.warn("There are no authors in data base");
         return authors;
     }
 }

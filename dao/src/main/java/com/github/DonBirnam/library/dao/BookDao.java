@@ -8,12 +8,12 @@ public interface BookDao {
 
     void createBook(Book book);
 
-    void readBook(Book book);
+    Book findById(Long id);
 
     void updateBook(Book book);
 
-    void deleteBook(Book book);
+    void deleteBook(Long id);
 
-    List <Book> showAllBooks();
+    List <Book> getAllBooks();
 
 }

@@ -9,6 +9,7 @@
 <a href="/library/">Главная</a>
  <a href="/library/logout">Выход</a>
  <a href="/library/libr_page">Администрирование авторов</a>
+  <a href="/library/books_page">Администрирование книг</a>
      <div class="container">
                 <h2>Welcome librarian</h2>
      <c:if test="${users != null}">

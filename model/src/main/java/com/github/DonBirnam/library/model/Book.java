@@ -1,31 +1,23 @@
 package com.github.DonBirnam.library.model;
 
-import java.util.Date;
-
 public class Book {
     private Long id;
     private String title;
-    private Author author;
-    private int page_count;
+    private Long authorId;
+    private int pageCount;
     private String isbn;
-    private Genre genre;
-    private User user;
-    private Date takeDate;
-    private Date expiredDate;
+    private String genre;
+//    private User user;
+//    private LocalDateTime takeDate;
+//    private LocalDateTime expiredDate;
 
-    public Book() {
-    }
-
-    public Book(Long id, String title, Author author, int page_count, String isbn, Genre genre, User user, Date takeDate, Date expiredDate) {
+    public Book(Long id, String title, Long authorId, int pageCount, String isbn, String genre) {
         this.id = id;
         this.title = title;
-        this.author = author;
-        this.page_count = page_count;
+        this.authorId = authorId;
+        this.pageCount = pageCount;
         this.isbn = isbn;
         this.genre = genre;
-        this.user = user;
-        this.takeDate = takeDate;
-        this.expiredDate = expiredDate;
     }
 
     public Long getId() {
@@ -44,20 +36,20 @@ public class Book {
         this.title = title;
     }
 
-    public Author getAuthor() {
-        return author;
+    public Long getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
-    public int getPage_count() {
-        return page_count;
+    public int getPageCount() {
+        return pageCount;
     }
 
-    public void setPage_count(int page_count) {
-        this.page_count = page_count;
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
     }
 
     public String getIsbn() {
@@ -68,35 +60,36 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public Genre getGenre() {
+    public String getGenre() {
         return genre;
     }
 
-    public void setGenre(Genre genre) {
+    public void setGenre(String genre) {
         this.genre = genre;
     }
 
-    public User getUser() {
-        return user;
-    }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Date getTakeDate() {
-        return takeDate;
-    }
-
-    public void setTakeDate(Date takeDate) {
-        this.takeDate = takeDate;
-    }
-
-    public Date getExpiredDate() {
-        return expiredDate;
-    }
-
-    public void setExpiredDate(Date expiredDate) {
-        this.expiredDate = expiredDate;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
+//
+//    public LocalDateTime getTakeDate() {
+//        return takeDate;
+//    }
+//
+//    public void setTakeDate(LocalDateTime takeDate) {
+//        this.takeDate = takeDate;
+//    }
+//
+//    public LocalDateTime getExpiredDate() {
+//        return expiredDate;
+//    }
+//
+//    public void setExpiredDate(LocalDateTime expiredDate) {
+//        this.expiredDate = expiredDate;
+//    }
 }

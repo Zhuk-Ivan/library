@@ -1,4 +1,4 @@
-package com.github.DonBirnam.library.web.Servlet.author;
+package com.github.DonBirnam.library.web.servlet.author;
 
 
 import com.github.DonBirnam.library.model.Author;

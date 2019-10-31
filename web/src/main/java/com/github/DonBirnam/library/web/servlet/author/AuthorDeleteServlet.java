@@ -1,7 +1,5 @@
-package com.github.DonBirnam.library.web.Servlet.author;
+package com.github.DonBirnam.library.web.servlet.author;
 
-
-import com.github.DonBirnam.library.model.Author;
 import com.github.DonBirnam.library.service.AuthorService;
 import com.github.DonBirnam.library.service.DefaultAuthorService;
 
@@ -11,22 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-import static com.github.DonBirnam.library.web.WebUtils.forward;
+import static com.github.DonBirnam.library.web.WebUtils.redirect;
 
-@WebServlet(urlPatterns = "/libr_page")
-public class AuthorAdminServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/deleteAuthor")
+public class AuthorDeleteServlet extends HttpServlet {
     private AuthorService authorService = DefaultAuthorService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Author> authors = authorService.getAuthors();
-        req.setAttribute("authors",authors);
-        forward("libr_page", req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Long id = Long.valueOf(req.getParameter("id"));
+        authorService.delete(id);
+        redirect("libr_page",req,resp);
     }
 }

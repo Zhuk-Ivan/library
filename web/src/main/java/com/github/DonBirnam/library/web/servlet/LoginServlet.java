@@ -1,4 +1,4 @@
-package com.github.DonBirnam.library.web.Servlet;
+package com.github.DonBirnam.library.web.servlet;
 
 
 import com.github.DonBirnam.library.service.DefaultUserService;
