@@ -7,9 +7,34 @@ public class Book {
     private int pageCount;
     private String isbn;
     private String genre;
-//    private User user;
-//    private LocalDateTime takeDate;
-//    private LocalDateTime expiredDate;
+    private String authorFirstName;
+    private String authorLastName;
+
+    public Book(Long id, String title, int pageCount, String isbn, String genre, String authorFirstName, String authorLastName) {
+        this.id = id;
+        this.title = title;
+        this.pageCount = pageCount;
+        this.isbn = isbn;
+        this.genre = genre;
+        this.authorFirstName = authorFirstName;
+        this.authorLastName = authorLastName;
+    }
+
+    public String getAuthorFirstName() {
+        return authorFirstName;
+    }
+
+    public void setAuthorFirstName(String authorFirstName) {
+        this.authorFirstName = authorFirstName;
+    }
+
+    public String getAuthorLastName() {
+        return authorLastName;
+    }
+
+    public void setAuthorLastName(String authorLastName) {
+        this.authorLastName = authorLastName;
+    }
 
     public Book(Long id, String title, Long authorId, int pageCount, String isbn, String genre) {
         this.id = id;
@@ -69,27 +94,5 @@ public class Book {
     }
 
 
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-//
-//    public LocalDateTime getTakeDate() {
-//        return takeDate;
-//    }
-//
-//    public void setTakeDate(LocalDateTime takeDate) {
-//        this.takeDate = takeDate;
-//    }
-//
-//    public LocalDateTime getExpiredDate() {
-//        return expiredDate;
-//    }
-//
-//    public void setExpiredDate(LocalDateTime expiredDate) {
-//        this.expiredDate = expiredDate;
-//    }
 }
+

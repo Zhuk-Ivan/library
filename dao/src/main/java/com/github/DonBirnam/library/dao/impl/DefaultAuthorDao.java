@@ -6,10 +6,7 @@ import com.github.DonBirnam.library.model.Author;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +33,7 @@ public class DefaultAuthorDao implements AuthorDao {
         } catch (SQLException e) {
             logger.error("Unable to save author", e);
         }
+
     }
 
     @Override

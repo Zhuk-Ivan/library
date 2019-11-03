@@ -1,15 +1,16 @@
-package com.github.DonBirnam.library.service;
+package com.github.DonBirnam.library.service.impl;
 
 import com.github.DonBirnam.library.dao.BookDao;
 import com.github.DonBirnam.library.dao.impl.DefaultBookDao;
 import com.github.DonBirnam.library.model.Book;
 import com.github.DonBirnam.library.model.Genre;
+import com.github.DonBirnam.library.service.BookService;
 
 import java.util.List;
 
 public class DefaultBookService implements BookService {
 
-    BookDao bookDao = DefaultBookDao.getInstance();
+    private BookDao bookDao = DefaultBookDao.getInstance();
 
     private static class SingletonHolder {
         static final BookService HOLDER_INSTANCE = new DefaultBookService();
@@ -47,6 +48,11 @@ public class DefaultBookService implements BookService {
     @Override
     public List<Book> getAllBooks() {
         return bookDao.getAllBooks();
+    }
+
+    @Override
+    public List<Book> getAllAuthorsBooks() {
+        return bookDao.getAllAuthorBooks();
     }
 
     @Override

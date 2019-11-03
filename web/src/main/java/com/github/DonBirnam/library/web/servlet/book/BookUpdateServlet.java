@@ -2,7 +2,7 @@ package com.github.DonBirnam.library.web.servlet.book;
 
 import com.github.DonBirnam.library.model.Book;
 import com.github.DonBirnam.library.service.BookService;
-import com.github.DonBirnam.library.service.DefaultBookService;
+import com.github.DonBirnam.library.service.impl.DefaultBookService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

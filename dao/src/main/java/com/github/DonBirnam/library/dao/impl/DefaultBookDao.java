@@ -82,7 +82,7 @@ public class DefaultBookDao implements BookDao {
             ps.setString(4, book.getIsbn());
             ps.setString(5, book.getGenre());
 
-            ps.setLong(6,book.getId());
+            ps.setLong(6, book.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error("Unable to update book", e);
@@ -131,5 +131,37 @@ public class DefaultBookDao implements BookDao {
         logger.warn("There are no books in data base");
         return books;
     }
+
+    @Override
+    public List<Book> getAllAuthorBooks() {
+        final String sql = "select * from books inner join authors on books.author_id = authors.id";
+        List<Book> books = new ArrayList<>();
+        Book book;
+        try (Connection connection = MyDataBase.getInstance().connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            try {
+                ResultSet rs = statement.executeQuery();
+                while (rs.next()) {
+                    book = new Book(
+                            rs.getLong("id"),
+                            rs.getString("title"),
+                            rs.getInt("page_count"),
+                            rs.getString("isbn"),
+                            rs.getString("genre"),
+                            rs.getString("first_name"),
+                            rs.getString("last_name"));
+                    books.add(book);
+                }
+                return books;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        logger.warn("There are no books in data base");
+        return books;
+    }
 }
+
 

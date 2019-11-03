@@ -1,7 +1,7 @@
 package com.github.DonBirnam.library.web.servlet;
 
 import com.github.DonBirnam.library.model.User;
-import com.github.DonBirnam.library.service.DefaultUserService;
+import com.github.DonBirnam.library.service.impl.DefaultUserService;
 import com.github.DonBirnam.library.service.UserService;
 
 import javax.servlet.ServletException;

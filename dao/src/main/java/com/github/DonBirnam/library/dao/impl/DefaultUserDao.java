@@ -88,7 +88,7 @@ public class DefaultUserDao implements UserDao {
 
     @Override
     public void changePersonalData(User user) {
-        final String sql = "update user set fist_name=?,last_name=?,phone=?,email=? where login=? & password=?";
+        final String sql = "update user set first_name=?, last_name=?, phone=?, email=?, password=? where id=?";
 
         try (Connection connection = MyDataBase.getInstance().connect();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -96,8 +96,9 @@ public class DefaultUserDao implements UserDao {
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getPhone());
             ps.setString(4, user.getEmail());
-            ps.setString(5, user.getLogin());
-            ps.setString(6, user.getPassword());
+            ps.setString(5, user.getPassword());
+
+            ps.setLong(6,user.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error("Unable to update user", e);

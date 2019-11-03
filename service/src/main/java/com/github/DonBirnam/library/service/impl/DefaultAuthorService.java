@@ -1,8 +1,9 @@
-package com.github.DonBirnam.library.service;
+package com.github.DonBirnam.library.service.impl;
 
 import com.github.DonBirnam.library.dao.AuthorDao;
 import com.github.DonBirnam.library.dao.impl.DefaultAuthorDao;
 import com.github.DonBirnam.library.model.Author;
+import com.github.DonBirnam.library.service.AuthorService;
 
 import java.util.List;
 

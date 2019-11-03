@@ -1,4 +1,4 @@
-package com.github.DonBirnam.library.service;
+package com.github.DonBirnam.library.service.impl;
 
 
 
@@ -6,6 +6,7 @@ import com.github.DonBirnam.library.dao.UserDao;
 import com.github.DonBirnam.library.dao.impl.DefaultUserDao;
 import com.github.DonBirnam.library.model.Role;
 import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.service.UserService;
 
 import java.util.List;
 

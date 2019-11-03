@@ -3,7 +3,7 @@ package com.github.DonBirnam.library.web.servlet.author;
 
 import com.github.DonBirnam.library.model.Author;
 import com.github.DonBirnam.library.service.AuthorService;
-import com.github.DonBirnam.library.service.DefaultAuthorService;
+import com.github.DonBirnam.library.service.impl.DefaultAuthorService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

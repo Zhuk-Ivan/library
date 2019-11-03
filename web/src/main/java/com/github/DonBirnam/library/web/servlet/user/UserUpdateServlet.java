@@ -1,11 +1,9 @@
-package com.github.DonBirnam.library.web.servlet;
+package com.github.DonBirnam.library.web.servlet.user;
+
 
 import com.github.DonBirnam.library.model.User;
-
-import com.github.DonBirnam.library.service.UserService;
 import com.github.DonBirnam.library.service.impl.DefaultUserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.DonBirnam.library.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,20 +12,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.github.DonBirnam.library.web.WebUtils.forward;
+import static com.github.DonBirnam.library.web.WebUtils.redirect;
 
-@WebServlet("/registration")
-public class RegistrationServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/updateUser")
+public class UserUpdateServlet extends HttpServlet {
     private UserService userService = DefaultUserService.getInstance();
-    private static final Logger log = LoggerFactory.getLogger(RegistrationServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        forward("registration", req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Long id = Long.valueOf(req.getParameter("id"));
         String firstName = req.getParameter("firstName");
         String lastName = req.getParameter("lastName");
         String phone = req.getParameter("phone");
@@ -36,15 +33,8 @@ public class RegistrationServlet extends HttpServlet {
         String password = req.getParameter("password");
         String role = "user";
 
-
-        if (!userService.isExist(login, password)) {
-            userService.saveUser(new User(null,firstName,lastName,phone,email,login,password,role));
-            req.setAttribute("login", login);
-            log.info("user {} was created with the following fields {},{},{},{}", login, firstName, lastName, email, phone);
-            forward("login", req, resp);
-        }
-        else {
-            forward("registration", req, resp);
-        }
+        User user = new User(id,firstName,lastName,phone,email,login,password,role);
+        userService.updateUser(user);
+        redirect("user_admin",req,resp);
     }
 }

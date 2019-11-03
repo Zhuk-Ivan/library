@@ -17,6 +17,8 @@ public interface BookService {
 
     List<Book> getAllBooks();
 
+    List<Book> getAllAuthorsBooks();
+
     Genre setGenre(String genre);
 
 }

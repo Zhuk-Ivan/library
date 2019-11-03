@@ -1,7 +1,8 @@
 package com.github.DonBirnam.library.web.servlet;
 
 
-import com.github.DonBirnam.library.service.DefaultUserService;
+import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.service.impl.DefaultUserService;
 import com.github.DonBirnam.library.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +26,19 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Object authUser = req.getSession().getAttribute("authUser");
+        User authUser = (User) req.getSession().getAttribute("authUser");
         if (authUser == null) {
             forward("login", req, resp);
             return;
+        } else {
+            if (authUser.getRole().equals("user")) {
+                redirect("user_admin", req, resp);
+            } else {
+                redirect("librarian", req, resp);
+            }
         }
-       redirect("home", req, resp);
     }
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,8 +48,14 @@ public class LoginServlet extends HttpServlet {
         if (userService.isExist(login, password)) {
             req.getSession().setAttribute("authUser", userService.getByLogin(login));
             req.getSession().setAttribute("role",userService.getByLogin(login).getRole());
+            req.getSession().setAttribute("login",userService.getByLogin(login).getLogin());
             log.info("user {} logged", userService.getByLogin(login).getLogin());
-            redirect("home",req,resp);
+            if (userService.getByLogin(login).getRole().equals("user")){
+                redirect("user_admin",req,resp);
+            }
+            else {
+                redirect("librarian",req,resp);
+            }
         } else {
             log.warn("user {} couldn't log in with password {}", login, password);
             forward("login", req, resp);

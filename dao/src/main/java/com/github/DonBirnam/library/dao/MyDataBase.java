@@ -28,7 +28,7 @@ public class MyDataBase {
         pool.setMinPoolSize(5);
         pool.setAcquireIncrement(5);
         pool.setMaxPoolSize(10);
-        pool.setMaxStatements(100);
+        pool.setMaxStatements(180);
 }
     public Connection connect(){
         try {
