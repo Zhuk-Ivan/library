@@ -27,7 +27,7 @@ public class DefaultBookDao implements BookDao {
 
     @Override
     public void createBook(Book book) {
-        final String sql = "insert into books(title, author_id ,page_count,isbn,genre) values(?,?,?,?,?)";
+        final String sql = "insert into books(title, author_id ,page_count,isbn,genre,status) values(?,?,?,?,?,?)";
         try (Connection connection = MyDataBase.getInstance().connect();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, book.getTitle());
@@ -35,6 +35,7 @@ public class DefaultBookDao implements BookDao {
             ps.setInt(3, book.getPageCount());
             ps.setString(4, book.getIsbn());
             ps.setString(5, book.getGenre());
+            ps.setString(6, book.getStatus());
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error("Unable to save book", e);
@@ -57,7 +58,8 @@ public class DefaultBookDao implements BookDao {
                             rs.getLong("author_id"),
                             rs.getInt("page_count"),
                             rs.getString("isbn"),
-                            rs.getString("genre"));
+                            rs.getString("genre"),
+                            rs.getString("status"));
                 } else {
                     return null;
                 }
@@ -72,7 +74,7 @@ public class DefaultBookDao implements BookDao {
 
     @Override
     public void updateBook(Book book) {
-        final String sql = "update books set title=?,author_id=?, page_count=?,isbn=?,genre=? where id = ?";
+        final String sql = "update books set title=?,author_id=?, page_count=?,isbn=?,genre=?,status=? where id = ?";
 
         try (Connection connection = MyDataBase.getInstance().connect();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -81,12 +83,28 @@ public class DefaultBookDao implements BookDao {
             ps.setInt(3, book.getPageCount());
             ps.setString(4, book.getIsbn());
             ps.setString(5, book.getGenre());
+            ps.setString(6, book.getStatus());
 
-            ps.setLong(6, book.getId());
+            ps.setLong(7, book.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             logger.error("Unable to update book", e);
         }
+    }
+
+    @Override
+    public void updateBookStatus(String status, Long id) {
+        final String sql = "update books set status=? where id = ?";
+
+        try (Connection connection = MyDataBase.getInstance().connect();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setLong(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Unable to update book", e);
+        }
+
     }
 
     @Override
@@ -118,7 +136,8 @@ public class DefaultBookDao implements BookDao {
                             rs.getLong("author_id"),
                             rs.getInt("page_count"),
                             rs.getString("isbn"),
-                            rs.getString("genre"));
+                            rs.getString("genre"),
+                            rs.getString("status"));
                     books.add(book);
                 }
                 return books;
@@ -149,7 +168,41 @@ public class DefaultBookDao implements BookDao {
                             rs.getString("isbn"),
                             rs.getString("genre"),
                             rs.getString("first_name"),
-                            rs.getString("last_name"));
+                            rs.getString("last_name"),
+                            rs.getString("status"));
+                    books.add(book);
+                }
+                return books;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        logger.warn("There are no books in data base");
+        return books;
+    }
+
+    @Override
+    public List<Book> getBooksByGenre(String genre) {
+        final String sql = "select * from books inner join authors on books.author_id = authors.id where genre=?";
+        List<Book> books = new ArrayList<>();
+        Book book;
+        try (Connection connection = MyDataBase.getInstance().connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, genre);
+            try {
+                ResultSet rs = statement.executeQuery();
+                while (rs.next()) {
+                    book = new Book(
+                            rs.getLong("id"),
+                            rs.getString("title"),
+                            rs.getInt("page_count"),
+                            rs.getString("isbn"),
+                            rs.getString("genre"),
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getString("status"));
                     books.add(book);
                 }
                 return books;

@@ -17,6 +17,8 @@
         <th>Количество страниц</th>
         <th>isbn</th>
         <th>Жанр</th>
+        <th>Статус</th>
+
     </tr>
     <c:forEach items="${books}" var="books">
         <tr>
@@ -27,6 +29,7 @@
                 <td><input name="page_count"  type="text"  value=${books.pageCount}></td>
                 <td><input name="isbn"  type="text"  value=${books.isbn}></td>
                 <td><input name="genre"  type="text"  value=${books.genre}></td>
+                <td><input name="status"  type="text"  value=${books.status}></td>
                 <td><input formaction="${pageContext.request.contextPath}/deleteBook" formmethod="post" type="submit" value="удалить"></td>
                 <td><input formaction="${pageContext.request.contextPath}/updateBook" formmethod="post" type="submit" value="обновить"></td>
             </form>

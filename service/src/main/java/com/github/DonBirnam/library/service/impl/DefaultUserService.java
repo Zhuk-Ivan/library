@@ -52,11 +52,13 @@ public class DefaultUserService implements UserService {
 
     @Override
     public Role setRole(String role) {
-        Role type = Role.GUEST;
+        Role type = null;
         switch (role){
             case "user":type=Role.USER;
                 break;
             case "librarian":type=Role.LIBRARIAN;
+                break;
+            case "blocked":type=Role.BLOCKED;
                 break;
         }
 
@@ -82,6 +84,11 @@ public class DefaultUserService implements UserService {
     @Override
     public void updateUser(User user) {
         userDao.changePersonalData(user);
+    }
+
+    @Override
+    public void block(String role, Long id) {
+        userDao.blockUser(role,id);
     }
 }
 

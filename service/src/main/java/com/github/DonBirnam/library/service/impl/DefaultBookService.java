@@ -41,6 +41,11 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
+    public void updateBookStatus(String status, Long id) {
+        bookDao.updateBookStatus(status,id);
+    }
+
+    @Override
     public void delete(Long id) {
         bookDao.deleteBook(id);
     }
@@ -56,6 +61,11 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
+    public List<Book> getByGenre(String genre) {
+        return bookDao.getBooksByGenre(genre);
+    }
+
+    @Override
     public Genre setGenre(String genre) {
         Genre type = null;
         switch (genre){
@@ -63,7 +73,12 @@ public class DefaultBookService implements BookService {
                 break;
             case "фантастика": type=Genre.FANTASY;
                 break;
-            case "любовный роман": type=Genre.LOVE;
+            case "антиутопия": type=Genre.DYSTOPIA;
+                break;
+            case "драма": type=Genre.DRAMA;
+                break;
+            case "философия": type=Genre.PHILOSOPHY;
+                break;
         }
 
         return type;

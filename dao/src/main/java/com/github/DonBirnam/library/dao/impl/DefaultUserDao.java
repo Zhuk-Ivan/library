@@ -59,7 +59,7 @@ public class DefaultUserDao implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        final String sql = "select * from user where role='user'";
+        final String sql = "select * from user where role='user' or role ='blocked'";
         List<User> users = new ArrayList<>();
         User user;
         try (Connection connection = MyDataBase.getInstance().connect();
@@ -68,11 +68,13 @@ public class DefaultUserDao implements UserDao {
                 ResultSet rs = statement.executeQuery();
                 while (rs.next()) {
                     user = new User(
+                            rs.getLong("id"),
                             rs.getString("login"),
                             rs.getString("first_name"),
                             rs.getString("last_name"),
                             rs.getString("phone"),
-                            rs.getString("email"));
+                            rs.getString("email"),
+                            rs.getString("role"));
                     users.add(user);
                 }
                 return users;
@@ -105,10 +107,22 @@ public class DefaultUserDao implements UserDao {
         }
     }
 
+    @Override
+    public void blockUser(String role, Long id) {
+        final String sql = "update user set role=? where id = ?";
+
+        try (Connection connection = MyDataBase.getInstance().connect();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, role);
+            ps.setLong(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Unable to block user", e);
+        }
+    }
 
 
-
-        @Override
+    @Override
     public User showUser(String login) {
         final String sql = "select * from user where login = ?";
         try (Connection connection = MyDataBase.getInstance().connect();

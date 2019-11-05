@@ -15,6 +15,7 @@
            <input class="button" type="submit" value="Войти">
 
        </form>
+       ${errorBlock}
        ${errorLoginPassMessage}
        </body>
        </html>

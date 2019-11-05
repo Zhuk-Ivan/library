@@ -46,21 +46,26 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         if (userService.isExist(login, password)) {
-            req.getSession().setAttribute("authUser", userService.getByLogin(login));
-            req.getSession().setAttribute("role",userService.getByLogin(login).getRole());
-            req.getSession().setAttribute("login",userService.getByLogin(login).getLogin());
+            User user = userService.getByLogin(login);
+            req.getSession().setAttribute("authUser", user);
+            req.getSession().setAttribute("role",user.getRole());
+            req.getSession().setAttribute("login", user.getLogin());
             log.info("user {} logged", userService.getByLogin(login).getLogin());
-            if (userService.getByLogin(login).getRole().equals("user")){
+            if (user.getRole().equals("user")){
                 redirect("user_admin",req,resp);
             }
-            else {
+            else if (user.getRole().equals("librarian")){
                 redirect("librarian",req,resp);
+            } else if (user.getRole().equals("blocked")){
+                String error = "Вы не вернули книгу и были заблокированы";
+                req.setAttribute("errorBlock",error);
+                forward("login", req, resp);
             }
         } else {
             log.warn("user {} couldn't log in with password {}", login, password);
-            forward("login", req, resp);
-            String error = "Incorrect login or password";
+            String error = "Неверный логин либо пароль";
             req.setAttribute("errorLoginPassMessage",error);
+            forward("login", req, resp);
         }
 
     }

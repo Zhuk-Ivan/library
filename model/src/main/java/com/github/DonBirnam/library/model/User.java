@@ -21,12 +21,14 @@ public class User {
         this.role = role;
     }
 
-    public User(String login, String firstName, String lastName, String phone, String email) {
+    public User(Long id, String login, String firstName, String lastName, String phone, String email, String role) {
+        this.id = id;
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.email = email;
+        this.role = role;
     }
 
 

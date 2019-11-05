@@ -17,4 +17,6 @@ public interface UserDao {
 
     void changePersonalData(User user);
 
+    void blockUser(String role, Long id);
+
 }

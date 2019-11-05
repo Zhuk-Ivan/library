@@ -13,11 +13,15 @@ public interface BookService {
 
     void update(Book book);
 
+    void updateBookStatus(String status, Long id);
+
     void delete(Long id);
 
     List<Book> getAllBooks();
 
     List<Book> getAllAuthorsBooks();
+
+    List<Book> getByGenre(String genre);
 
     Genre setGenre(String genre);
 

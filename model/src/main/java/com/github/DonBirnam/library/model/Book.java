@@ -9,8 +9,9 @@ public class Book {
     private String genre;
     private String authorFirstName;
     private String authorLastName;
+    private String status;
 
-    public Book(Long id, String title, int pageCount, String isbn, String genre, String authorFirstName, String authorLastName) {
+    public Book(Long id, String title, int pageCount, String isbn, String genre, String authorFirstName, String authorLastName, String status) {
         this.id = id;
         this.title = title;
         this.pageCount = pageCount;
@@ -18,32 +19,20 @@ public class Book {
         this.genre = genre;
         this.authorFirstName = authorFirstName;
         this.authorLastName = authorLastName;
+        this.status = status;
     }
 
-    public String getAuthorFirstName() {
-        return authorFirstName;
-    }
-
-    public void setAuthorFirstName(String authorFirstName) {
-        this.authorFirstName = authorFirstName;
-    }
-
-    public String getAuthorLastName() {
-        return authorLastName;
-    }
-
-    public void setAuthorLastName(String authorLastName) {
-        this.authorLastName = authorLastName;
-    }
-
-    public Book(Long id, String title, Long authorId, int pageCount, String isbn, String genre) {
+    public Book(Long id, String title, Long authorId, int pageCount, String isbn, String genre, String status) {
         this.id = id;
         this.title = title;
         this.authorId = authorId;
         this.pageCount = pageCount;
         this.isbn = isbn;
         this.genre = genre;
+        this.status = status;
     }
+
+
 
     public Long getId() {
         return id;
@@ -93,6 +82,28 @@ public class Book {
         this.genre = genre;
     }
 
+    public String getAuthorFirstName() {
+        return authorFirstName;
+    }
 
+    public void setAuthorFirstName(String authorFirstName) {
+        this.authorFirstName = authorFirstName;
+    }
+
+    public String getAuthorLastName() {
+        return authorLastName;
+    }
+
+    public void setAuthorLastName(String authorLastName) {
+        this.authorLastName = authorLastName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
 

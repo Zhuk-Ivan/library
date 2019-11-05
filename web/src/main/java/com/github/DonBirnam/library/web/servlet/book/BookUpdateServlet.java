@@ -29,7 +29,8 @@ public class BookUpdateServlet extends HttpServlet {
         int pageCount = Integer.valueOf(req.getParameter("page_count"));
         String isbn = req.getParameter("isbn");
         String genre = req.getParameter("genre");
-        Book book = new Book(id,title,authorId,pageCount,isbn,genre);
+        String status = "Свободна";
+        Book book = new Book(id,title,authorId,pageCount,isbn,genre,status);
         bookService.update(book);
         redirect("books_page",req,resp);
     }

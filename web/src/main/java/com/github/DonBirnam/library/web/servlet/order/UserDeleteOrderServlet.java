@@ -1,8 +1,9 @@
-package com.github.DonBirnam.library.web.servlet.book;
+package com.github.DonBirnam.library.web.servlet.order;
 
-import com.github.DonBirnam.library.model.Book;
 import com.github.DonBirnam.library.service.BookService;
+import com.github.DonBirnam.library.service.OrderService;
 import com.github.DonBirnam.library.service.impl.DefaultBookService;
+import com.github.DonBirnam.library.service.impl.DefaultOrderService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,8 +14,9 @@ import java.io.IOException;
 
 import static com.github.DonBirnam.library.web.WebUtils.redirect;
 
-@WebServlet(urlPatterns = "/addBook")
-public class BookAddServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/userDeleteOrder")
+public class UserDeleteOrderServlet  extends HttpServlet {
+    private OrderService orderService = DefaultOrderService.getInstance();
     private BookService bookService = DefaultBookService.getInstance();
 
     @Override
@@ -23,16 +25,12 @@ public class BookAddServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String title = req.getParameter("title");
-        Long authorId = Long.valueOf(req.getParameter("author_id"));
-        int pageCount = Integer.valueOf(req.getParameter("page_count"));
-        String isbn = req.getParameter("isbn");
-        String genre = req.getParameter("genre");
-        String staus = "Свободна";
+        Long id = Long.valueOf(req.getParameter("id"));
+        orderService.delete(id);
+        String status = "Свободна";
+        Long bookId = Long.valueOf(req.getParameter("bookId"));
+        bookService.updateBookStatus(status,bookId);
 
-        Book book = new Book(null,title,authorId,pageCount,isbn,genre,staus);
-        bookService.save(book);
-        redirect("books_page",req,resp);
+        redirect("user_admin",req,resp);
     }
-
 }

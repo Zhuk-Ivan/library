@@ -12,10 +12,14 @@ public interface BookDao {
 
     void updateBook(Book book);
 
+    void updateBookStatus(String status, Long id);
+
     void deleteBook(Long id);
 
     List <Book> getAllBooks();
 
     List<Book> getAllAuthorBooks();
+
+    List<Book> getBooksByGenre(String genre);
 
 }

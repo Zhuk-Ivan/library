@@ -13,7 +13,7 @@
      <br/>
                   <table width="60%" cellspacing="0" cellpadding="4" border="1">
                                <tr>
-                                   <th>id</th>
+                                   <th style="display:none;">id</th>
                                    <th>Индекс книги</th>
                                    <th>Индекс пользователя</th>
                                    <th>Дата взятия</th>
@@ -21,11 +21,16 @@
                                </tr>
                                <c:forEach items="${orders}" var="order">
                                    <tr>
-                                       <td>${order.id}</td>
+                                       <td style="display:none;">${order.id}</td>
                                        <td>${order.bookId}</td>
                                        <td>${order.userId}</td>
                                        <td>${order.takeDate}</td>
                                        <td>${order.expireDate}</td>
+                                       <td><form method="post" action="${pageContext.request.contextPath}/userDeleteOrder">
+                                       <input name="bookId" type="hidden" value="${order.bookId}"></input>
+                                       <input name="id" type="hidden" value="${order.id}"></input>
+                                       <input type="submit" value="Вернуть книгу"></input>
+                                       </form></td>
                                    </tr>
                                </c:forEach>
                    </table>
