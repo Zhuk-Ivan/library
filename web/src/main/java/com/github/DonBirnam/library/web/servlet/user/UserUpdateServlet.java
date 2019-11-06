@@ -1,6 +1,7 @@
 package com.github.DonBirnam.library.web.servlet.user;
 
 
+import com.github.DonBirnam.library.model.Role;
 import com.github.DonBirnam.library.model.User;
 import com.github.DonBirnam.library.service.impl.DefaultUserService;
 import com.github.DonBirnam.library.service.UserService;
@@ -31,7 +32,7 @@ public class UserUpdateServlet extends HttpServlet {
         String email = req.getParameter("email");
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        String role = "user";
+        Role role = Role.USER;
 
         User user = new User(id,firstName,lastName,phone,email,login,password,role);
         userService.updateUser(user);

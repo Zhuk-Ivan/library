@@ -157,6 +157,40 @@ public class DefaultOrderDao implements OrderDao {
         logger.warn("There are no orders in data base");
         return orders;
     }
+
+    @Override
+    public List<Order> getAllUsersOrders() {
+        final String sql = "select orders.user_id, user.login, user.role, books.title, authors.first_name, authors.last_name, " +
+        "orders.take_date, orders.expire_date from orders inner join user on orders.user_id=user.id inner join books on orders.book_id=books.id join authors on books.author_id = authors.id;";
+        List<Order> orders = new ArrayList<>();
+        Order order;
+        try (Connection connection = MyDataBase.getInstance().connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            try {
+                ResultSet rs = statement.executeQuery();
+                while (rs.next()) {
+                    order = new Order(
+                            rs.getLong("user_id"),
+                            rs.getString("login"),
+                            rs.getString("role"),
+                            rs.getString("title"),
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getTimestamp("take_date").toLocalDateTime(),
+                            rs.getTimestamp("expire_date").toLocalDateTime());
+                    orders.add(order);
+                }
+                return orders;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        logger.warn("There are no orders in data base");
+        return orders;
+    }
 }
+
 
 

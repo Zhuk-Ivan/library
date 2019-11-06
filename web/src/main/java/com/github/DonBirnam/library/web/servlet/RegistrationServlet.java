@@ -1,7 +1,7 @@
 package com.github.DonBirnam.library.web.servlet;
 
+import com.github.DonBirnam.library.model.Role;
 import com.github.DonBirnam.library.model.User;
-
 import com.github.DonBirnam.library.service.UserService;
 import com.github.DonBirnam.library.service.impl.DefaultUserService;
 import org.slf4j.Logger;
@@ -34,8 +34,7 @@ public class RegistrationServlet extends HttpServlet {
         String email = req.getParameter("email");
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        String role = "user";
-
+        Role role = Role.USER;
 
         if (!userService.isExist(login, password)) {
             userService.saveUser(new User(null,firstName,lastName,phone,email,login,password,role));

@@ -1,7 +1,6 @@
 package com.github.DonBirnam.library.service.impl;
 
 
-
 import com.github.DonBirnam.library.dao.UserDao;
 import com.github.DonBirnam.library.dao.impl.DefaultUserDao;
 import com.github.DonBirnam.library.model.Role;
@@ -41,28 +40,13 @@ public class DefaultUserService implements UserService {
     public boolean isExist(String login, String password) {
         User user = userDao.showUser(login);
         if ((user != null) && user.getPassword().equals(password)) {
-            role = setRole(user.getRole());
+            role = user.getRole();
             return true;
         }
         else {
             return false;
         }
 
-    }
-
-    @Override
-    public Role setRole(String role) {
-        Role type = null;
-        switch (role){
-            case "user":type=Role.USER;
-                break;
-            case "librarian":type=Role.LIBRARIAN;
-                break;
-            case "blocked":type=Role.BLOCKED;
-                break;
-        }
-
-        return type;
     }
 
     @Override
@@ -87,7 +71,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public void block(String role, Long id) {
+    public void block(Role role, Long id) {
         userDao.blockUser(role,id);
     }
 }

@@ -1,6 +1,7 @@
 package com.github.DonBirnam.library.web.servlet;
 
 
+import com.github.DonBirnam.library.model.Role;
 import com.github.DonBirnam.library.model.User;
 import com.github.DonBirnam.library.service.impl.DefaultUserService;
 import com.github.DonBirnam.library.service.UserService;
@@ -51,12 +52,12 @@ public class LoginServlet extends HttpServlet {
             req.getSession().setAttribute("role",user.getRole());
             req.getSession().setAttribute("login", user.getLogin());
             log.info("user {} logged", userService.getByLogin(login).getLogin());
-            if (user.getRole().equals("user")){
+            if (user.getRole().equals(Role.USER)){
                 redirect("user_admin",req,resp);
             }
-            else if (user.getRole().equals("librarian")){
+            else if (user.getRole().equals(Role.LIBRARIAN)){
                 redirect("librarian",req,resp);
-            } else if (user.getRole().equals("blocked")){
+            } else if (user.getRole().equals(Role.BLOCKED)){
                 String error = "Вы не вернули книгу и были заблокированы";
                 req.setAttribute("errorBlock",error);
                 forward("login", req, resp);

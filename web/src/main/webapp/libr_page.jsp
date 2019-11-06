@@ -8,6 +8,7 @@
 <a href="/library/">Главная</a>
  <a href="/library/logout">Выход</a>
   <a href="/library/books_page">Администрирование книг</a>
+     <a href="/library/users_orders">Администрирование заказов</a>
 <h3>Просмотр авторов</h3>
 <table>
     <tr>

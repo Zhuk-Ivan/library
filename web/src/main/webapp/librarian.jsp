@@ -10,6 +10,7 @@
  <a href="/library/logout">Выход</a>
  <a href="/library/libr_page">Администрирование авторов</a>
   <a href="/library/books_page">Администрирование книг</a>
+     <a href="/library/users_orders">Администрирование заказов</a>
      <div class="container">
                 <h2>Welcome librarian</h2>
      <c:if test="${users != null}">
@@ -34,7 +35,7 @@
                        <td>${user.phone}</td>
                        <td>${user.email}</td>
                        <td><c:choose>
-                            <c:when test="${user.role.equals('user')}">Активен</c:when>
+                            <c:when test="${user.role == 'USER'}">Активен</c:when>
                             <c:otherwise>Заблокирован</c:otherwise>
                        </c:choose></td>
                        <td><form method="post" action="${pageContext.request.contextPath}//librarianDelete">
@@ -45,7 +46,7 @@
                        <input name="id" type="hidden" value="${user.id}"></input>
                        <input name="role" type="hidden" value="${user.role}"></input>
                        <c:choose>
-                           <c:when test="${user.role.equals('user')}"><input type="submit" value="Заблокировать"></input></c:when>
+                           <c:when test="${user.role == 'USER'}"><input type="submit" value="Заблокировать"></input></c:when>
                             <c:otherwise><input type="submit" value="Разблокировать"></input></c:otherwise>
                        </c:choose>
                        </form></td>

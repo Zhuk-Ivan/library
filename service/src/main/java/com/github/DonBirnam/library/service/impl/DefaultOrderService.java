@@ -45,6 +45,11 @@ public class DefaultOrderService implements OrderService {
     }
 
     @Override
+    public List<Order> getAllUsersOrders() {
+        return orderDao.getAllUsersOrders();
+    }
+
+    @Override
     public List<Order> getOrdersByUserId(Long userId) {
         return orderDao.getOrderByUserId(userId);
     }

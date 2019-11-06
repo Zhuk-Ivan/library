@@ -1,15 +1,37 @@
-package com.github.DonBirnam.library.model;
+package com.github.DonBirnam.library.dao.entity;
 
-public class Book {
+import com.github.DonBirnam.library.model.Author;
+import com.github.DonBirnam.library.model.BookStatus;
+import com.github.DonBirnam.library.model.Genre;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "BOOKS")
+public class BookEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column
     private String title;
+    @ManyToOne
+    @JoinColumn(name = "id")
     private Author author;
+    @Column(name = "page_count")
     private int pageCount;
+    @Column
     private String isbn;
+    @Column
+    @Enumerated(EnumType.STRING)
     private Genre genre;
+    @Column
+    @Enumerated(EnumType.STRING)
     private BookStatus status;
 
-    public Book(Long id, String title,Author author, int pageCount, String isbn, Genre genre,  BookStatus status) {
+    public BookEntity() {
+    }
+
+    public BookEntity(Long id, String title, Author author, int pageCount, String isbn, Genre genre, BookStatus status) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -18,17 +40,6 @@ public class Book {
         this.genre = genre;
         this.status = status;
     }
-
-    public Book(Long id, String title,int pageCount, String isbn, Genre genre, BookStatus status) {
-        this.id = id;
-        this.title = title;
-        this.pageCount = pageCount;
-        this.isbn = isbn;
-        this.genre = genre;
-        this.status = status;
-    }
-
-
 
     public Long getId() {
         return id;
@@ -78,7 +89,6 @@ public class Book {
         this.genre = genre;
     }
 
-
     public BookStatus getStatus() {
         return status;
     }
@@ -87,4 +97,3 @@ public class Book {
         this.status = status;
     }
 }
-

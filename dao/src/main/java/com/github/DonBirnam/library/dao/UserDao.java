@@ -1,6 +1,7 @@
 package com.github.DonBirnam.library.dao;
 
 
+import com.github.DonBirnam.library.model.Role;
 import com.github.DonBirnam.library.model.User;
 
 import java.util.List;
@@ -13,10 +14,10 @@ public interface UserDao {
 
     User showUser(String login);
 
-    List <User> getAllUsers();
+    List<User> getAllUsers();
 
     void changePersonalData(User user);
 
-    void blockUser(String role, Long id);
+    void blockUser(Role role, Long id);
 
 }
