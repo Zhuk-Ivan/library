@@ -1,5 +1,6 @@
 package com.github.DonBirnam.library.web.servlet.user;
 
+import com.github.DonBirnam.library.model.Book;
 import com.github.DonBirnam.library.model.User;
 import com.github.DonBirnam.library.service.BookService;
 import com.github.DonBirnam.library.service.OrderService;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 import static com.github.DonBirnam.library.web.WebUtils.forward;
 
@@ -27,8 +29,8 @@ public class UserAdminServlet extends HttpServlet {
         req.getSession().setAttribute("userId",id);
         req.setAttribute("user",authUser);
 
-//        List<Book> books = bookService.getAllAuthorsBooks();
-//        req.setAttribute("books",books);
+        List<Book> books = bookService.getAllBooks();
+        req.setAttribute("books",books);
 
         forward("user_admin", req, resp);
     }

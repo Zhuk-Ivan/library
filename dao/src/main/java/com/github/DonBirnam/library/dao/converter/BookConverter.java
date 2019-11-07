@@ -11,7 +11,7 @@ public class BookConverter {
         final BookEntity bookEntity = new BookEntity();
         bookEntity.setId(book.getId());
         bookEntity.setTitle(book.getTitle());
-        bookEntity.setAuthor(book.getAuthor());
+        bookEntity.setAuthorEntity(AuthorConverter.toEntity(book.getAuthor()));
         bookEntity.setPageCount(book.getPageCount());
         bookEntity.setIsbn(book.getIsbn());
         bookEntity.setGenre(book.getGenre());
@@ -26,7 +26,7 @@ public class BookConverter {
             return new Book (
                     bookEntity.getId(),
                     bookEntity.getTitle(),
-                    bookEntity.getAuthor(),
+                    AuthorConverter.fromEntity(bookEntity.getAuthorEntity()),
                     bookEntity.getPageCount(),
                     bookEntity.getIsbn(),
                     bookEntity.getGenre(),

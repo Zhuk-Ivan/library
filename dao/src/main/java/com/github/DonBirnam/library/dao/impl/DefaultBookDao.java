@@ -1,13 +1,21 @@
 package com.github.DonBirnam.library.dao.impl;
 
 import com.github.DonBirnam.library.dao.BookDao;
-import com.github.DonBirnam.library.dao.MyDataBase;
+import com.github.DonBirnam.library.dao.HibernateUtil;
+import com.github.DonBirnam.library.dao.converter.AuthorConverter;
+import com.github.DonBirnam.library.dao.converter.BookConverter;
+import com.github.DonBirnam.library.dao.entity.BookEntity;
+import com.github.DonBirnam.library.model.Book;
+import com.github.DonBirnam.library.model.BookStatus;
+import com.github.DonBirnam.library.model.Genre;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import javax.persistence.NoResultException;
+import javax.persistence.RollbackException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DefaultBookDao implements BookDao {
 
@@ -21,196 +29,89 @@ public class DefaultBookDao implements BookDao {
         return DefaultBookDao.SingletonHolder.HOLDER_INSTANCE;
     }
 
-//    @Override
-//    public void createBook(Book book) {
-//        final String sql = "insert into books(title, author_id ,page_count,isbn,genre,status) values(?,?,?,?,?,?)";
-//        try (Connection connection = MyDataBase.getInstance().connect();
-//             PreparedStatement ps = connection.prepareStatement(sql)) {
-//            ps.setString(1, book.getTitle());
-//            ps.setLong(2, book.getAuthorId());
-//            ps.setInt(3, book.getPageCount());
-//            ps.setString(4, book.getIsbn());
-//            ps.setString(5, book.getGenre());
-//            ps.setString(6, book.getStatus());
-//            ps.executeUpdate();
-//        } catch (SQLException e) {
-//            logger.error("Unable to save book", e);
-//        }
-//
-//    }
+    @Override
+    public void createBook(Book book) {
+        BookEntity bookEntity = BookConverter.toEntity(book);
+        try (final Session session = HibernateUtil.getSession()) {
+            session.beginTransaction();
+            session.save(bookEntity);
+            session.getTransaction().commit();
+        } catch (
+                RollbackException e) {
+        }
 
-//    @Override
-//    public Book findById(Long id) {
-//        final String sql = "select * from books where id = ?";
-//
-//        try (Connection connection = MyDataBase.getInstance().connect();
-//             PreparedStatement ps = connection.prepareStatement(sql)) {
-//            ps.setLong(1, id);
-//            try (ResultSet rs = ps.executeQuery()) {
-//                if (rs.next()) {
-//                    return new Book(
-//                            rs.getLong("id"),
-//                            rs.getString("title"),
-//                            rs.getLong("author_id"),
-//                            rs.getInt("page_count"),
-//                            rs.getString("isbn"),
-//                            rs.getString("genre"),
-//                            rs.getString("status"));
-//                } else {
-//                    return null;
-//                }
-//            }
-//        } catch (SQLException e) {
-//            logger.error("Unable to find Book by id", e);
-//        }
-//
-//        return null;
-//    }
-
-
-//    @Override
-//    public void updateBook(Book book) {
-//        final String sql = "update books set title=?,author_id=?, page_count=?,isbn=?,genre=?,status=? where id = ?";
-//
-//        try (Connection connection = MyDataBase.getInstance().connect();
-//             PreparedStatement ps = connection.prepareStatement(sql)) {
-//            ps.setString(1, book.getTitle());
-//            ps.setLong(2, book.getAuthorId());
-//            ps.setInt(3, book.getPageCount());
-//            ps.setString(4, book.getIsbn());
-//            ps.setString(5, book.getGenre());
-//            ps.setString(6, book.getStatus());
-//
-//            ps.setLong(7, book.getId());
-//            ps.executeUpdate();
-//        } catch (SQLException e) {
-//            logger.error("Unable to update book", e);
-//        }
-//    }
+    }
 
     @Override
-    public void updateBookStatus(String status, Long id) {
-        final String sql = "update books set status=? where id = ?";
-
-        try (Connection connection = MyDataBase.getInstance().connect();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, status);
-            ps.setLong(2, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Unable to update book", e);
+    public Book findById(Long id) {
+        BookEntity book;
+        try {
+            book = (BookEntity) HibernateUtil.getSession().createQuery("from BookEntity b where b.id = :id")
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            book = null;
         }
+
+        return BookConverter.fromEntity(book);
+    }
+
+
+    @Override
+    public void updateBook(Book book) {
+        Session session = HibernateUtil.getSession();
+        BookEntity bookEntityUPD = session.get(BookEntity.class, book.getId());
+        session.beginTransaction();
+        bookEntityUPD.setTitle(book.getTitle());
+        bookEntityUPD.setAuthorEntity(AuthorConverter.toEntity(book.getAuthor()));
+        bookEntityUPD.setPageCount(book.getPageCount());
+        bookEntityUPD.setIsbn(book.getIsbn());
+        bookEntityUPD.setGenre(book.getGenre());
+        bookEntityUPD.setStatus(book.getStatus());
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public void updateBookStatus(BookStatus status, Long id) {
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+        session.createQuery("update BookEntity u set u.status= :status where u.id = :id")
+                .setParameter("status", status)
+                .setParameter("is", id)
+                .executeUpdate();
+        session.getTransaction().commit();
+        session.close();
 
     }
 
     @Override
     public void deleteBook(Long id) {
-        final String sql = "delete from books where id = ?";
-        try (Connection connection = MyDataBase.getInstance().connect();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setLong(1, id);
-            ps.executeUpdate();
-
-        } catch (SQLException e) {
-            logger.error("Unable to delete book", e);
-        }
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+        BookEntity bookEntity = session.find(BookEntity.class, id);
+        session.remove(bookEntity);
+        session.getTransaction().commit();
+        session.close();
     }
 
-//    @Override
-//    public List<Book> getAllBooks() {
-//        final String sql = "select * from books";
-//        List<Book> books = new ArrayList<>();
-//        Book book;
-//        try (Connection connection = MyDataBase.getInstance().connect();
-//             PreparedStatement statement = connection.prepareStatement(sql)) {
-//            try {
-//                ResultSet rs = statement.executeQuery();
-//                while (rs.next()) {
-//                    book = new Book(
-//                            rs.getLong("id"),
-//                            rs.getString("title"),
-//                            rs.getLong("author_id"),
-//                            rs.getInt("page_count"),
-//                            rs.getString("isbn"),
-//                            rs.getString("genre"),
-//                            rs.getString("status"));
-//                    books.add(book);
-//                }
-//                return books;
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        logger.warn("There are no books in data base");
-//        return books;
-//    }
-//
-//    @Override
-//    public List<Book> getAllAuthorBooks() {
-//        final String sql = "select * from books inner join authors on books.author_id = authors.id";
-//        List<Book> books = new ArrayList<>();
-//        Book book;
-//        try (Connection connection = MyDataBase.getInstance().connect();
-//             PreparedStatement statement = connection.prepareStatement(sql)) {
-//            try {
-//                ResultSet rs = statement.executeQuery();
-//                while (rs.next()) {
-//                    book = new Book(
-//                            rs.getLong("id"),
-//                            rs.getString("title"),
-//                            rs.getInt("page_count"),
-//                            rs.getString("isbn"),
-//                            rs.getString("genre"),
-//                            rs.getString("first_name"),
-//                            rs.getString("last_name"),
-//                            rs.getString("status"));
-//                    books.add(book);
-//                }
-//                return books;
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        logger.warn("There are no books in data base");
-//        return books;
-//    }
-//
-//    @Override
-//    public List<Book> getBooksByGenre(String genre) {
-//        final String sql = "select * from books inner join authors on books.author_id = authors.id where genre=?";
-//        List<Book> books = new ArrayList<>();
-//        Book book;
-//        try (Connection connection = MyDataBase.getInstance().connect();
-//             PreparedStatement statement = connection.prepareStatement(sql)) {
-//            statement.setString(1, genre);
-//            try {
-//                ResultSet rs = statement.executeQuery();
-//                while (rs.next()) {
-//                    book = new Book(
-//                            rs.getLong("id"),
-//                            rs.getString("title"),
-//                            rs.getInt("page_count"),
-//                            rs.getString("isbn"),
-//                            rs.getString("genre"),
-//                            rs.getString("first_name"),
-//                            rs.getString("last_name"),
-//                            rs.getString("status"));
-//                    books.add(book);
-//                }
-//                return books;
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        logger.warn("There are no books in data base");
-//        return books;
-//    }
+    @Override
+    public List<Book> getAllBooks() {
+        final List<BookEntity> books = HibernateUtil.getSession().createQuery("from BookEntity")
+                .list();
+        return books.stream().map(BookConverter::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<Book> getBooksByGenre(Genre genre) {
+        final List<BookEntity> books = HibernateUtil.getSession().createQuery("from BookEntity b where b.genre = :genre")
+                .setParameter("genre", genre)
+                .list();
+        return books.stream().map(BookConverter::fromEntity)
+                .collect(Collectors.toList());
+    }
 }
 
 

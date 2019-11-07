@@ -1,22 +1,23 @@
 package com.github.DonBirnam.library.dao.entity;
 
-import com.github.DonBirnam.library.model.Author;
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "BOOKS")
+@Table(name = "books")
 public class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String title;
-    @ManyToOne
-    @JoinColumn(name = "id")
-    private Author author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private AuthorEntity authorEntity;
+
     @Column(name = "page_count")
     private int pageCount;
     @Column
@@ -29,16 +30,6 @@ public class BookEntity {
     private BookStatus status;
 
     public BookEntity() {
-    }
-
-    public BookEntity(Long id, String title, Author author, int pageCount, String isbn, Genre genre, BookStatus status) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.pageCount = pageCount;
-        this.isbn = isbn;
-        this.genre = genre;
-        this.status = status;
     }
 
     public Long getId() {
@@ -57,12 +48,12 @@ public class BookEntity {
         this.title = title;
     }
 
-    public Author getAuthor() {
-        return author;
+    public AuthorEntity getAuthorEntity() {
+        return authorEntity;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setAuthorEntity(AuthorEntity authorEntity) {
+        this.authorEntity = authorEntity;
     }
 
     public int getPageCount() {

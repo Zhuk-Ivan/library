@@ -69,7 +69,7 @@ public class DefaultUserDao implements UserDao {
     public void changePersonalData(User user) {
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
-        session.createQuery("update UserEntity u set set u.firstName= :firstName, u.lastName= :lastName, u.phone= :phone, u.email= :email, u.password= :password")
+        session.createQuery("update UserEntity u set u.firstName= :firstName, u.lastName= :lastName, u.phone= :phone, u.email= :email, u.password= :password")
                 .setParameter("firstName", user.getFirstName())
                 .setParameter("lastName", user.getLastName())
                 .setParameter("phone", user.getPhone())

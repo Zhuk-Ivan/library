@@ -1,14 +1,18 @@
 package com.github.DonBirnam.library.dao.impl;
 
 import com.github.DonBirnam.library.dao.AuthorDao;
-import com.github.DonBirnam.library.dao.MyDataBase;
+import com.github.DonBirnam.library.dao.HibernateUtil;
+import com.github.DonBirnam.library.dao.converter.AuthorConverter;
+import com.github.DonBirnam.library.dao.entity.AuthorEntity;
 import com.github.DonBirnam.library.model.Author;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
-import java.util.ArrayList;
+import javax.persistence.NoResultException;
+import javax.persistence.RollbackException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DefaultAuthorDao implements AuthorDao {
 
@@ -24,119 +28,77 @@ public class DefaultAuthorDao implements AuthorDao {
 
     @Override
     public void createAuthor(Author author) {
-        final String sql = "insert into authors(first_name, last_name) values(?,?)";
-        try (Connection connection = MyDataBase.getInstance().connect();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, author.getFirstName());
-            ps.setString(2, author.getLastName());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Unable to save author", e);
+        AuthorEntity authorEntity = AuthorConverter.toEntity(author);
+        try (final Session session = HibernateUtil.getSession()) {
+            session.beginTransaction();
+            session.save(authorEntity);
+            session.getTransaction().commit();
+        } catch (RollbackException e){
+
         }
 
     }
 
     @Override
     public Author findById(Long id) {
-        final String sql = "select * from authors where id = ?";
-        try (Connection connection = MyDataBase.getInstance().connect();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setLong(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new Author(
-                            rs.getLong("id"),
-                            rs.getString("first_name"),
-                            rs.getString("last_name"));
-                } else {
-                    return null;
-                }
-            }
-        } catch (SQLException e) {
-            logger.error("Unable to find Author by id", e);
+        AuthorEntity author;
+        try {
+            author = (AuthorEntity) HibernateUtil.getSession().createQuery("from AuthorEntity a where a.id = :id")
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (NoResultException e){
+            author = null;
         }
 
-        return null;
+        return AuthorConverter.fromEntity(author);
     }
 
 
     @Override
     public Author findByName(String lastName) {
-        final String sql = "select * from authors where last_name = ?";
-        try (Connection connection = MyDataBase.getInstance().connect();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, lastName);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new Author(
-                            rs.getLong("id"),
-                            rs.getString("first_name"),
-                            rs.getString("last_name"));
-                } else {
-                    return null;
-                }
-            }
-        } catch (SQLException e) {
-            logger.error("Unable to find Author by last name", e);
+        AuthorEntity author;
+        try {
+            author = (AuthorEntity) HibernateUtil.getSession().createQuery("from AuthorEntity a where a.lastName = :lastName")
+                    .setParameter("lastName", lastName)
+                    .getSingleResult();
+        } catch (NoResultException e){
+            author = null;
         }
 
-        return null;
+        return AuthorConverter.fromEntity(author);
     }
+
 
 
     @Override
     public void updateAuthor(Author author) {
-        final String sql = "update authors set first_name=?,last_name=? where id = ?";
-
-        try (Connection connection = MyDataBase.getInstance().connect();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, author.getFirstName());
-            ps.setString(2, author.getLastName());
-
-            ps.setLong(3,author.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Unable to update user", e);
-        }
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+        session.createQuery("update AuthorEntity a set a.firstName= :firstName, a.lastName= :lastName where a.id = :id")
+                .setParameter("firstName", author.getFirstName())
+                .setParameter("lastName", author.getLastName())
+                .setParameter("id", author.getId())
+                .executeUpdate();
+        session.getTransaction().commit();
+        session.close();
     }
 
     @Override
     public void deleteAuthor(Long id) {
-        final String sql = "delete from authors where id = ?";
-        try (Connection connection = MyDataBase.getInstance().connect();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setLong(1, id);
-            ps.executeUpdate();
-
-        } catch (SQLException e) {
-            logger.error("Unable to delete author", e);
-        }
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+        AuthorEntity authorEntity = session.get(AuthorEntity.class, id);
+        session.remove(authorEntity);
+        session.getTransaction().commit();
+        session.close();
     }
 
     @Override
     public List<Author> getAllAuthors() {
-        final String sql = "select * from authors";
-        List<Author> authors = new ArrayList<>();
-        Author author;
-        try (Connection connection = MyDataBase.getInstance().connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            try {
-                ResultSet rs = statement.executeQuery();
-                while (rs.next()) {
-                    author = new Author(
-                            rs.getLong("id"),
-                            rs.getString("first_name"),
-                            rs.getString("last_name"));
-                    authors.add(author);
-                }
-                return authors;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        logger.warn("There are no authors in data base");
-        return authors;
+         List<AuthorEntity> authors = HibernateUtil.getSession().createQuery("from AuthorEntity")
+                .list();
+        return authors.stream().map(AuthorConverter::fromEntity)
+                .collect(Collectors.toList());
+
     }
 }

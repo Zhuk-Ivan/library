@@ -38,12 +38,12 @@
                     <form action="selectGenre" method="post">
                                            <p><select name="genre">
                                             <option disabled>Выберите жанр</option>
-                                            <option value="детектив">Детектив</option>
-                                            <option selected value="драма">Драма</option>
-                                            <option value="фантастика">Фантастика</option>
-                                            <option value="антиутопия">Антиутопия</option>
-                                             <option value="философия">Философия</option>
-                                             <option value="вернуть">Показать весь список</option>
+                                            <option value="DETECTIVE">Детектив</option>
+                                            <option selected value="DRAMA">Драма</option>
+                                            <option value="FANTASY">Фантастика</option>
+                                            <option value="DYSTOPIA">Антиутопия</option>
+                                             <option value="PHILOSOPHY">Философия</option>
+                                             <option value="ALL">Показать весь список</option>
                                            </select></p>
                                            <p><input type="submit" value="Выбрать"></p>
                                           </form>
@@ -53,21 +53,30 @@
                                             <tr>
                                                 <th style="display:none;">id</th>
                                                 <th style="width: 100px">Название</th>
+                                                <th>Автор</th>
                                                 <th>Количество страниц</th>
                                                 <th>isbn</th>
                                                 <th>Жанр</th>
-                                                <th>Автор</th>
                                                 <th>Статус</th>
                                             </tr>
                                             <c:forEach items="${books}" var="book">
                                             <tr>
                                                 <td style="display:none;">${book.id}</td>
                                                 <td>${book.title}</td>
+                                                <td>${book.author.firstName} ${book.author.lastName}</td>
                                                 <td>${book.pageCount}</td>
                                                 <td>${book.isbn}</td>
-                                                <td>${book.genre}</td>
-                                                <td>${book.authorFirstName} ${book.authorLastName}</td>
-                                                <td>${book.status}</td>
+                                                <td><c:choose>
+                                                    <c:when test="${book.genre == 'FANTASY'}">Фантастика</c:when>
+                                                    <c:when test="${book.genre == 'DETECTIVE'}">Детектив</c:when>
+                                                    <c:when test="${book.genre == 'DYSTOPIA'}">Антиутопия</c:when>
+                                                    <c:when test="${book.genre == 'DRAMA'}">Драма</c:when>
+                                                    <c:when test="${book.genre == 'PHILOSOPHY'}">Философия</c:when>
+                                                </c:choose></td>
+                                                <td><c:choose>
+                                                    <c:when test="${book.status == 'FREE'}">Свободна</c:when>
+                                                    <c:when test="${book.status == 'OCCUPIED'}">Занята</c:when>
+                                                </c:choose></td>
                                                 <td><form method="post" action="${pageContext.request.contextPath}/userAddOrderServlet">
                                                 <input name="status" type="hidden" value="${book.status}"></input>
                                                 <input name="id" type="hidden" value="${book.id}"></input>

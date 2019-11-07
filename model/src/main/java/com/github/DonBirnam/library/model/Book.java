@@ -50,7 +50,7 @@ public class Book {
         return author;
     }
 
-    public void setAuthor(Author author) {
+    public void setAuthor(Long author_id) {
         this.author = author;
     }
 
