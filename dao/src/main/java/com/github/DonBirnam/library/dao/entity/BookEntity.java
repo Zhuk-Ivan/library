@@ -2,36 +2,32 @@ package com.github.DonBirnam.library.dao.entity;
 
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "books")
 public class BookEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
     private String title;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
     private AuthorEntity authorEntity;
-
-    @Column(name = "page_count")
+    private List<OrderEntity> orders = new ArrayList<>();
     private int pageCount;
-    @Column
     private String isbn;
-    @Column
-    @Enumerated(EnumType.STRING)
     private Genre genre;
-    @Column
-    @Enumerated(EnumType.STRING)
     private BookStatus status;
+    private int inStock;
 
     public BookEntity() {
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     public Long getId() {
         return id;
     }
@@ -40,6 +36,7 @@ public class BookEntity {
         this.id = id;
     }
 
+    @Column
     public String getTitle() {
         return title;
     }
@@ -48,6 +45,8 @@ public class BookEntity {
         this.title = title;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
     public AuthorEntity getAuthorEntity() {
         return authorEntity;
     }
@@ -56,6 +55,7 @@ public class BookEntity {
         this.authorEntity = authorEntity;
     }
 
+    @Column(name = "page_count")
     public int getPageCount() {
         return pageCount;
     }
@@ -64,6 +64,7 @@ public class BookEntity {
         this.pageCount = pageCount;
     }
 
+    @Column
     public String getIsbn() {
         return isbn;
     }
@@ -72,6 +73,8 @@ public class BookEntity {
         this.isbn = isbn;
     }
 
+    @Column
+    @Enumerated(EnumType.STRING)
     public Genre getGenre() {
         return genre;
     }
@@ -80,11 +83,33 @@ public class BookEntity {
         this.genre = genre;
     }
 
+    @Column
+    @Enumerated(EnumType.STRING)
     public BookStatus getStatus() {
         return status;
     }
 
     public void setStatus(BookStatus status) {
         this.status = status;
+    }
+
+    @Column(name = "in_stock")
+    public int getInStock() {
+        return inStock;
+    }
+
+    public void setInStock(int inStock) {
+        this.inStock = inStock;
+    }
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "book_order", joinColumns = {@JoinColumn(name = "book_id")},
+            inverseJoinColumns = {@JoinColumn(name = "order_id")})
+    public List<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
     }
 }

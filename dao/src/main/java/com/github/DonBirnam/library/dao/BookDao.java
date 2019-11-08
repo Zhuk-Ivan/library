@@ -12,6 +12,8 @@ public interface BookDao {
 
     Book findById(Long id);
 
+    Book findByTitle(String title);
+
     void updateBook(Book book);
 
     void updateBookStatus(BookStatus status, Long id);
@@ -21,5 +23,7 @@ public interface BookDao {
     List<Book> getAllBooks();
 
     List<Book> getBooksByGenre(Genre genre);
+
+    void addBookToOrder(Long orderId, String bookId);
 
 }

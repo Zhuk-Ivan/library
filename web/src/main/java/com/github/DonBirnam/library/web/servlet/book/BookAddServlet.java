@@ -35,18 +35,19 @@ public class BookAddServlet extends HttpServlet {
         int pageCount = Integer.valueOf(req.getParameter("page_count"));
         String isbn = req.getParameter("isbn");
         Genre genre = Genre.valueOf(req.getParameter("genre"));
+        int inStock = Integer.valueOf(req.getParameter("inStock"));
         BookStatus staus = BookStatus.FREE;
 
         if (authorService.findByLastName(authorLN) == null){
             Author authorSave = new Author(null,authorFN,authorLN);
             authorService.save(authorSave);
             Author savedAuthor = authorService.findByLastName(authorSave.getLastName());
-            Book book = new Book(null,title,savedAuthor,pageCount,isbn,genre,staus);
+            Book book = new Book(null,title,savedAuthor,pageCount,isbn,genre,staus, inStock);
             bookService.save(book);
         }
         else {
             Author author = authorService.findByLastName(authorLN);
-            Book book = new Book(null,title,author,pageCount,isbn,genre,staus);
+            Book book = new Book(null,title,author,pageCount,isbn,genre,staus, inStock);
             bookService.save(book);
         }
         redirect("books_page",req,resp);

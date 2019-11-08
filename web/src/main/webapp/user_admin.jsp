@@ -20,7 +20,6 @@
                                    <th>phone</th>
                                    <th>email</th>
                                    <th>login</th>
-                                   <th>password</th>
                                </tr>
                                    <tr><form>
                                        <td style="display:none;"><input name="id" type="text" readonly  value=${user.id}></td>
@@ -29,7 +28,6 @@
                                        <td><input name="phone" type="text"  value=${user.phone}></td>
                                        <td><input name="email" type="text"  value=${user.email}></td>
                                        <td><input name="login" type="text"  value=${user.login}></td>
-                                       <td><input name="password" type="text"  value=${user.password}></td>
                                        <td><input formaction="${pageContext.request.contextPath}/updateUser" formmethod="post" type="submit" value="обновить"></td>
                                        </form></tr>
                    </table>
@@ -58,6 +56,7 @@
                                                 <th>isbn</th>
                                                 <th>Жанр</th>
                                                 <th>Статус</th>
+                                                <th>В наличии</th>
                                             </tr>
                                             <c:forEach items="${books}" var="book">
                                             <tr>
@@ -77,6 +76,7 @@
                                                     <c:when test="${book.status == 'FREE'}">Свободна</c:when>
                                                     <c:when test="${book.status == 'OCCUPIED'}">Занята</c:when>
                                                 </c:choose></td>
+                                                <td>${book.inStock}</td>
                                                 <td><form method="post" action="${pageContext.request.contextPath}/userAddOrderServlet">
                                                 <input name="status" type="hidden" value="${book.status}"></input>
                                                 <input name="id" type="hidden" value="${book.id}"></input>
@@ -84,7 +84,8 @@
                                                 </form></td>
                                             </tr>
                                             </c:forEach>
-                    </table>
+                    </table
+
 
 
 

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static com.github.DonBirnam.library.web.WebUtils.forward;
+import static com.github.DonBirnam.library.web.WebUtils.*;
 
 @WebServlet(urlPatterns = "/books_page")
 public class AdminBookServlet extends HttpServlet {
@@ -28,5 +28,6 @@ public class AdminBookServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        redirect("books_page", req, resp);
     }
 }

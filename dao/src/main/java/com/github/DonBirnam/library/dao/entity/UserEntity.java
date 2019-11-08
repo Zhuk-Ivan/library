@@ -1,11 +1,15 @@
 package com.github.DonBirnam.library.dao.entity;
 
-import com.github.DonBirnam.library.model.Role;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserEntity {
 
     private Long id;
@@ -13,10 +17,8 @@ public class UserEntity {
     private String lastName;
     private String phone;
     private String email;
-    private Role role;
-    private String login;
-    private String password;
-
+    private AuthUserEntity authUserEntity;
+    private List<OrderEntity> orders = new ArrayList<>();
 
     public UserEntity() {
     }
@@ -68,31 +70,21 @@ public class UserEntity {
         this.email = email;
     }
 
-    @Column
-    public String getLogin() {
-        return login;
+    @OneToOne(mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    public AuthUserEntity getAuthUserEntity() {
+        return authUserEntity;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setAuthUserEntity(AuthUserEntity authUserEntity) {
+        this.authUserEntity = authUserEntity;
     }
 
-    @Column
-    public String getPassword() {
-        return password;
+    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<OrderEntity> getOrders() {
+        return orders;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Enumerated(EnumType.STRING)
-    @Column
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
     }
 }

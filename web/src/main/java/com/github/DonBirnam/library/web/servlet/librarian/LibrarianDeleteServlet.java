@@ -23,8 +23,8 @@ public class LibrarianDeleteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String login = req.getParameter("login");
-        userService.deleteUser(login);
+        Long id = Long.valueOf(req.getParameter("id"));
+        userService.deleteUser(id);
         redirect("librarian",req,resp);
     }
 }

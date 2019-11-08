@@ -8,8 +8,12 @@ public class Book {
     private String isbn;
     private Genre genre;
     private BookStatus status;
+    private int inStock;
 
-    public Book(Long id, String title,Author author, int pageCount, String isbn, Genre genre,  BookStatus status) {
+    public Book() {
+    }
+
+    public Book(Long id, String title, Author author, int pageCount, String isbn, Genre genre, BookStatus status, int inStock) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -17,18 +21,8 @@ public class Book {
         this.isbn = isbn;
         this.genre = genre;
         this.status = status;
+        this.inStock = inStock;
     }
-
-    public Book(Long id, String title,int pageCount, String isbn, Genre genre, BookStatus status) {
-        this.id = id;
-        this.title = title;
-        this.pageCount = pageCount;
-        this.isbn = isbn;
-        this.genre = genre;
-        this.status = status;
-    }
-
-
 
     public Long getId() {
         return id;
@@ -50,7 +44,7 @@ public class Book {
         return author;
     }
 
-    public void setAuthor(Long author_id) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 
@@ -78,13 +72,20 @@ public class Book {
         this.genre = genre;
     }
 
-
     public BookStatus getStatus() {
         return status;
     }
 
     public void setStatus(BookStatus status) {
         this.status = status;
+    }
+
+    public int getInStock() {
+        return inStock;
+    }
+
+    public void setInStock(int inStock) {
+        this.inStock = inStock;
     }
 }
 

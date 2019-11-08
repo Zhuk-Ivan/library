@@ -7,20 +7,18 @@ import java.util.List;
 @Entity
 @Table(name = "authors")
 public class AuthorEntity {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
-    @Column(name = "first_name")
     private String firstName;
-    @Column(name = "last_name")
     private String lastName;
-    @OneToMany(mappedBy = "authorEntity",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookEntity> books = new ArrayList<>();
 
     public AuthorEntity() {
     }
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -29,6 +27,7 @@ public class AuthorEntity {
         this.id = id;
     }
 
+    @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -37,6 +36,7 @@ public class AuthorEntity {
         this.firstName = firstName;
     }
 
+    @Column(name = "last_name")
     public String getLastName() {
         return lastName;
     }
@@ -45,6 +45,7 @@ public class AuthorEntity {
         this.lastName = lastName;
     }
 
+    @OneToMany(mappedBy = "authorEntity",cascade = CascadeType.ALL, orphanRemoval = true)
     public List<BookEntity> getBooks() {
         return books;
     }

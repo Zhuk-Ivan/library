@@ -2,10 +2,13 @@ package com.github.DonBirnam.library.dao.impl;
 
 import com.github.DonBirnam.library.dao.HibernateUtil;
 import com.github.DonBirnam.library.dao.UserDao;
+import com.github.DonBirnam.library.dao.converter.AuthUserConverter;
 import com.github.DonBirnam.library.dao.converter.UserConverter;
+import com.github.DonBirnam.library.dao.entity.AuthUserEntity;
 import com.github.DonBirnam.library.dao.entity.UserEntity;
 import com.github.DonBirnam.library.model.Role;
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.UserDTO;
+import com.github.DonBirnam.library.model.UserRegDTO;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +32,12 @@ public class DefaultUserDao implements UserDao {
 
 
     @Override
-    public void saveUser(User user) {
-        UserEntity userEntity = UserConverter.toEntity(user);
+    public Long saveUser(UserRegDTO userRegDTO) {
+        AuthUserEntity authUserEntity = AuthUserConverter.toEntity(userRegDTO);
+        UserEntity userEntity = UserConverter.toEntity(userRegDTO);
+
+        authUserEntity.setUserEntity(userEntity);
+        userEntity.setAuthUserEntity(authUserEntity);
         try (final Session session = HibernateUtil.getSession()){
         session.beginTransaction();
         session.save(userEntity);
@@ -38,25 +45,25 @@ public class DefaultUserDao implements UserDao {
     } catch (
     RollbackException e) {
     }
-
+        return authUserEntity.getId();
     }
 
     @Override
-    public void deleteUser(String login) {
+    public void deleteUser(Long id) {
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
-        session.createQuery("delete from UserEntity u where u.login = :login")
-                .setParameter("login", login)
+        session.createQuery("delete from UserEntity u where u.id = :id")
+                .setParameter("id", id)
                 .executeUpdate();
         session.getTransaction().commit();
         session.close();
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         Role roleU = Role.USER;
         Role roleB = Role.BLOCKED;
-       final List<UserEntity> users = HibernateUtil.getSession().createQuery("from UserEntity u where u.role = :roleU or u.role = :roleB")
+       final List<UserEntity> users = HibernateUtil.getSession().createQuery("from UserEntity u where u.authUserEntity.role = :roleU or u.authUserEntity.role = :roleB")
                .setParameter("roleU", roleU)
                .setParameter("roleB", roleB)
                .list();
@@ -66,15 +73,14 @@ public class DefaultUserDao implements UserDao {
 
 
     @Override
-    public void changePersonalData(User user) {
+    public void changePersonalData(UserDTO userDTO) {
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         session.createQuery("update UserEntity u set u.firstName= :firstName, u.lastName= :lastName, u.phone= :phone, u.email= :email, u.password= :password")
-                .setParameter("firstName", user.getFirstName())
-                .setParameter("lastName", user.getLastName())
-                .setParameter("phone", user.getPhone())
-                .setParameter("email",user.getEmail())
-                .setParameter("password",user.getPassword())
+                .setParameter("firstName", userDTO.getFirstName())
+                .setParameter("lastName", userDTO.getLastName())
+                .setParameter("phone", userDTO.getPhone())
+                .setParameter("email", userDTO.getEmail())
                 .executeUpdate();
         session.getTransaction().commit();
         session.close();
@@ -85,7 +91,7 @@ public class DefaultUserDao implements UserDao {
     public void blockUser(Role role, Long id) {
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
-        session.createQuery("update UserEntity u set u.role = :role where u.id = :id")
+        session.createQuery("update AuthUserEntity u set u.role = :role where u.id = :id")
                 .setParameter("role", role)
                 .setParameter("id", id)
                 .executeUpdate();
@@ -97,11 +103,25 @@ public class DefaultUserDao implements UserDao {
 
 
     @Override
-    public User showUser(String login) {
+    public UserDTO showUser(String login) {
         UserEntity user;
         try {
-            user = (UserEntity) HibernateUtil.getSession().createQuery("from UserEntity ue where ue.login = :login")
+            user = (UserEntity) HibernateUtil.getSession().createQuery("from UserEntity eu where eu.authUserEntity.login = :login")
                     .setParameter("login", login)
+                    .getSingleResult();
+        } catch (NoResultException e){
+            user = null;
+        }
+
+        return UserConverter.fromEntity(user);
+    }
+
+    @Override
+    public UserDTO getById(Long id) {
+        UserEntity user;
+        try {
+            user = (UserEntity) HibernateUtil.getSession().createQuery("from UserEntity eu where eu.id = :id")
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (NoResultException e){
             user = null;

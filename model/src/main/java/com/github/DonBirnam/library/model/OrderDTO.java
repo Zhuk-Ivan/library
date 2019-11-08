@@ -1,24 +1,25 @@
-package com.github.DonBirnam.library.dao.entity;
+package com.github.DonBirnam.library.model;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "orders")
-public class OrderEntity {
+public class OrderDTO {
     private Long id;
-    private Set<BookEntity> books = new HashSet<>();
-    private UserEntity userEntity;
+    private Set<Book> books;
+    private UserDTO userDTO;
     private LocalDateTime createDate;
     private LocalDateTime takeDate;
     private LocalDateTime expireDate;
 
-    public OrderEntity() {
+    public OrderDTO(Long id, Set<Book> books, UserDTO userDTO, LocalDateTime createDate, LocalDateTime takeDate, LocalDateTime expireDate) {
+        this.id = id;
+        this.books = books;
+        this.userDTO = userDTO;
+        this.createDate = createDate;
+        this.takeDate = takeDate;
+        this.expireDate = expireDate;
     }
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     public Long getId() {
         return id;
     }
@@ -27,26 +28,22 @@ public class OrderEntity {
         this.id = id;
     }
 
-    @ManyToMany(mappedBy = "orders", cascade = CascadeType.ALL)
-    public Set<BookEntity> getBooks() {
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(Set<BookEntity> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public UserDTO getUserDTO() {
+        return userDTO;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
-    @Column(name = "create_date")
     public LocalDateTime getCreateDate() {
         return createDate;
     }
@@ -55,7 +52,6 @@ public class OrderEntity {
         this.createDate = createDate;
     }
 
-    @Column(name = "take_date")
     public LocalDateTime getTakeDate() {
         return takeDate;
     }
@@ -64,7 +60,6 @@ public class OrderEntity {
         this.takeDate = takeDate;
     }
 
-    @Column(name = "expire_date")
     public LocalDateTime getExpireDate() {
         return expireDate;
     }

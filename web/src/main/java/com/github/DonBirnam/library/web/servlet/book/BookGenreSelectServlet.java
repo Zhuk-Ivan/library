@@ -2,7 +2,7 @@ package com.github.DonBirnam.library.web.servlet.book;
 
 import com.github.DonBirnam.library.model.Book;
 import com.github.DonBirnam.library.model.Genre;
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.UserRegDTO;
 import com.github.DonBirnam.library.service.BookService;
 import com.github.DonBirnam.library.service.impl.DefaultBookService;
 
@@ -27,10 +27,10 @@ public class BookGenreSelectServlet  extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User authUser = (User)req.getSession().getAttribute("authUser");
-        Long id = authUser.getId();
+        UserRegDTO authUserRegDTO = (UserRegDTO)req.getSession().getAttribute("authUserRegDTO");
+        Long id = authUserRegDTO.getId();
         req.getSession().setAttribute("userId",id);
-        req.setAttribute("user",authUser);
+        req.setAttribute("user", authUserRegDTO);
 
         Genre genre = Genre.valueOf(req.getParameter("genre"));
         if (genre.equals(Genre.ALL)){

@@ -4,7 +4,8 @@ package com.github.DonBirnam.library.service.impl;
 import com.github.DonBirnam.library.dao.UserDao;
 import com.github.DonBirnam.library.dao.impl.DefaultUserDao;
 import com.github.DonBirnam.library.model.Role;
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.UserDTO;
+import com.github.DonBirnam.library.model.UserRegDTO;
 import com.github.DonBirnam.library.service.UserService;
 
 import java.util.List;
@@ -25,22 +26,27 @@ public class DefaultUserService implements UserService {
 
 
     @Override
-    public void saveUser(User user) {
-        userDao.saveUser(user);
+    public UserDTO saveUser(UserRegDTO userRegDTO) {
+        userDao.saveUser(userRegDTO);
+
+        UserDTO user = getByLogin(userRegDTO.getLogin());
+        if (user == null) {
+            long id = userDao.saveUser(userRegDTO);
+            return userDao.getById(id);
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userDao.deleteUser(id);
 
     }
 
     @Override
-    public void deleteUser(String login) {
-        userDao.deleteUser(login);
-
-    }
-
-    @Override
-    public boolean isExist(String login, String password) {
-        User user = userDao.showUser(login);
-        if ((user != null) && user.getPassword().equals(password)) {
-            role = user.getRole();
+    public boolean isExist(String login) {
+        UserDTO user = userDao.showUser(login);
+        if ((user != null) && user.getLogin().equals(login)) {
             return true;
         }
         else {
@@ -50,8 +56,8 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public User getByLogin(String login) {
-        User user = userDao.showUser(login);
+    public UserDTO getByLogin(String login) {
+        UserDTO user = userDao.showUser(login);
         if (user == null) {
             return null;
         }
@@ -61,13 +67,13 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         return userDao.getAllUsers();
     }
 
     @Override
-    public void updateUser(User user) {
-        userDao.changePersonalData(user);
+    public void updateUser(UserDTO userDTO) {
+        userDao.changePersonalData(userDTO);
     }
 
     @Override

@@ -2,9 +2,8 @@ package com.github.DonBirnam.library.web.servlet.user;
 
 
 import com.github.DonBirnam.library.model.Role;
-import com.github.DonBirnam.library.model.User;
-import com.github.DonBirnam.library.service.impl.DefaultUserService;
 import com.github.DonBirnam.library.service.UserService;
+import com.github.DonBirnam.library.service.impl.DefaultUserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,9 +32,9 @@ public class UserUpdateServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         Role role = Role.USER;
-
-        User user = new User(id,firstName,lastName,phone,email,login,password,role);
-        userService.updateUser(user);
+//
+//        UserRegDTO user = new UserRegDTO(id,firstName,lastName,phone,email,login,password,role);
+//        userService.updateUser(user);
         redirect("user_admin",req,resp);
     }
 }

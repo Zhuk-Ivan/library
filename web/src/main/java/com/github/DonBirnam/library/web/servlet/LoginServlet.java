@@ -2,9 +2,9 @@ package com.github.DonBirnam.library.web.servlet;
 
 
 import com.github.DonBirnam.library.model.Role;
-import com.github.DonBirnam.library.model.User;
-import com.github.DonBirnam.library.service.impl.DefaultUserService;
+import com.github.DonBirnam.library.model.UserDTO;
 import com.github.DonBirnam.library.service.UserService;
+import com.github.DonBirnam.library.service.impl.DefaultUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,12 +27,12 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User authUser = (User) req.getSession().getAttribute("authUser");
-        if (authUser == null) {
+        UserDTO UserDTO = (UserDTO) req.getSession().getAttribute("authUser");
+        if (UserDTO == null) {
             forward("login", req, resp);
             return;
         } else {
-            if (authUser.getRole().equals("user")) {
+            if (UserDTO.getRole().equals(Role.USER)) {
                 redirect("user_admin", req, resp);
             } else {
                 redirect("librarian", req, resp);
@@ -44,13 +44,10 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
-        String password = req.getParameter("password");
 
-        if (userService.isExist(login, password)) {
-            User user = userService.getByLogin(login);
+        if (userService.isExist(login)) {
+            UserDTO user = userService.getByLogin(login);
             req.getSession().setAttribute("authUser", user);
-            req.getSession().setAttribute("role",user.getRole());
-            req.getSession().setAttribute("login", user.getLogin());
             log.info("user {} logged", userService.getByLogin(login).getLogin());
             if (user.getRole().equals(Role.USER)){
                 redirect("user_admin",req,resp);
@@ -63,7 +60,7 @@ public class LoginServlet extends HttpServlet {
                 forward("login", req, resp);
             }
         } else {
-            log.warn("user {} couldn't log in with password {}", login, password);
+            log.warn("user {} couldn't log in with password {}", login);
             String error = "Неверный логин либо пароль";
             req.setAttribute("errorLoginPassMessage",error);
             forward("login", req, resp);

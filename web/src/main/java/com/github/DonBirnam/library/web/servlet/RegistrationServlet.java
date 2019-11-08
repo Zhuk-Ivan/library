@@ -1,7 +1,8 @@
 package com.github.DonBirnam.library.web.servlet;
 
 import com.github.DonBirnam.library.model.Role;
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.UserDTO;
+import com.github.DonBirnam.library.model.UserRegDTO;
 import com.github.DonBirnam.library.service.UserService;
 import com.github.DonBirnam.library.service.impl.DefaultUserService;
 import org.slf4j.Logger;
@@ -36,8 +37,9 @@ public class RegistrationServlet extends HttpServlet {
         String password = req.getParameter("password");
         Role role = Role.USER;
 
-        if (!userService.isExist(login, password)) {
-            userService.saveUser(new User(null,firstName,lastName,phone,email,login,password,role));
+        if (!userService.isExist(login)) {
+            UserRegDTO userRegDTO = new UserRegDTO(null,firstName,lastName,phone,email,login,password,role);
+            UserDTO user = userService.saveUser(userRegDTO);
             req.setAttribute("login", login);
             log.info("user {} was created with the following fields {},{},{},{}", login, firstName, lastName, email, phone);
             forward("login", req, resp);

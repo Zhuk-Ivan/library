@@ -39,7 +39,8 @@ public class BookUpdateServlet extends HttpServlet {
         String isbn = req.getParameter("isbn");
         Genre genre = Genre.valueOf(req.getParameter("genre"));
         BookStatus status = BookStatus.valueOf(req.getParameter("status"));
-        Book book = new Book(id,title,author,pageCount,isbn,genre,status);
+        int inStock = Integer.valueOf(req.getParameter("inStock"));
+        Book book = new Book(id,title,author,pageCount,isbn,genre,status, inStock);
         bookService.update(book);
         redirect("books_page",req,resp);
     }

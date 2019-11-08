@@ -2,22 +2,27 @@ package com.github.DonBirnam.library.dao;
 
 
 import com.github.DonBirnam.library.model.Role;
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.UserDTO;
+import com.github.DonBirnam.library.model.UserRegDTO;
 
 import java.util.List;
 
 public interface UserDao {
 
-    void saveUser(User user);
+    Long saveUser(UserRegDTO userRegDTO);
 
-    void deleteUser(String login);
+    void deleteUser(Long id);
 
-    User showUser(String login);
+    UserDTO showUser(String login);
 
-    List<User> getAllUsers();
+    UserDTO getById(Long id);
 
-    void changePersonalData(User user);
+    List<UserDTO> getAllUsers();
+
+    void changePersonalData(UserDTO userDTO);
 
     void blockUser(Role role, Long id);
+
+
 
 }

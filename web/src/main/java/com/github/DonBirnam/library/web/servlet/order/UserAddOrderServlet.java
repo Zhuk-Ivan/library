@@ -1,7 +1,7 @@
 //package com.github.DonBirnam.library.web.servlet.order;
 //
 //import com.github.DonBirnam.library.model.BookStatus;
-//import com.github.DonBirnam.library.model.Order;
+//import com.github.DonBirnam.library.model.OrderSaveDTO;
 //import com.github.DonBirnam.library.service.BookService;
 //import com.github.DonBirnam.library.service.OrderService;
 //import com.github.DonBirnam.library.service.impl.DefaultBookService;
@@ -39,7 +39,7 @@
 //            BookStatus status = BookStatus.OCCUPIED;
 //            bookService.updateBookStatus(status, bookId);
 //
-//            Order order = new Order(null, bookId, userId, takeDate, expireDate);
+//            OrderSaveDTO order = new OrderSaveDTO(null, bookId, userId, takeDate, expireDate);
 //            orderService.save(order);
 //            redirect("user_admin", req, resp);
 //        }

@@ -1,6 +1,6 @@
 package com.github.DonBirnam.library.web.servlet.librarian;
 
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.UserDTO;
 import com.github.DonBirnam.library.service.UserService;
 import com.github.DonBirnam.library.service.impl.DefaultUserService;
 
@@ -21,8 +21,8 @@ public class LibrarianServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<User> users = userService.getAllUsers();
-        req.setAttribute("users",users);
+        List<UserDTO> users = userService.getAllUsers();
+        req.setAttribute("users", users);
         forward("librarian", req, resp);
     }
 

@@ -6,6 +6,8 @@
     <persistence-unit name="com.github.DonBirnam.library" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>com.github.DonBirnam.library.dao.entity.UserEntity</class>
+        <class>com.github.DonBirnam.library.dao.entity.AuthUserEntity</class>
+        <class>com.github.DonBirnam.library.dao.entity.OrderEntity</class>
         <class>com.github.DonBirnam.library.dao.entity.AuthorEntity</class>
         <class>com.github.DonBirnam.library.dao.entity.BookEntity</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
@@ -25,6 +27,7 @@
             <property name="hibernate.cache.use_second_level_cache" value="true"/>
             <property name="hibernate.cache.use_query_cache" value="true"/>
             <property name="hibernate.cache.auto_evict_collection_cache" value="true"/>
+
         </properties>
     </persistence-unit>
 

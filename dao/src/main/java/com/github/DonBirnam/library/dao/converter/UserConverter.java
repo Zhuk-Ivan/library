@@ -1,38 +1,36 @@
 package com.github.DonBirnam.library.dao.converter;
 
 import com.github.DonBirnam.library.dao.entity.UserEntity;
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.UserDTO;
+import com.github.DonBirnam.library.model.UserRegDTO;
 
 public class UserConverter {
-    public static UserEntity toEntity(User user) {
-        if (user == null) {
+    public static UserEntity toEntity(UserRegDTO userRegDTO) {
+        if (userRegDTO == null) {
             return null;
         }
         final UserEntity userEntity = new UserEntity();
-        userEntity.setId(user.getId());
-        userEntity.setFirstName(user.getFirstName());
-        userEntity.setLastName(user.getLastName());
-        userEntity.setPhone(user.getPhone());
-        userEntity.setEmail(user.getEmail());
-        userEntity.setLogin(user.getLogin());
-        userEntity.setPassword(user.getPassword());
-        userEntity.setRole(user.getRole());
+        userEntity.setId(userRegDTO.getId());
+        userEntity.setFirstName(userRegDTO.getFirstName());
+        userEntity.setLastName(userRegDTO.getLastName());
+        userEntity.setPhone(userRegDTO.getPhone());
+        userEntity.setEmail(userRegDTO.getEmail());
         return userEntity;
     }
 
-    public static User fromEntity(UserEntity userEntity) {
+    public static UserDTO fromEntity(UserEntity userEntity) {
         if (userEntity == null) {
             return null;
         }
-        return new User(
+        return new UserDTO(
                 userEntity.getId(),
                 userEntity.getFirstName(),
                 userEntity.getLastName(),
                 userEntity.getPhone(),
                 userEntity.getEmail(),
-                userEntity.getLogin(),
-                userEntity.getPassword(),
-                userEntity.getRole());
+                userEntity.getAuthUserEntity().getLogin(),
+                userEntity.getAuthUserEntity().getRole());
+
     }
 
 }

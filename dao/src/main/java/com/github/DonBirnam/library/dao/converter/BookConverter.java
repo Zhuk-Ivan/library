@@ -16,6 +16,7 @@ public class BookConverter {
         bookEntity.setIsbn(book.getIsbn());
         bookEntity.setGenre(book.getGenre());
         bookEntity.setStatus(book.getStatus());
+        bookEntity.setInStock(book.getInStock());
         return bookEntity;
         }
 
@@ -30,6 +31,7 @@ public class BookConverter {
                     bookEntity.getPageCount(),
                     bookEntity.getIsbn(),
                     bookEntity.getGenre(),
-                    bookEntity.getStatus());
+                    bookEntity.getStatus(),
+                    bookEntity.getInStock());
             }
 }

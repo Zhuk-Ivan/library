@@ -1,23 +1,23 @@
 package com.github.DonBirnam.library.service;
 
-import com.github.DonBirnam.library.model.Order;
+import com.github.DonBirnam.library.model.OrderSaveDTO;
 
 import java.util.List;
 
 public interface OrderService {
 
-    void save(Order order);
+    void save(OrderSaveDTO order);
 
-    Order find(Long id);
+    OrderSaveDTO find(Long id);
 
-    void update(Order order);
+    void update(OrderSaveDTO order);
 
     void delete(Long id);
 
-    List<Order> getAllOrders();
+    List<OrderSaveDTO> getAllOrders();
 
-    List<Order> getAllUsersOrders();
+    List<OrderSaveDTO> getAllUsersOrders();
 
-    List<Order> getOrdersByUserId(Long userId);
+    List<OrderSaveDTO> getOrdersByUserId(Long userId);
 
 }

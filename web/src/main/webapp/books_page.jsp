@@ -20,6 +20,7 @@
         <th>isbn</th>
         <th>Жанр</th>
         <th>Статус</th>
+        <th>В наличии</th>
 
     </tr>
     <c:forEach items="${books}" var="books">
@@ -43,6 +44,7 @@
                     <option selected value="FREE">Свободна</option>
                     <option selected value="OCCUPIED">Забронирована</option>
                 </select></td></td>
+                <td><input name="inStock"  type="text"  value=${books.inStock}></td>
                 <td><input formaction="${pageContext.request.contextPath}/deleteBook" formmethod="post" type="submit" value="удалить"></td>
                 <td><input formaction="${pageContext.request.contextPath}/updateBook" formmethod="post" type="submit" value="обновить"></td>
             </form>
@@ -58,7 +60,7 @@
         <th>Количество страниц</th>
         <th>isbn</th>
         <th>Жанр</th>
-        <th></th>
+        <th>В наличии</th>
     </tr>
     <form > <tr>
         <td><input name="title" required type="text"  placeholder="Название"></td>
@@ -72,7 +74,8 @@
                                 <option selected value="DYSTOPIA">Антиутопия</option>
                                 <option selected value="DRAMA">Драма</option>
                                 <option selected value="PHILOSOPHY">Философия</option>
-                                </select></td>
+        </select></td>
+        <td><input name="inStock" required type="text"  placeholder="Количество страниц"></td>
         <td> <input formaction="${pageContext.request.contextPath}/addBook" formmethod="post" type="submit"  value="добавить"></td>
     </tr>
     </form>

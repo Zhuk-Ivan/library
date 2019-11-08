@@ -1,11 +1,9 @@
 package com.github.DonBirnam.library.web.servlet.user;
 
 import com.github.DonBirnam.library.model.Book;
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.UserDTO;
 import com.github.DonBirnam.library.service.BookService;
-import com.github.DonBirnam.library.service.OrderService;
 import com.github.DonBirnam.library.service.impl.DefaultBookService;
-import com.github.DonBirnam.library.service.impl.DefaultOrderService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,14 +18,14 @@ import static com.github.DonBirnam.library.web.WebUtils.forward;
 @WebServlet(urlPatterns = "/user_admin")
 public class UserAdminServlet extends HttpServlet {
     private BookService bookService = DefaultBookService.getInstance();
-    private OrderService orderService = DefaultOrderService.getInstance();
+//    private OrderService orderService = DefaultOrderService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User authUser = (User)req.getSession().getAttribute("authUser");
-        Long id = authUser.getId();
+        UserDTO user = (UserDTO) req.getSession().getAttribute("authUser");
+        Long id = user.getId();
         req.getSession().setAttribute("userId",id);
-        req.setAttribute("user",authUser);
+        req.setAttribute("user", user);
 
         List<Book> books = bookService.getAllBooks();
         req.setAttribute("books",books);

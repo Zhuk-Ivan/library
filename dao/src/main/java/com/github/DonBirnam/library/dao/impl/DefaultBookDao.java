@@ -5,6 +5,7 @@ import com.github.DonBirnam.library.dao.HibernateUtil;
 import com.github.DonBirnam.library.dao.converter.AuthorConverter;
 import com.github.DonBirnam.library.dao.converter.BookConverter;
 import com.github.DonBirnam.library.dao.entity.BookEntity;
+import com.github.DonBirnam.library.dao.entity.OrderEntity;
 import com.github.DonBirnam.library.model.Book;
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
@@ -12,8 +13,12 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.RollbackException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +53,20 @@ public class DefaultBookDao implements BookDao {
         try {
             book = (BookEntity) HibernateUtil.getSession().createQuery("from BookEntity b where b.id = :id")
                     .setParameter("id", id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            book = null;
+        }
+
+        return BookConverter.fromEntity(book);
+    }
+
+    @Override
+    public Book findByTitle(String title) {
+        BookEntity book;
+        try {
+            book = (BookEntity) HibernateUtil.getSession().createQuery("from BookEntity b where b.title = :title")
+                    .setParameter("title", title)
                     .getSingleResult();
         } catch (NoResultException e) {
             book = null;
@@ -97,11 +116,16 @@ public class DefaultBookDao implements BookDao {
 
     @Override
     public List<Book> getAllBooks() {
-        final List<BookEntity> books = HibernateUtil.getSession().createQuery("from BookEntity")
-                .list();
-        return books.stream().map(BookConverter::fromEntity)
-                .collect(Collectors.toList());
+
+        EntityManager em = HibernateUtil.getSession();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<BookEntity> criteria = cb.createQuery(BookEntity.class);
+        criteria.select(criteria.from(BookEntity.class));
+        List<BookEntity> bookEntities = em.createQuery(criteria).getResultList();
+        return bookEntities.stream().map(BookConverter::fromEntity).collect(Collectors.toList());
     }
+
+
 
 
     @Override
@@ -112,6 +136,29 @@ public class DefaultBookDao implements BookDao {
         return books.stream().map(BookConverter::fromEntity)
                 .collect(Collectors.toList());
     }
-}
 
+
+    @Override
+    public void addBookToOrder(Long orderId, String bookId) {
+        Session session = HibernateUtil.getSession();
+        Query query = session.createQuery("from BookEntity b where b.id = :id");
+        query.setParameter("id", bookId);
+        BookEntity bookEntity = (BookEntity) query.getSingleResult();
+
+        OrderEntity orderEntity = session.get(OrderEntity.class, orderId);
+
+        orderEntity.getBooks().add(bookEntity);
+        bookEntity.getOrders().add(orderEntity);
+
+        try {
+            session.beginTransaction();
+            session.saveOrUpdate(orderEntity);
+            session.getTransaction().commit();
+        } catch (RollbackException e) {
+
+        } finally {
+            session.close();
+        }
+    }
+}
 

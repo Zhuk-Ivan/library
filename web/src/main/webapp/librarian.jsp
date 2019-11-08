@@ -39,7 +39,7 @@
                             <c:otherwise>Заблокирован</c:otherwise>
                        </c:choose></td>
                        <td><form method="post" action="${pageContext.request.contextPath}//librarianDelete">
-                            <button type="submit" name="login" value="${user.login}">Удалить</button>
+                            <button type="submit" name="id" value="${user.id}">Удалить</button>
                             </form>
                        </td>
                        <td><form method="post" action="${pageContext.request.contextPath}/librarianBlock">

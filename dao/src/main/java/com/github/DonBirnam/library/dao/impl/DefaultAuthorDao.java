@@ -9,8 +9,11 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.RollbackException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +30,7 @@ public class DefaultAuthorDao implements AuthorDao {
     }
 
     @Override
-    public void createAuthor(Author author) {
+    public Long createAuthor(Author author) {
         AuthorEntity authorEntity = AuthorConverter.toEntity(author);
         try (final Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
@@ -36,7 +39,7 @@ public class DefaultAuthorDao implements AuthorDao {
         } catch (RollbackException e){
 
         }
-
+        return authorEntity.getId();
     }
 
     @Override
@@ -95,10 +98,12 @@ public class DefaultAuthorDao implements AuthorDao {
 
     @Override
     public List<Author> getAllAuthors() {
-         List<AuthorEntity> authors = HibernateUtil.getSession().createQuery("from AuthorEntity")
-                .list();
-        return authors.stream().map(AuthorConverter::fromEntity)
-                .collect(Collectors.toList());
+        EntityManager em = HibernateUtil.getSession();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<AuthorEntity> criteria = cb.createQuery(AuthorEntity.class);
+        criteria.select(criteria.from(AuthorEntity.class));
+        List<AuthorEntity> authorEntities = em.createQuery(criteria).getResultList();
+        return authorEntities.stream().map(AuthorConverter::fromEntity).collect(Collectors.toList());
 
     }
 }
