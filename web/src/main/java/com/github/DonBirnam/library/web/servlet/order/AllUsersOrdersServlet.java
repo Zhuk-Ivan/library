@@ -1,6 +1,6 @@
 //package com.github.DonBirnam.library.web.servlet.order;
 //
-//import com.github.DonBirnam.library.model.OrderSaveDTO;
+//import com.github.DonBirnam.library.model.Order;
 //import com.github.DonBirnam.library.service.OrderService;
 //import com.github.DonBirnam.library.service.impl.DefaultOrderService;
 //
@@ -20,7 +20,7 @@
 //
 //    @Override
 //    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        List<OrderSaveDTO> orders = orderService.getAllUsersOrders();
+//        List<Order> orders = orderService.getAllUsersOrders();
 //        req.setAttribute("orders", orders);
 //        forward("users_orders", req, resp);
 //    }

@@ -55,9 +55,7 @@ public class AuthUserEntity {
         this.role = role;
     }
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "id")
+    @OneToOne(mappedBy = "authUserEntity", cascade = CascadeType.ALL)
     public UserEntity getUserEntity() {
         return userEntity;
     }

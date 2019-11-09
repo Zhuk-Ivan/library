@@ -1,25 +1,20 @@
 package com.github.DonBirnam.library.model;
 
-public class UserDTO {
+public class User {
     private Long id;
     private String firstName;
     private String lastName;
     private String phone;
     private String email;
-    private String login;
-    private Role role;
+    private AuthUser authUser;
 
-    public UserDTO() {
-    }
-
-    public UserDTO(Long id, String firstName, String lastName, String phone, String email, String login, Role role) {
+    public User(Long id, String firstName, String lastName, String phone, String email, AuthUser authUser) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.email = email;
-        this.login = login;
-        this.role = role;
+        this.authUser = authUser;
     }
 
     public Long getId() {
@@ -62,19 +57,11 @@ public class UserDTO {
         this.email = email;
     }
 
-    public String getLogin() {
-        return login;
+    public AuthUser getAuthUser() {
+        return authUser;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
+    public void setAuthUser(AuthUser authUser) {
+        this.authUser = authUser;
     }
 }

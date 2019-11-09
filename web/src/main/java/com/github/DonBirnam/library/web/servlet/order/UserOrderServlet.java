@@ -1,7 +1,7 @@
 //package com.github.DonBirnam.library.web.servlet.order;
 //
-//import com.github.DonBirnam.library.model.OrderSaveDTO;
-//import com.github.DonBirnam.library.model.UserRegDTO;
+//import com.github.DonBirnam.library.model.Order;
+//import com.github.DonBirnam.library.model.User;
 //import com.github.DonBirnam.library.service.OrderService;
 //import com.github.DonBirnam.library.service.impl.DefaultOrderService;
 //
@@ -21,9 +21,9 @@
 //
 //    @Override
 //    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        UserRegDTO authUser = (UserRegDTO) req.getSession().getAttribute("authUser");
+//        User authUser = (User) req.getSession().getAttribute("authUser");
 //        Long userId = authUser.getId();
-//        List<OrderSaveDTO> orders = orderService.getOrdersByUserId(userId);
+//        List<Order> orders = orderService.getOrdersByUserId(userId);
 //        req.setAttribute("orders", orders);
 //        forward("user_orders", req, resp);
 //    }

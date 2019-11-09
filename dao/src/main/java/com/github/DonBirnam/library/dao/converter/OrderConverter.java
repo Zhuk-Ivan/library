@@ -5,11 +5,11 @@
 //import com.github.DonBirnam.library.dao.impl.DefaultUserDao;
 //import com.github.DonBirnam.library.model.Book;
 //import com.github.DonBirnam.library.model.OrderDTO;
-//import com.github.DonBirnam.library.model.OrderSaveDTO;
+//import com.github.DonBirnam.library.model.Order;
 //import com.github.DonBirnam.library.model.UserDTO;
 //
 //public class OrderConverter {
-//    public static OrderEntity toEntity(OrderSaveDTO order) {
+//    public static OrderEntity toEntity(Order order) {
 //        if (order == null) {
 //            return null;
 //        }

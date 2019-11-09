@@ -6,7 +6,7 @@
 //import com.github.DonBirnam.library.dao.entity.BookEntity;
 //import com.github.DonBirnam.library.dao.entity.OrderEntity;
 //import com.github.DonBirnam.library.dao.entity.UserEntity;
-//import com.github.DonBirnam.library.model.OrderSaveDTO;
+//import com.github.DonBirnam.library.model.Order;
 //import org.hibernate.Session;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@
 //
 //
 //    @Override
-//    public void createOrder(OrderSaveDTO order) {
+//    public void createOrder(Order order) {
 //        try(Session session = HibernateUtil.getSession()) {
 //            OrderEntity orderEntity = OrderConverter.toEntity(order);
 //            session.beginTransaction();
@@ -57,7 +57,7 @@
 
 //
 //        @Override
-//    public OrderSaveDTO findById(Long id) {
+//    public Order findById(Long id) {
 //            final String sql = "select * from orders where id = ?";
 //
 //            try (Connection connection = MyDataBase.getInstance().connect();
@@ -65,7 +65,7 @@
 //                ps.setLong(1, id);
 //                try (ResultSet rs = ps.executeQuery()) {
 //                    if (rs.next()) {
-//                        return new OrderSaveDTO(
+//                        return new Order(
 //                                rs.getLong("id"),
 //                                rs.getLong("book_id"),
 //                                rs.getLong("user_id"),
@@ -83,7 +83,7 @@
 //    }
 //
 //    @Override
-//    public void updateOrder(OrderSaveDTO order) {
+//    public void updateOrder(Order order) {
 //        final String sql = "update orders set book_id=?,user_id=?, take_date=?,expire_date=? where id = ?";
 //
 //        try (Connection connection = MyDataBase.getInstance().connect();
@@ -116,16 +116,16 @@
 //    }
 //
 //    @Override
-//    public List<OrderSaveDTO> getAllOrders() {
+//    public List<Order> getAllOrders() {
 //        final String sql = "select * from orders";
-//        List<OrderSaveDTO> orders = new ArrayList<>();
-//        OrderSaveDTO order;
+//        List<Order> orders = new ArrayList<>();
+//        Order order;
 //        try (Connection connection = MyDataBase.getInstance().connect();
 //             PreparedStatement statement = connection.prepareStatement(sql)) {
 //            try {
 //                ResultSet rs = statement.executeQuery();
 //                while (rs.next()) {
-//                    order = new OrderSaveDTO(
+//                    order = new Order(
 //                            rs.getLong("id"),
 //                            rs.getLong("book_id"),
 //                            rs.getLong("user_id"),
@@ -145,17 +145,17 @@
 //    }
 //
 //    @Override
-//    public List<OrderSaveDTO> getOrderByUserId(Long userId) {
+//    public List<Order> getOrderByUserId(Long userId) {
 //        final String sql = "select * from orders where user_id=?";
-//        List<OrderSaveDTO> orders = new ArrayList<>();
-//        OrderSaveDTO order;
+//        List<Order> orders = new ArrayList<>();
+//        Order order;
 //        try (Connection connection = MyDataBase.getInstance().connect();
 //             PreparedStatement statement = connection.prepareStatement(sql)) {
 //            statement.setLong(1, userId);
 //            try {
 //                ResultSet rs = statement.executeQuery();
 //                while (rs.next()) {
-//                    order = new OrderSaveDTO(
+//                    order = new Order(
 //                            rs.getLong("id"),
 //                            rs.getLong("book_id"),
 //                            rs.getLong("user_id"),
@@ -175,17 +175,17 @@
 //    }
 //
 //    @Override
-//    public List<OrderSaveDTO> getAllUsersOrders() {
+//    public List<Order> getAllUsersOrders() {
 //        final String sql = "select orders.user_id, user.login, user.role, books.title, authors.first_name, authors.last_name, " +
 //        "orders.take_date, orders.expire_date from orders inner join user on orders.user_id=user.id inner join books on orders.book_id=books.id join authors on books.author_id = authors.id;";
-//        List<OrderSaveDTO> orders = new ArrayList<>();
-//        OrderSaveDTO order;
+//        List<Order> orders = new ArrayList<>();
+//        Order order;
 //        try (Connection connection = MyDataBase.getInstance().connect();
 //             PreparedStatement statement = connection.prepareStatement(sql)) {
 //            try {
 //                ResultSet rs = statement.executeQuery();
 //                while (rs.next()) {
-//                    order = new OrderSaveDTO(
+//                    order = new Order(
 //                            rs.getLong("user_id"),
 //                            rs.getString("login"),
 //                            rs.getString("role"),

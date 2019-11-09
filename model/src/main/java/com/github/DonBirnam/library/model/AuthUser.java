@@ -1,13 +1,12 @@
 package com.github.DonBirnam.library.model;
 
-public class UserLoginDTO {
+public class AuthUser {
     private Long id;
     private String login;
     private String password;
     private Role role;
 
-
-    public UserLoginDTO(Long id, String login, String password, Role role) {
+    public AuthUser(Long id, String login, String password, Role role) {
         this.id = id;
         this.login = login;
         this.password = password;

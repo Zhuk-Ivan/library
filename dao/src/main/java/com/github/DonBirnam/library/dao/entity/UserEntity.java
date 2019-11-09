@@ -1,15 +1,11 @@
 package com.github.DonBirnam.library.dao.entity;
 
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cache;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserEntity {
 
     private Long id;
@@ -21,6 +17,15 @@ public class UserEntity {
     private List<OrderEntity> orders = new ArrayList<>();
 
     public UserEntity() {
+    }
+
+    public UserEntity(Long id, String firstName, String lastName, String phone, String email, AuthUserEntity authUserEntity) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.email = email;
+        this.authUserEntity = authUserEntity;
     }
 
     @Id
@@ -70,18 +75,14 @@ public class UserEntity {
         this.email = email;
     }
 
-    @OneToOne(mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn (name = "auth_id")
     public AuthUserEntity getAuthUserEntity() {
         return authUserEntity;
     }
 
     public void setAuthUserEntity(AuthUserEntity authUserEntity) {
         this.authUserEntity = authUserEntity;
-    }
-
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL, orphanRemoval = true)
-    public List<OrderEntity> getOrders() {
-        return orders;
     }
 
     public void setOrders(List<OrderEntity> orders) {

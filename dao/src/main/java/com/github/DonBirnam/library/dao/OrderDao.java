@@ -1,20 +1,20 @@
 //package com.github.DonBirnam.library.dao;
 //
-//import com.github.DonBirnam.library.model.OrderSaveDTO;
+//import com.github.DonBirnam.library.model.Order;
 //
 //public interface OrderDao {
 //
-//    void createOrder(OrderSaveDTO order);
+//    void createOrder(Order order);
 //
-//    OrderSaveDTO findById(Long id);
+//    Order findById(Long id);
 //
-//    void updateOrder(OrderSaveDTO order);
+//    void updateOrder(Order order);
 //
 //    void deleteOrder(Long id);
 //
-//    List<OrderSaveDTO> getAllOrders();
+//    List<Order> getAllOrders();
 //
-//    List<OrderSaveDTO> getOrderByUserId(Long userId);
+//    List<Order> getOrderByUserId(Long userId);
 //
-//    List<OrderSaveDTO> getAllUsersOrders();
+//    List<Order> getAllUsersOrders();
 //}

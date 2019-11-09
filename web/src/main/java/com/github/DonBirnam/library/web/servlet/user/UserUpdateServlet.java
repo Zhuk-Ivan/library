@@ -33,7 +33,7 @@ public class UserUpdateServlet extends HttpServlet {
         String password = req.getParameter("password");
         Role role = Role.USER;
 //
-//        UserRegDTO user = new UserRegDTO(id,firstName,lastName,phone,email,login,password,role);
+//        User user = new User(id,firstName,lastName,phone,email,login,password,role);
 //        userService.updateUser(user);
         redirect("user_admin",req,resp);
     }

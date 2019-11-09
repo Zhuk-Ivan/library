@@ -1,10 +1,7 @@
 package com.github.DonBirnam.library.web.servlet;
 
-import com.github.DonBirnam.library.model.Role;
-import com.github.DonBirnam.library.model.UserDTO;
-import com.github.DonBirnam.library.model.UserRegDTO;
-import com.github.DonBirnam.library.service.UserService;
-import com.github.DonBirnam.library.service.impl.DefaultUserService;
+import com.github.DonBirnam.library.service.AuthUserService;
+import com.github.DonBirnam.library.service.impl.DefaultAuthUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.github.DonBirnam.library.web.WebUtils.forward;
+import static com.github.DonBirnam.library.web.WebUtils.redirect;
 
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
-    private UserService userService = DefaultUserService.getInstance();
+    private AuthUserService service = DefaultAuthUserService.getInstance();
+
     private static final Logger log = LoggerFactory.getLogger(RegistrationServlet.class);
 
     @Override
@@ -35,16 +34,14 @@ public class RegistrationServlet extends HttpServlet {
         String email = req.getParameter("email");
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        Role role = Role.USER;
 
-        if (!userService.isExist(login)) {
-            UserRegDTO userRegDTO = new UserRegDTO(null,firstName,lastName,phone,email,login,password,role);
-            UserDTO user = userService.saveUser(userRegDTO);
-            req.setAttribute("login", login);
+        if (!service.isExist(login)) {
+            service.save(firstName,lastName,phone,email,login,password);
             log.info("user {} was created with the following fields {},{},{},{}", login, firstName, lastName, email, phone);
-            forward("login", req, resp);
+            redirect("login", req, resp);
         }
         else {
+            req.setAttribute("error", "User with this login already exists");
             forward("registration", req, resp);
         }
     }

@@ -28,25 +28,26 @@
                </tr>
                <c:forEach items="${users}" var="user">
                    <tr>
-                       <td style="display:none;">${user.id}</td>
-                       <td>${user.login}</td>
+                       <td style="display:none;">${user.authUser.id}</td>
+                       <td>${user.authUser.login}</td>
                        <td>${user.firstName}</td>
                        <td>${user.lastName}</td>
                        <td>${user.phone}</td>
                        <td>${user.email}</td>
                        <td><c:choose>
-                            <c:when test="${user.role == 'USER'}">Активен</c:when>
+                            <c:when test="${user.authUser.role == 'USER'}">Активен</c:when>
+                            <c:when test="${user.authUser.role == 'LIBRARIAN'}">Библиотекарь</c:when>
                             <c:otherwise>Заблокирован</c:otherwise>
                        </c:choose></td>
-                       <td><form method="post" action="${pageContext.request.contextPath}//librarianDelete">
-                            <button type="submit" name="id" value="${user.id}">Удалить</button>
+                       <td><form method="post" action="${pageContext.request.contextPath}/librarianDelete">
+                            <button type="submit" name="id" value="${user.authUser.id}">Удалить</button>
                             </form>
                        </td>
                        <td><form method="post" action="${pageContext.request.contextPath}/librarianBlock">
-                       <input name="id" type="hidden" value="${user.id}"></input>
-                       <input name="role" type="hidden" value="${user.role}"></input>
+                       <input name="id" type="hidden" value="${user.authUser.id}"></input>
+                       <input name="role" type="hidden" value="${user.authUser.role}"></input>
                        <c:choose>
-                           <c:when test="${user.role == 'USER'}"><input type="submit" value="Заблокировать"></input></c:when>
+                           <c:when test="${user.authUser.role == 'USER'}"><input type="submit" value="Заблокировать"></input></c:when>
                             <c:otherwise><input type="submit" value="Разблокировать"></input></c:otherwise>
                        </c:choose>
                        </form></td>

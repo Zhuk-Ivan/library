@@ -21,6 +21,8 @@
         <br>
         <input class="button" type="submit" value="Регистрироваться">
     </form>
+
+    <p style="color: red">${error}</p>
 </div>
 </body>
 </html>

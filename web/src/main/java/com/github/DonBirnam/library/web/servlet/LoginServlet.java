@@ -1,10 +1,10 @@
 package com.github.DonBirnam.library.web.servlet;
 
 
+import com.github.DonBirnam.library.model.AuthUser;
 import com.github.DonBirnam.library.model.Role;
-import com.github.DonBirnam.library.model.UserDTO;
-import com.github.DonBirnam.library.service.UserService;
-import com.github.DonBirnam.library.service.impl.DefaultUserService;
+import com.github.DonBirnam.library.service.AuthUserService;
+import com.github.DonBirnam.library.service.impl.DefaultAuthUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,17 +22,16 @@ import static com.github.DonBirnam.library.web.WebUtils.redirect;
 @WebServlet(urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
-
-    UserService userService = DefaultUserService.getInstance();
+    AuthUserService service = DefaultAuthUserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserDTO UserDTO = (UserDTO) req.getSession().getAttribute("authUser");
-        if (UserDTO == null) {
+        AuthUser authUser = (AuthUser) req.getSession().getAttribute("authUser");
+        if (authUser == null) {
             forward("login", req, resp);
             return;
         } else {
-            if (UserDTO.getRole().equals(Role.USER)) {
+            if (authUser.getRole().equals(Role.USER)) {
                 redirect("user_admin", req, resp);
             } else {
                 redirect("librarian", req, resp);
@@ -45,16 +44,16 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
 
-        if (userService.isExist(login)) {
-            UserDTO user = userService.getByLogin(login);
-            req.getSession().setAttribute("authUser", user);
-            log.info("user {} logged", userService.getByLogin(login).getLogin());
-            if (user.getRole().equals(Role.USER)){
+        if (service.isExist(login)) {
+            AuthUser authUser = service.getByLogin(login);
+            req.getSession().setAttribute("authUser", authUser);
+            log.info("user {} logged", login);
+            if (authUser.getRole().equals(Role.USER)){
                 redirect("user_admin",req,resp);
             }
-            else if (user.getRole().equals(Role.LIBRARIAN)){
+            else if (authUser.getRole().equals(Role.LIBRARIAN)){
                 redirect("librarian",req,resp);
-            } else if (user.getRole().equals(Role.BLOCKED)){
+            } else if (authUser.getRole().equals(Role.BLOCKED)){
                 String error = "Вы не вернули книгу и были заблокированы";
                 req.setAttribute("errorBlock",error);
                 forward("login", req, resp);

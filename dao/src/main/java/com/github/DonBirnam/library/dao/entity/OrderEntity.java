@@ -10,7 +10,7 @@ import java.util.Set;
 public class OrderEntity {
     private Long id;
     private Set<BookEntity> books = new HashSet<>();
-    private UserEntity userEntity;
+//    private UserEntity userEntity;
     private LocalDateTime createDate;
     private LocalDateTime takeDate;
     private LocalDateTime expireDate;
@@ -36,15 +36,15 @@ public class OrderEntity {
         this.books = books;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
-    }
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id")
+//    public UserEntity getUserEntity() {
+//        return userEntity;
+//    }
+//
+//    public void setUserEntity(UserEntity userEntity) {
+//        this.userEntity = userEntity;
+//    }
 
     @Column(name = "create_date")
     public LocalDateTime getCreateDate() {

@@ -1,20 +1,26 @@
 package com.github.DonBirnam.library.model;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
-public class OrderDTO {
+public class Order {
     private Long id;
-    private Set<Book> books;
-    private UserDTO userDTO;
+    private Long bookId;
+    private Long userId;
     private LocalDateTime createDate;
     private LocalDateTime takeDate;
     private LocalDateTime expireDate;
 
-    public OrderDTO(Long id, Set<Book> books, UserDTO userDTO, LocalDateTime createDate, LocalDateTime takeDate, LocalDateTime expireDate) {
+    public Order(Long id, Long bookId, Long userId, LocalDateTime createDate) {
         this.id = id;
-        this.books = books;
-        this.userDTO = userDTO;
+        this.bookId = bookId;
+        this.userId = userId;
+        this.createDate = createDate;
+    }
+
+    public Order(Long id, Long bookId, Long userId, LocalDateTime createDate, LocalDateTime takeDate, LocalDateTime expireDate) {
+        this.id = id;
+        this.bookId = bookId;
+        this.userId = userId;
         this.createDate = createDate;
         this.takeDate = takeDate;
         this.expireDate = expireDate;
@@ -28,20 +34,20 @@ public class OrderDTO {
         this.id = id;
     }
 
-    public Set<Book> getBooks() {
-        return books;
+    public Long getBookId() {
+        return bookId;
     }
 
-    public void setBooks(Set<Book> books) {
-        this.books = books;
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
     }
 
-    public UserDTO getUserDTO() {
-        return userDTO;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public LocalDateTime getCreateDate() {
@@ -67,4 +73,5 @@ public class OrderDTO {
     public void setExpireDate(LocalDateTime expireDate) {
         this.expireDate = expireDate;
     }
+
 }

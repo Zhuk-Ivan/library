@@ -1,27 +1,19 @@
 package com.github.DonBirnam.library.service;
 
 
-import com.github.DonBirnam.library.model.Role;
-import com.github.DonBirnam.library.model.UserDTO;
-import com.github.DonBirnam.library.model.UserRegDTO;
+import com.github.DonBirnam.library.model.User;
 
 import java.util.List;
-    public interface UserService {
 
-        UserDTO saveUser(UserRegDTO userRegDTO);
+public interface UserService {
 
-        void deleteUser(Long id);
+        void save(User user);
 
-        boolean isExist(String login);
+        User getUserById(Long id);
 
-        UserDTO getByLogin(String login);
+        void updateUser(User user);
 
-        List<UserDTO> getAllUsers();
+        void delete(Long id);
 
-        void updateUser(UserDTO userDTO);
-
-        void block(Role role, Long id);
-
-
-
+        List<User> getAllUsers();
 }
