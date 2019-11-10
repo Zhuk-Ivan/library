@@ -3,6 +3,8 @@ package com.github.DonBirnam.library.dao.entity;
 import com.github.DonBirnam.library.model.Role;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "auth_users")
@@ -12,6 +14,7 @@ public class AuthUserEntity {
     private String password;
     private Role role;
     private UserEntity userEntity;
+    private Set<OrderEntity> orders = new HashSet<>();
 
     public AuthUserEntity() {
     }
@@ -62,5 +65,14 @@ public class AuthUserEntity {
 
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
+    }
+
+    @OneToMany(mappedBy = "authUserEntity",cascade = CascadeType.ALL, orphanRemoval = true)
+    public Set<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<OrderEntity> orders) {
+        this.orders = orders;
     }
 }

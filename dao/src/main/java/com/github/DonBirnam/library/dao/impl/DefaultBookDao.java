@@ -87,6 +87,7 @@ public class DefaultBookDao implements BookDao {
         bookEntityUPD.setIsbn(book.getIsbn());
         bookEntityUPD.setGenre(book.getGenre());
         bookEntityUPD.setStatus(book.getStatus());
+        bookEntityUPD.setInStock(book.getInStock());
         session.getTransaction().commit();
         session.close();
     }
@@ -97,7 +98,7 @@ public class DefaultBookDao implements BookDao {
         session.beginTransaction();
         session.createQuery("update BookEntity u set u.status= :status where u.id = :id")
                 .setParameter("status", status)
-                .setParameter("is", id)
+                .setParameter("id", id)
                 .executeUpdate();
         session.getTransaction().commit();
         session.close();

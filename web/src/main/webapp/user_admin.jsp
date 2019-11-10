@@ -79,6 +79,7 @@
                                                 <td>${book.inStock}</td>
                                                 <td><form method="post" action="${pageContext.request.contextPath}/userAddOrderServlet">
                                                 <input name="status" type="hidden" value="${book.status}"></input>
+                                                <input name="userId" type="hidden" value="${authUser.id}"></input>
                                                 <input name="id" type="hidden" value="${book.id}"></input>
                                                 <input type="submit" value="Добавить"></input>
                                                 </form></td>

@@ -1,10 +1,22 @@
 package com.github.DonBirnam.library.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class AuthUser {
     private Long id;
     private String login;
     private String password;
     private Role role;
+    private Set<Order> orders = new HashSet<>();
+
+    public AuthUser(Long id, String login, String password, Role role, Set<Order> orders) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.role = role;
+        this.orders = orders;
+    }
 
     public AuthUser(Long id, String login, String password, Role role) {
         this.id = id;
@@ -43,5 +55,13 @@ public class AuthUser {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 }

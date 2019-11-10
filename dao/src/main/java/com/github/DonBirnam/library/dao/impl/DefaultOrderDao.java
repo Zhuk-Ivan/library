@@ -1,59 +1,58 @@
-//package com.github.DonBirnam.library.dao.impl;
-//
-//import com.github.DonBirnam.library.dao.HibernateUtil;
-//import com.github.DonBirnam.library.dao.OrderDao;
-//import com.github.DonBirnam.library.dao.converter.OrderConverter;
-//import com.github.DonBirnam.library.dao.entity.BookEntity;
-//import com.github.DonBirnam.library.dao.entity.OrderEntity;
-//import com.github.DonBirnam.library.dao.entity.UserEntity;
-//import com.github.DonBirnam.library.model.Order;
-//import org.hibernate.Session;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//
-//import javax.persistence.RollbackException;
-//import java.time.LocalDateTime;
-//
-//public class DefaultOrderDao implements OrderDao {
-//
-//    private static Logger logger = LoggerFactory.getLogger(DefaultUserDao.class);
-//
-//    private static class SingletonHolder {
-//        final static OrderDao HOLDER_INSTANCE = new DefaultOrderDao();
-//    }
-//
-//    public static OrderDao getInstance(){
-//        return DefaultOrderDao.SingletonHolder.HOLDER_INSTANCE;
-//    }
-//
-//
-//    @Override
-//    public void createOrder(Order order) {
-//        try(Session session = HibernateUtil.getSession()) {
-//            OrderEntity orderEntity = OrderConverter.toEntity(order);
-//            session.beginTransaction();
-//            UserEntity userEntity = session.get(UserEntity.class, order.getUserId());
-//            BookEntity bookEntity = session.get(BookEntity.class, order.getBookId());
-//
-//            String login = userEntity.getAuthUserEntity().getLogin();
-//            String title = bookEntity.getTitle();
-//            String author = bookEntity.getAuthorEntity().getFirstName() + " " + bookEntity.getAuthorEntity().getLastName();
-//            LocalDateTime createDate = order.getCreateDate();
-//            LocalDateTime takeDate = order.getTakeDate();
-//            LocalDateTime expireDate = order.getExpireDate();
-//            userEntity.getOrders().add(orderEntity);
-//            bookEntity.getOrders().add(orderEntity);
-//            session.save(orderEntity);
-//            session.saveOrUpdate(userEntity);
-//            session.saveOrUpdate(bookEntity);
-//            session.getTransaction().commit();
-//        } catch (RollbackException e) {
-//
-//        }
-//        }
-//
-//    }
-//
+package com.github.DonBirnam.library.dao.impl;
+
+import com.github.DonBirnam.library.dao.HibernateUtil;
+import com.github.DonBirnam.library.dao.OrderDao;
+import com.github.DonBirnam.library.dao.converter.OrderConverter;
+import com.github.DonBirnam.library.dao.entity.AuthUserEntity;
+import com.github.DonBirnam.library.dao.entity.BookEntity;
+import com.github.DonBirnam.library.dao.entity.OrderEntity;
+import com.github.DonBirnam.library.model.Order;
+import com.github.DonBirnam.library.model.OrderFin;
+import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.persistence.RollbackException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class DefaultOrderDao implements OrderDao {
+
+    private static Logger logger = LoggerFactory.getLogger(DefaultUserDao.class);
+
+    private static class SingletonHolder {
+        final static OrderDao HOLDER_INSTANCE = new DefaultOrderDao();
+    }
+
+    public static OrderDao getInstance() {
+        return DefaultOrderDao.SingletonHolder.HOLDER_INSTANCE;
+    }
+
+
+    @Override
+    public void createOrder(Order order) {
+        try (Session session = HibernateUtil.getSession()) {
+            OrderEntity orderEntity = OrderConverter.toEntity(order);
+            session.beginTransaction();
+            AuthUserEntity authUserEntity = session.get(AuthUserEntity.class, order.getAuthUser().getId());
+            BookEntity bookEntity = session.get(BookEntity.class, order.getBook().getId());
+            int inStock = bookEntity.getInStock();
+            bookEntity.setInStock(--inStock);
+            orderEntity.setAuthUserEntity(authUserEntity);
+            orderEntity.getBooks().add(bookEntity);
+            authUserEntity.getOrders().add(orderEntity);
+            bookEntity.getOrders().add(orderEntity);
+            session.save(orderEntity);
+            session.saveOrUpdate(authUserEntity);
+            session.saveOrUpdate(bookEntity);
+            session.getTransaction().commit();
+
+        } catch (RollbackException e) {
+
+        }
+    }
+
 
 //
 //        @Override
@@ -82,25 +81,8 @@
 //            return null;
 //    }
 //
-//    @Override
-//    public void updateOrder(Order order) {
-//        final String sql = "update orders set book_id=?,user_id=?, take_date=?,expire_date=? where id = ?";
-//
-//        try (Connection connection = MyDataBase.getInstance().connect();
-//             PreparedStatement ps = connection.prepareStatement(sql)) {
-//            ps.setLong(1, order.getBookId());
-//            ps.setLong(2, order.getUserId());
-//            ps.setTimestamp(3, Timestamp.valueOf(order.getTakeDate()));
-//            ps.setTimestamp(4, Timestamp.valueOf(order.getExpireDate()));
-//
-//            ps.setLong(5, order.getId());
-//            ps.executeUpdate();
-//        } catch (SQLException e) {
-//            logger.error("Unable to update order", e);
-//        }
-//
-//    }
-//
+
+    //
 //    @Override
 //    public void deleteOrder(Long id) {
 //        final String sql = "delete from orders where id = ?";
@@ -115,34 +97,27 @@
 //
 //    }
 //
-//    @Override
-//    public List<Order> getAllOrders() {
-//        final String sql = "select * from orders";
-//        List<Order> orders = new ArrayList<>();
-//        Order order;
-//        try (Connection connection = MyDataBase.getInstance().connect();
-//             PreparedStatement statement = connection.prepareStatement(sql)) {
-//            try {
-//                ResultSet rs = statement.executeQuery();
-//                while (rs.next()) {
-//                    order = new Order(
-//                            rs.getLong("id"),
-//                            rs.getLong("book_id"),
-//                            rs.getLong("user_id"),
-//                            rs.getTimestamp("take_date").toLocalDateTime(),
-//                            rs.getTimestamp("expire_date").toLocalDateTime());
-//                    orders.add(order);
-//                }
-//                return orders;
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        logger.warn("There are no orders in data base");
-//        return orders;
-//    }
+    @Override
+    public List<OrderFin> getAllOrders() {
+        final List<OrderEntity> orders = HibernateUtil.getSession().createQuery("from OrderEntity").list();
+        return orders.stream().map(OrderConverter::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void approveOrder(LocalDateTime takeDate, LocalDateTime expireDate, Long id) {
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+        session.createQuery("update OrderEntity o set o.takeDate= :takeDate, o.expireDate = :expireDate where o.id = :id")
+                .setParameter("takeDate", takeDate)
+                .setParameter("expireDate", expireDate)
+                .setParameter("id", id)
+                .executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+    }
+}
+
 //
 //    @Override
 //    public List<Order> getOrderByUserId(Long userId) {

@@ -17,32 +17,25 @@
                <tr>
                    <th style="display:none;">id</th>
                    <th>Логин</th>
-                   <th>Роль</th>
                    <th>Название книги</th>
                    <th width="13%">Автор</th>
-                   <th>Дата взятия</th>
+                   <th>Дата создания запроса</th>
+                   <th>Дата выдачи книги</th>
                    <th>Дата возвращения</th>
-                   <th>Заблокировать/разблокировать пользователя</th>
+                   <th>Выдать книгу</th>
                </tr>
                <c:forEach items="${orders}" var="order">
                    <tr>
-                       <td style="display:none;">${order.userId}</td>
-                       <td>${order.userLogin}</td>
-                       <td><c:choose>
-                           <c:when test="${order.userRole.equals('user')}">Активен</c:when>
-                           <c:otherwise>Заблокирован</c:otherwise>
-                       </c:choose></td>
-                       <td>${order.bookTitle}</td>
-                       <td>${order.bookAuthorFN} ${order.bookAuthorLN}</td>
+                       <td style="display:none;">${order.id}</td>
+                       <td>${order.login}</td>
+                       <td>${order.title}</td>
+                       <td>${order.authorFN} ${order.authorLN}</td>
+                       <td>${order.createOrder}</td>
                        <td>${order.takeDate}</td>
                        <td>${order.expireDate}</td>
-                       <td><form method="post" action="${pageContext.request.contextPath}/librarianBlock">
-                       <input name="id" type="hidden" value="${order.userId}"></input>
-                       <input name="role" type="hidden" value="${order.userRole}"></input>
-                       <c:choose>
-                           <c:when test="${order.userRole.equals('user')}"><input type="submit" value="Заблокировать"></input></c:when>
-                            <c:otherwise><input type="submit" value="Разблокировать"></input></c:otherwise>
-                       </c:choose>
+                       <td><form method="post" action="${pageContext.request.contextPath}/librarian_approve">
+                       <input name="id" type="hidden" value="${order.id}"></input>
+                       <input type="submit" value="Выдать"></input>
                        </form></td>
                    </tr>
                </c:forEach>

@@ -2,12 +2,12 @@ package com.github.DonBirnam.library.dao.entity;
 
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "books")
@@ -15,7 +15,7 @@ public class BookEntity {
     private Long id;
     private String title;
     private AuthorEntity authorEntity;
-    private List<OrderEntity> orders = new ArrayList<>();
+    private Set<OrderEntity> orders = new HashSet<>();
     private int pageCount;
     private String isbn;
     private Genre genre;
@@ -105,11 +105,11 @@ public class BookEntity {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "book_order", joinColumns = {@JoinColumn(name = "book_id")},
             inverseJoinColumns = {@JoinColumn(name = "order_id")})
-    public List<OrderEntity> getOrders() {
+    public Set<OrderEntity> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<OrderEntity> orders) {
+    public void setOrders(Set<OrderEntity> orders) {
         this.orders = orders;
     }
 }

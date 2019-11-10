@@ -1,20 +1,24 @@
-//package com.github.DonBirnam.library.dao;
-//
-//import com.github.DonBirnam.library.model.Order;
-//
-//public interface OrderDao {
-//
-//    void createOrder(Order order);
-//
+package com.github.DonBirnam.library.dao;
+
+import com.github.DonBirnam.library.model.Order;
+import com.github.DonBirnam.library.model.OrderFin;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+public interface OrderDao {
+
+    void createOrder(Order order);
+
 //    Order findById(Long id);
-//
-//    void updateOrder(Order order);
 //
 //    void deleteOrder(Long id);
 //
-//    List<Order> getAllOrders();
-//
+    List<OrderFin> getAllOrders();
+
+    void approveOrder(LocalDateTime takeDate, LocalDateTime expireDate, Long id);
+
 //    List<Order> getOrderByUserId(Long userId);
 //
 //    List<Order> getAllUsersOrders();
-//}
+}

@@ -23,7 +23,7 @@ public class UserAdminServlet extends HttpServlet {
     private BookService bookService = DefaultBookService.getInstance();
     private UserService userService = DefaultUserService.getInstance();
 
-//    private OrderService orderService = DefaultOrderService.getInstance();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

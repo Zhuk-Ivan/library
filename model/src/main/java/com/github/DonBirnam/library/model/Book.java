@@ -1,5 +1,7 @@
 package com.github.DonBirnam.library.model;
 
+import java.util.Set;
+
 public class Book {
     private Long id;
     private String title;
@@ -9,6 +11,7 @@ public class Book {
     private Genre genre;
     private BookStatus status;
     private int inStock;
+    private Set<Order>orders;
 
     public Book() {
     }
@@ -22,6 +25,19 @@ public class Book {
         this.genre = genre;
         this.status = status;
         this.inStock = inStock;
+    }
+
+
+    public Book(Long id, String title, Author author, int pageCount, String isbn, Genre genre, BookStatus status, int inStock, Set<Order> orders) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.pageCount = pageCount;
+        this.isbn = isbn;
+        this.genre = genre;
+        this.status = status;
+        this.inStock = inStock;
+        this.orders = orders;
     }
 
     public Long getId() {
@@ -86,6 +102,14 @@ public class Book {
 
     public void setInStock(int inStock) {
         this.inStock = inStock;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 }
 
