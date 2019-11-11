@@ -1,6 +1,6 @@
 package com.github.DonBirnam.library.dao;
 
-import com.github.DonBirnam.library.model.AuthUser;
+import com.github.DonBirnam.library.model.User.AuthUser;
 import com.github.DonBirnam.library.model.Role;
 
 public interface AuthUserDao {
@@ -17,5 +17,4 @@ public interface AuthUserDao {
 
     void blockUser(Role role, Long id);
 
-//    List<AuthUser> getAllUsers();
 }

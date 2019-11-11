@@ -3,7 +3,8 @@ package com.github.DonBirnam.library.service.impl;
 
 import com.github.DonBirnam.library.dao.UserDao;
 import com.github.DonBirnam.library.dao.impl.DefaultUserDao;
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.User.User;
+import com.github.DonBirnam.library.model.User.UserFull;
 import com.github.DonBirnam.library.service.UserService;
 
 import java.util.List;
@@ -22,13 +23,14 @@ public class DefaultUserService implements UserService {
 
 
     @Override
-    public void save(User user) {
-        userDao.saveUser(user);
+    public Long save(User user) {
+        Long userId = userDao.saveUser(user);
+        return userId;
 
     }
 
     @Override
-    public User getUserById(Long id) {
+    public UserFull getUserById(Long id) {
         return userDao.getById(id);
 
     }
@@ -44,7 +46,7 @@ public class DefaultUserService implements UserService {
 
     }
 
-    public List<User> getAllUsers(){
+    public List<UserFull> getAllUsers(){
        return userDao.getAllUsers();
     }
 }

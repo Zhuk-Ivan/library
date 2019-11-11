@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.NoResultException;
 import javax.persistence.RollbackException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,9 +32,9 @@ public class DefaultOrderDao implements OrderDao {
 
 
     @Override
-    public void createOrder(Order order) {
+    public Long createOrder(Order order) {
+        OrderEntity orderEntity = OrderConverter.toEntity(order);
         try (Session session = HibernateUtil.getSession()) {
-            OrderEntity orderEntity = OrderConverter.toEntity(order);
             session.beginTransaction();
             AuthUserEntity authUserEntity = session.get(AuthUserEntity.class, order.getAuthUser().getId());
             BookEntity bookEntity = session.get(BookEntity.class, order.getBook().getId());
@@ -49,38 +50,27 @@ public class DefaultOrderDao implements OrderDao {
             session.getTransaction().commit();
 
         } catch (RollbackException e) {
-
+            return null;
         }
+        return orderEntity.getId();
     }
 
 
-//
-//        @Override
-//    public Order findById(Long id) {
-//            final String sql = "select * from orders where id = ?";
-//
-//            try (Connection connection = MyDataBase.getInstance().connect();
-//                 PreparedStatement ps = connection.prepareStatement(sql)) {
-//                ps.setLong(1, id);
-//                try (ResultSet rs = ps.executeQuery()) {
-//                    if (rs.next()) {
-//                        return new Order(
-//                                rs.getLong("id"),
-//                                rs.getLong("book_id"),
-//                                rs.getLong("user_id"),
-//                                rs.getTimestamp("take_date").toLocalDateTime(),
-//                                rs.getTimestamp("expire_date").toLocalDateTime());
-//                    } else {
-//                        return null;
-//                    }
-//                }
-//            } catch (SQLException e) {
-//                logger.error("Unable to find order by id", e);
-//            }
-//
-//            return null;
-//    }
-//
+
+    @Override
+    public OrderFin findById(Long id) {
+            OrderEntity orderEntity;
+            try {
+                orderEntity = (OrderEntity) HibernateUtil.getSession().createQuery("from OrderEntity b where b.id = :id")
+                        .setParameter("id", id)
+                        .getSingleResult();
+            } catch (NoResultException e) {
+                orderEntity = null;
+            }
+
+            return OrderConverter.fromEntity(orderEntity);
+    }
+
 
     //
 //    @Override

@@ -22,8 +22,9 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
-    public void save(Book book) {
-        bookDao.createBook(book);
+    public Long save(Book book) {
+       Long bookId =  bookDao.createBook(book);
+       return bookId;
     }
 
     @Override
@@ -59,6 +60,14 @@ public class DefaultBookService implements BookService {
     @Override
     public List<Book> getByGenre(Genre genre) {
         return bookDao.getBooksByGenre(genre);
+    }
+
+    @Override
+    public boolean notLastPage(int page) {
+        int max = 2;
+        int countBooks = bookDao.countBooks();
+        int lastPage = countBooks / max;
+        return page < lastPage;
     }
 
 

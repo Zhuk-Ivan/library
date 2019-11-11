@@ -1,4 +1,4 @@
-package com.github.DonBirnam.library.model;
+package com.github.DonBirnam.library.model.User;
 
 public class User {
     private Long id;
@@ -6,16 +6,25 @@ public class User {
     private String lastName;
     private String phone;
     private String email;
-    private AuthUser authUser;
+    private Long authUserId;
 
-    public User(Long id, String firstName, String lastName, String phone, String email, AuthUser authUser) {
+    public User(Long id, String firstName, String lastName, String phone, String email, Long authUserId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.email = email;
-        this.authUser = authUser;
+        this.authUserId = authUserId;
     }
+
+    public User(String firstName, String lastName, String phone, String email, Long authUserId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.email = email;
+        this.authUserId = authUserId;
+    }
+
 
     public Long getId() {
         return id;
@@ -57,11 +66,11 @@ public class User {
         this.email = email;
     }
 
-    public AuthUser getAuthUser() {
-        return authUser;
+    public Long getAuthUserId() {
+        return authUserId;
     }
 
-    public void setAuthUser(AuthUser authUser) {
-        this.authUser = authUser;
+    public void setAuthUserId(Long authUserId) {
+        this.authUserId = authUserId;
     }
 }

@@ -1,6 +1,7 @@
 package com.github.DonBirnam.library.dao.entity;
 
 import com.github.DonBirnam.library.model.Role;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "auth_users")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AuthUserEntity {
     private Long id;
     private String login;

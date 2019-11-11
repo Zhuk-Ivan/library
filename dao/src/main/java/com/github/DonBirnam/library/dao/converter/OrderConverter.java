@@ -10,17 +10,10 @@ public class OrderConverter {
         if (order == null) {
             return null;
         }
-//        Set<BookEntity> bookEntities = new HashSet<>();
-//        bookEntities.add(BookConverter.toEntity(order.getBook()));
-//        for (Book book: books) {
-//            bookEntities.add(BookConverter.toEntity(book));
-//
-//        }
+
 
         final OrderEntity orderEntity = new OrderEntity();
         orderEntity.setId(order.getId());
-//        orderEntity.setAuthUserEntity(AuthUserConverter.toEntity(order.getAuthUser()));
-//        orderEntity.setBooks(bookEntities);
         orderEntity.setCreateDate(order.getCreateDate());
         orderEntity.setTakeDate(order.getTakeDate());
         orderEntity.setExpireDate(order.getExpireDate());

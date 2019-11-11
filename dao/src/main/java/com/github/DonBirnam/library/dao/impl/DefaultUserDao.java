@@ -3,8 +3,10 @@ package com.github.DonBirnam.library.dao.impl;
 import com.github.DonBirnam.library.dao.HibernateUtil;
 import com.github.DonBirnam.library.dao.UserDao;
 import com.github.DonBirnam.library.dao.converter.UserConverter;
+import com.github.DonBirnam.library.dao.entity.AuthUserEntity;
 import com.github.DonBirnam.library.dao.entity.UserEntity;
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.User.User;
+import com.github.DonBirnam.library.model.User.UserFull;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,15 +31,19 @@ public class DefaultUserDao implements UserDao {
 
 
     @Override
-    public void saveUser(User user) {
+    public Long saveUser(User user) {
         UserEntity userEntity = UserConverter.toEntity(user);
         try (final Session session = HibernateUtil.getSession()) {
+            AuthUserEntity authUserEntity = session.get(AuthUserEntity.class, user.getAuthUserId());
+            userEntity.setAuthUserEntity(authUserEntity);
             session.beginTransaction();
             session.save(userEntity);
             session.getTransaction().commit();
         } catch (
                 RollbackException e) {
+            return null;
         }
+        return userEntity.getId();
     }
 
     @Override
@@ -52,7 +58,7 @@ public class DefaultUserDao implements UserDao {
     }
 
     @Override
-    public User getById(Long id) {
+    public UserFull getById(Long id) {
         UserEntity user;
         try {
             user = (UserEntity) HibernateUtil.getSession().createQuery("from UserEntity eu where eu.id = :id")
@@ -77,7 +83,7 @@ public class DefaultUserDao implements UserDao {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<UserFull> getAllUsers() {
         final List<UserEntity> users = HibernateUtil.getSession().createQuery("from UserEntity").list();
         return users.stream().map(UserConverter::fromEntity)
                 .collect(Collectors.toList());
@@ -85,18 +91,5 @@ public class DefaultUserDao implements UserDao {
     }
 
 }
-//    @Override
-//    public void blockUser(Role role, Long id) {
-//        Session session = HibernateUtil.getSession();
-//        session.beginTransaction();
-//        session.createQuery("update AuthUserEntity u set u.role = :role where u.id = :id")
-//                .setParameter("role", role)
-//                .setParameter("id", id)
-//                .executeUpdate();
-//        session.getTransaction().commit();
-//        session.close();
-//
-//    }
-//
 
 

@@ -11,7 +11,7 @@
      <a href="/library/logout">Выход</a>
      <a href="/library/user_orders">Ваши заявки</a>
 
-                <h2>Добро пожаловать, ${authUser.login}</h2>
+                <h2>Добро пожаловать, ${user.login}</h2>
                  <table>
                                <tr>
                                <th style="display:none;">id</th>
@@ -22,12 +22,12 @@
                                    <th>login</th>
                                </tr>
                                    <tr><form>
-                                       <td style="display:none;"><input name="id" type="text" readonly  value=${authUser.id}></td>
+                                       <td style="display:none;"><input name="id" type="text" readonly  value=${user.id}></td>
                                        <td><input name="firstName" type="text"  value=${user.firstName}></td>
                                        <td><input name="lastName" type="text"  value=${user.lastName}></td>
                                        <td><input name="phone" type="text"  value=${user.phone}></td>
                                        <td><input name="email" type="text"  value=${user.email}></td>
-                                       <td><input name="login" type="text"  value=${authUser.login}></td>
+                                       <td><input name="login" type="text"  value=${user.login}></td>
                                        <td><input formaction="${pageContext.request.contextPath}/updateUser" formmethod="post" type="submit" value="обновить"></td>
                                        </form></tr>
                    </table>
@@ -86,6 +86,23 @@
                                             </tr>
                                             </c:forEach>
                     </table
+                    <form method="post" action="${pageContext.request.contextPath}/user_admin">
+                        <div style="margin-left: 140px;">
+                            <c:if test="${page>1}">
+                                <div class="navigation">
+                                    <button type="submit" formmethod="post" name="nav" value="prev"><<</button>
+                                </div>
+                            </c:if>
+                            <div class="navigation">${page}</div>
+                            <c:if test="${notLast}">
+                                <div class="navigation">
+                                    <button type="submit" formmethod="post" name="nav" value="next">>></button>
+                                </div>
+                            </c:if>
+                        </div>
+                    </form>
+
+
 
 
 

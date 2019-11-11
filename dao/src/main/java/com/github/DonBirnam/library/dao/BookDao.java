@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BookDao {
 
-    void createBook(Book book);
+    Long createBook(Book book);
 
     Book findById(Long id);
 
@@ -24,6 +24,6 @@ public interface BookDao {
 
     List<Book> getBooksByGenre(Genre genre);
 
-    void addBookToOrder(Long orderId, String bookId);
+    int countBooks();
 
 }

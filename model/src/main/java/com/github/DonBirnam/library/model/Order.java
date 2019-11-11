@@ -1,5 +1,7 @@
 package com.github.DonBirnam.library.model;
 
+import com.github.DonBirnam.library.model.User.AuthUser;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;

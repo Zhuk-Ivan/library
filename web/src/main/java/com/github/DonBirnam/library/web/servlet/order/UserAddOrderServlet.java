@@ -1,6 +1,6 @@
 package com.github.DonBirnam.library.web.servlet.order;
 
-import com.github.DonBirnam.library.model.AuthUser;
+import com.github.DonBirnam.library.model.User.AuthUser;
 import com.github.DonBirnam.library.model.Book;
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Order;

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BookService {
 
-    void save(Book book);
+    Long save(Book book);
 
     Book find(Long id);
 
@@ -21,5 +21,7 @@ public interface BookService {
     List<Book> getAllBooks();
 
     List<Book> getByGenre(Genre genre);
+
+    boolean notLastPage(int page);
 
 }

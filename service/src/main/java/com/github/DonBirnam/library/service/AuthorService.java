@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface AuthorService {
 
-    void save(Author author);
+    Long save(Author author);
 
     Author find(Long id);
 

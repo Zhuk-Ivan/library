@@ -5,7 +5,6 @@ import com.github.DonBirnam.library.dao.HibernateUtil;
 import com.github.DonBirnam.library.dao.converter.AuthorConverter;
 import com.github.DonBirnam.library.dao.converter.BookConverter;
 import com.github.DonBirnam.library.dao.entity.BookEntity;
-import com.github.DonBirnam.library.dao.entity.OrderEntity;
 import com.github.DonBirnam.library.model.Book;
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
@@ -13,9 +12,7 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.RollbackException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -35,7 +32,7 @@ public class DefaultBookDao implements BookDao {
     }
 
     @Override
-    public void createBook(Book book) {
+    public Long createBook(Book book) {
         BookEntity bookEntity = BookConverter.toEntity(book);
         try (final Session session = HibernateUtil.getSession()) {
             session.beginTransaction();
@@ -43,8 +40,9 @@ public class DefaultBookDao implements BookDao {
             session.getTransaction().commit();
         } catch (
                 RollbackException e) {
+            return null;
         }
-
+        return bookEntity.getId();
     }
 
     @Override
@@ -115,16 +113,33 @@ public class DefaultBookDao implements BookDao {
         session.close();
     }
 
+//    @Override
+//    public List<Book> getAllBooks(Integer page) {
+//        Integer pageSize = 2;
+//        Session session = HibernateUtil.getSession();
+//        CriteriaBuilder cb = session.getCriteriaBuilder();
+//        CriteriaQuery<BookEntity> criteria = cb.createQuery(BookEntity.class);
+//        criteria.select(criteria.from(BookEntity.class));
+//        TypedQuery<BookEntity> typedQuery = session.createQuery(criteria);
+//        typedQuery.setFirstResult(page);
+//        typedQuery.setMaxResults(pageSize * page);
+//        List<BookEntity> bookEntities = typedQuery.getResultList();
+//        if (bookEntities.size() > 0) {
+//            return bookEntities.stream().map(BookConverter::fromEntity).collect(Collectors.toList());
+//        }
+//        return null;
+//    }
+
     @Override
     public List<Book> getAllBooks() {
-
-        EntityManager em = HibernateUtil.getSession();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+        Session session = HibernateUtil.getSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<BookEntity> criteria = cb.createQuery(BookEntity.class);
         criteria.select(criteria.from(BookEntity.class));
-        List<BookEntity> bookEntities = em.createQuery(criteria).getResultList();
+        List<BookEntity> bookEntities = session.createQuery(criteria).getResultList();
         return bookEntities.stream().map(BookConverter::fromEntity).collect(Collectors.toList());
     }
+
 
 
 
@@ -138,28 +153,12 @@ public class DefaultBookDao implements BookDao {
                 .collect(Collectors.toList());
     }
 
-
     @Override
-    public void addBookToOrder(Long orderId, String bookId) {
-        Session session = HibernateUtil.getSession();
-        Query query = session.createQuery("from BookEntity b where b.id = :id");
-        query.setParameter("id", bookId);
-        BookEntity bookEntity = (BookEntity) query.getSingleResult();
-
-        OrderEntity orderEntity = session.get(OrderEntity.class, orderId);
-
-        orderEntity.getBooks().add(bookEntity);
-        bookEntity.getOrders().add(orderEntity);
-
-        try {
-            session.beginTransaction();
-            session.saveOrUpdate(orderEntity);
-            session.getTransaction().commit();
-        } catch (RollbackException e) {
-
-        } finally {
-            session.close();
-        }
+    public int countBooks() {
+         List<BookEntity> books = HibernateUtil.getSession().createQuery("from BookEntity")
+                .list();
+        int bookSize = books.size();
+        return bookSize;
     }
 }
 

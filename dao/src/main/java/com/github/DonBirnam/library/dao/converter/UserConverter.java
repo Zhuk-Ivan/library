@@ -1,7 +1,8 @@
 package com.github.DonBirnam.library.dao.converter;
 
 import com.github.DonBirnam.library.dao.entity.UserEntity;
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.User.User;
+import com.github.DonBirnam.library.model.User.UserFull;
 
 
 public class UserConverter {
@@ -18,22 +19,23 @@ public class UserConverter {
         userEntity.setLastName(user.getLastName());
         userEntity.setPhone(user.getPhone());
         userEntity.setEmail(user.getEmail());
-        userEntity.setAuthUserEntity(AuthUserConverter.toEntity(user.getAuthUser()));
 
         return userEntity;
     }
 
-    public static User fromEntity(UserEntity userEntity) {
+    public static UserFull fromEntity(UserEntity userEntity) {
         if (userEntity == null) {
             return null;
         }
-        return new User(
+        return new UserFull(
                 userEntity.getId(),
                 userEntity.getFirstName(),
                 userEntity.getLastName(),
                 userEntity.getPhone(),
                 userEntity.getEmail(),
-                AuthUserConverter.fromEntity(userEntity.getAuthUserEntity()));
+                userEntity.getAuthUserEntity().getLogin(),
+                userEntity.getAuthUserEntity().getPassword(),
+                userEntity.getAuthUserEntity().getRole());
     }
 
 }

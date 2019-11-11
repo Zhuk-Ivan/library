@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static com.github.DonBirnam.library.web.WebUtils.*;
+import static com.github.DonBirnam.library.web.WebUtils.forward;
+import static com.github.DonBirnam.library.web.WebUtils.redirect;
 
 @WebServlet(urlPatterns = "/books_page")
 public class AdminBookServlet extends HttpServlet {

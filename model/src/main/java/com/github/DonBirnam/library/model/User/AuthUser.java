@@ -1,4 +1,7 @@
-package com.github.DonBirnam.library.model;
+package com.github.DonBirnam.library.model.User;
+
+import com.github.DonBirnam.library.model.Order;
+import com.github.DonBirnam.library.model.Role;
 
 import java.util.HashSet;
 import java.util.Set;

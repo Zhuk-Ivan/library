@@ -1,6 +1,6 @@
 package com.github.DonBirnam.library.service;
 
-import com.github.DonBirnam.library.model.AuthUser;
+import com.github.DonBirnam.library.model.User.AuthUser;
 import com.github.DonBirnam.library.model.Role;
 
 public interface AuthUserService {

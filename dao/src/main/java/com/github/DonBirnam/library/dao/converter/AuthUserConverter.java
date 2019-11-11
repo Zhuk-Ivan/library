@@ -2,7 +2,7 @@ package com.github.DonBirnam.library.dao.converter;
 
 
 import com.github.DonBirnam.library.dao.entity.AuthUserEntity;
-import com.github.DonBirnam.library.model.AuthUser;
+import com.github.DonBirnam.library.model.User.AuthUser;
 
 public class AuthUserConverter {
     public static AuthUserEntity toEntity(AuthUser authUser) {

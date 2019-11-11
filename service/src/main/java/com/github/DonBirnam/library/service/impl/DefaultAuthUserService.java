@@ -2,9 +2,9 @@ package com.github.DonBirnam.library.service.impl;
 
 import com.github.DonBirnam.library.dao.AuthUserDao;
 import com.github.DonBirnam.library.dao.impl.DefaultAuthUserDao;
-import com.github.DonBirnam.library.model.AuthUser;
+import com.github.DonBirnam.library.model.User.AuthUser;
 import com.github.DonBirnam.library.model.Role;
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.User.User;
 import com.github.DonBirnam.library.service.AuthUserService;
 import com.github.DonBirnam.library.service.UserService;
 
@@ -27,7 +27,7 @@ public class DefaultAuthUserService implements AuthUserService {
 
         AuthUser authUser = new AuthUser(null, login, password, role);
         Long authId = authUserDao.saveAuthUser(authUser);
-        User user = new User(null, firstName, lastName, email, phone, authUserDao.getById(authId));
+        User user = new User(null, firstName, lastName, email, phone, authId);
         userService.save(user);
         return authId;
     }

@@ -4,14 +4,12 @@ import com.github.DonBirnam.library.dao.AuthUserDao;
 import com.github.DonBirnam.library.dao.HibernateUtil;
 import com.github.DonBirnam.library.dao.converter.AuthUserConverter;
 import com.github.DonBirnam.library.dao.entity.AuthUserEntity;
-import com.github.DonBirnam.library.model.AuthUser;
+import com.github.DonBirnam.library.model.User.AuthUser;
 import com.github.DonBirnam.library.model.Role;
 import org.hibernate.Session;
 
 import javax.persistence.NoResultException;
 import javax.persistence.RollbackException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class DefaultAuthUserDao implements AuthUserDao{
 

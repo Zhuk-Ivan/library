@@ -1,7 +1,7 @@
 //package com.github.DonBirnam.library.web.servlet.order;
 //
 //import com.github.DonBirnam.library.model.Order;
-//import com.github.DonBirnam.library.model.User;
+//import com.github.DonBirnam.library.model.User.User;
 //import com.github.DonBirnam.library.service.OrderService;
 //import com.github.DonBirnam.library.service.impl.DefaultOrderService;
 //

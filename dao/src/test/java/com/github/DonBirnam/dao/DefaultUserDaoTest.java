@@ -1,71 +1,70 @@
 //package com.github.DonBirnam.dao;
 //
 //
+//import com.github.DonBirnam.library.dao.AuthUserDao;
 //import com.github.DonBirnam.library.dao.HibernateUtil;
+//import com.github.DonBirnam.library.dao.UserDao;
+//import com.github.DonBirnam.library.dao.entity.UserEntity;
+//import com.github.DonBirnam.library.dao.impl.DefaultAuthUserDao;
 //import com.github.DonBirnam.library.dao.impl.DefaultUserDao;
-//import com.github.DonBirnam.library.model.Role;
-//import com.github.DonBirnam.library.model.User;
-//import com.github.DonBirnam.library.model.UserDTO;
-//import org.junit.jupiter.api.AfterAll;
+//import com.github.DonBirnam.library.model.User.User;
+//import com.github.DonBirnam.library.model.User.UserFull;
 //import org.junit.jupiter.api.Test;
 //
-//import javax.persistence.EntityManager;
 //import java.util.List;
 //
-//import static org.junit.jupiter.api.Assertions.*;
+//import static junit.framework.TestCase.assertNull;
+//import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.junit.jupiter.api.Assertions.assertNotNull;
 //
 //public class DefaultUserDaoTest {
+//    private UserDao userDao = DefaultUserDao.getInstance();
+//    private AuthUserDao authUserDao = DefaultAuthUserDao.getInstance();
 //
 //    private User testUser() {
-//        User user = new User();
-//        user.setId(null);
-//        user.setFirstName("Алексей");
-//        user.setLastName("Ждун");
-//        user.setPhone("+375336559237");
-//        user.setEmail("Zhdun15@gmail.com");
-//        user.setLogin("Zhdun");
-//        user.setPassword("12345");
-//        user.setRole(Role.USER);
-//        return user;
-//  }
+//        User user = null;
+//        return user = new User(null, "Test", "User","+375291111111", "Pes@samsobaka",1000L);
+//    }
 //
 //    @Test
-//    void save() {
+//    void saveUser() {
 //        User user = testUser();
-//        Long id = DefaultUserDao.getInstance().saveUser(user);
-//        String firstName = DefaultUserDao.getInstance().getById(id).getFirstName();
-//        assertEquals("Алексей", firstName);
+//        userDao.saveUser(user);
+//
+//        final UserEntity userEntity = HibernateUtil.getSession().get(UserEntity.class, 1000L);
+//
+//        assertNotNull(userEntity);
 //    }
 //
 //    @Test
-//    void getUserByLogin() {
-//        String firstName = DefaultUserDao.getInstance().showUser("Alex").getFirstName();
-//        UserDTO userNull = DefaultUserDao.getInstance().getById(20L);
-//        assertEquals("Алексей", firstName);
-//        assertNull(userNull);
-//    }
+//    void getById(){
+//        final UserEntity userEntity = HibernateUtil.getSession().get(UserEntity.class, 1000L);
 //
+//        assertEquals(userEntity.getAuthUserEntity().getLogin(), "TestUser");
+//
+//        assertEquals(userEntity.getFirstName(), "Test");
+//    }
 //
 //    @Test
 //    void getUsers() {
-//        List<UserDTO> users = DefaultUserDao.getInstance().getAllUsers();
+//        List<UserFull> users = userDao.getAllUsers();
+//
 //        assertNotNull(users);
 //    }
 //
+//
 //    @Test
 //    void deleteUser() {
-//        UserDTO user = DefaultUserDao.getInstance().showUser("Zhdun");
-//        assertNotNull(DefaultUserDao.getInstance().showUser(user.getLogin()));
-//        DefaultUserDao.getInstance().deleteUser(user.getId());
-//        assertNull(DefaultUserDao.getInstance().showUser(user.getLogin()));
+//
+//        assertNotNull(userDao.getById(1000L));
+//
+//        userDao.deleteUser(1000L);
+//
+//        assertNull(userDao.getById(1000L));
+//
+//        authUserDao.deleteAuthUser(1000L);
 //    }
 //
-//    @AfterAll
-//    public static void cleanUp() {
-//        EntityManager em = HibernateUtil.getSession();
-//        if (em != null) {
-//            em.close();
-//        }
-//    }
 //}
+//
 //

@@ -1,21 +1,22 @@
 package com.github.DonBirnam.library.dao;
 
 
-import com.github.DonBirnam.library.model.User;
+import com.github.DonBirnam.library.model.User.User;
+import com.github.DonBirnam.library.model.User.UserFull;
 
 import java.util.List;
 
 public interface UserDao {
 
-    void saveUser(User user);
+    Long saveUser(User user);
 
     void updateUser(User user);
 
-    User getById(Long id);
+    UserFull getById(Long id);
 
     void deleteUser(Long id);
 
-    List<User> getAllUsers();
+    List<UserFull> getAllUsers();
 
 
 }

@@ -20,8 +20,9 @@ public class DefaultAuthorService implements AuthorService {
     }
 
     @Override
-    public void save(Author author) {
-        authorDao.createAuthor(author);
+    public Long save(Author author) {
+        Long authorId = authorDao.createAuthor(author);
+        return authorId;
     }
 
     @Override

@@ -1,70 +1,65 @@
 package com.github.DonBirnam.library.test;
 
-import com.github.DonBirnam.library.dao.AuthUserDao;
-import com.github.DonBirnam.library.dao.impl.DefaultAuthUserDao;
-import com.github.DonBirnam.library.service.UserService;
-import com.github.DonBirnam.library.service.impl.DefaultUserService;
+import com.github.DonBirnam.library.dao.AuthorDao;
+import com.github.DonBirnam.library.model.Author;
+import com.github.DonBirnam.library.service.impl.DefaultAuthorService;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class DefaultAuthorServiceTest {
 
-    AuthUserDao authUserDao = DefaultAuthUserDao.getInstance();
-    UserService userService = DefaultUserService.getInstance();
 
-//    private Author authorTest() {
-//        Author author=new Author();
-//        author.setId(1L);
-//        author.setFirstName("Лера");
-//        author.setLastName("Покрышкина");
-//        return author;
-//    }
-//
-//    @Mock
-//    AuthorDao dao;
-//
-//    @InjectMocks
-//    DefaultAuthorService service;
+    private Author author = new Author(1L, "Ирвин", "Уэлш");
+    @Mock
+    AuthorDao dao;
 
-//    @Test
-//    public void save() {
-//        Role role = Role.USER;
-//        String login = "user";
-//        String password = "11111";
-//        String firstName = "Ivan";
-//        String lastName = "Zhuk";
-//        String phone = "+375336559237";
-//        String email = "Alex@gmail.com";
-//        Long authId = authUserDao.saveAuthUser(login, password, role);
-//        User user = new User(null, firstName, lastName, email, phone, authId);
-//        userService.save(user);
-//
-//    }
+    @InjectMocks
+    DefaultAuthorService service;
 
-//    @Test
-//    void getAllAuthors() {
-//        when(dao.getAllAuthors()).thenReturn(new ArrayList<Author>());
-//        List<Author> authors = service.getAuthors();
-//        assertNotNull(authors);
-//    }
-//
-//    @Test
-//    public void getById() {
-//        Author author= authorTest();
-//        when(service.find(author.getId())).thenReturn(author);
-//        assertNotNull(service.find(author.getId()));
-//        assertEquals("Покрышкина",service.find(author.getId()).getLastName());
-//    }
-//
-//    @Test
-//    public void deleteUser() {
-//        Author author= authorTest();
-//        when(service.find(author.getId())).thenReturn(author);
-//        service.delete(author.getId());
-//        when(service.find(author.getId())).thenReturn(null);
-//        assertNull(service.find(author.getId()));
-//    }
+    @Test
+    public void getById() {
+        when(dao.findById(1L)).thenReturn(author);
+
+        assertNotNull(service.find(1L));
+    }
+
+
+    @Test
+    public void getByLastName() {
+        when(dao.findByName("Уэлш")).thenReturn(author);
+        Author author1 = service.findByLastName("Уэлш");
+        assertEquals(author, author1);
+        when(dao.findByName("Кизи")).thenReturn(null);
+        Author wrongAuthor = service.findByLastName("Кизи");
+        assertNull(wrongAuthor);
+    }
+
+    @Test
+    void getAllAuthors() {
+        when(dao.getAllAuthors()).thenReturn(new ArrayList<>());
+        List<Author> authors = service.getAuthors();
+        assertNotNull(authors);
+    }
+
+    @Test
+    void saveAuthor(){
+        when(dao.createAuthor(author)).thenReturn(100L);
+
+        Long id = service.save(author);
+
+        assertEquals(id, 100L);
+
+    }
 
 }
 
