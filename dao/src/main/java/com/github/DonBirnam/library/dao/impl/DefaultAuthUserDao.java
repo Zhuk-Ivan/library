@@ -4,12 +4,15 @@ import com.github.DonBirnam.library.dao.AuthUserDao;
 import com.github.DonBirnam.library.dao.HibernateUtil;
 import com.github.DonBirnam.library.dao.converter.AuthUserConverter;
 import com.github.DonBirnam.library.dao.entity.AuthUserEntity;
+import com.github.DonBirnam.library.dao.entity.OrderEntity;
 import com.github.DonBirnam.library.model.User.AuthUser;
-import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User.Role;
 import org.hibernate.Session;
 
 import javax.persistence.NoResultException;
 import javax.persistence.RollbackException;
+import java.util.Iterator;
+import java.util.Set;
 
 public class DefaultAuthUserDao implements AuthUserDao{
 
@@ -95,6 +98,24 @@ public class DefaultAuthUserDao implements AuthUserDao{
                 .executeUpdate();
         session.getTransaction().commit();
         session.close();
+    }
+
+    @Override
+    public boolean canMakeAnOrder(Long id) {
+        Session session = HibernateUtil.getSession();
+        int bookCount = 0;
+        AuthUserEntity authUserEntity = session.get(AuthUserEntity.class, id);
+        Set<OrderEntity> userOrders = authUserEntity.getOrders();
+        Iterator<OrderEntity> iter = userOrders.iterator();
+        while (iter.hasNext()){
+            bookCount += iter.next().getBooks().size();
+        }
+
+        if (bookCount < 3){
+            return true;
+        }
+        else return false;
+
     }
 
 //    @Override

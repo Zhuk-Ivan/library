@@ -28,9 +28,8 @@
             <form >
                 <td style="display:none;"><input name="id" type="text"  value=${books.id}></td>
                 <td><input name="title"  type="text"  value=${books.title}></td>
-                <td style="display:none;"><input name="authorId"  type="text"  value=${books.author.id}>
-                <td><input name="authorFN"  type="text"  value=${books.author.firstName}>
-                <td><input name="authorLN"  type="text"  value=${books.author.lastName}>
+                <td><input name="authorFirstName"  type="text"  value=${books.authorFirstName}>
+                <td><input name="authorLastName"  type="text"  value=${books.authorLastName}>
                 <td><input name="page_count"  type="text"  value=${books.pageCount}></td>
                 <td><input name="isbn"  type="text"  value=${books.isbn}></td>
                 <td><select name ="genre">

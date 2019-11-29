@@ -23,8 +23,9 @@ public class LibrarianDeleteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long id = Long.valueOf(req.getParameter("id"));
-        authUserService.deleteAuthUser(id);
+        String login = req.getParameter("login");
+        Long authUserId = authUserService.getByLogin(login).getId();
+        authUserService.deleteAuthUser(authUserId);
         redirect("librarian",req,resp);
     }
 }

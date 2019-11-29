@@ -1,7 +1,7 @@
 package com.github.DonBirnam.library.test;
 
 import com.github.DonBirnam.library.dao.AuthUserDao;
-import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User.Role;
 import com.github.DonBirnam.library.model.User.AuthUser;
 import com.github.DonBirnam.library.service.impl.DefaultAuthUserService;
 import org.junit.jupiter.api.Test;

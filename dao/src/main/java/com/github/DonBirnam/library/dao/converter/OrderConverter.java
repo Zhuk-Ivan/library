@@ -4,6 +4,8 @@ import com.github.DonBirnam.library.dao.entity.OrderEntity;
 import com.github.DonBirnam.library.model.Order;
 import com.github.DonBirnam.library.model.OrderFin;
 
+import java.util.stream.Collectors;
+
 
 public class OrderConverter {
     public static OrderEntity toEntity(Order order) {
@@ -29,11 +31,9 @@ public class OrderConverter {
         return new OrderFin(
                 orderEntity.getId(),
                 orderEntity.getAuthUserEntity().getLogin(),
-                orderEntity.getBooks().iterator().next().getTitle(),
-                orderEntity.getBooks().iterator().next().getAuthorEntity().getFirstName(),
-                orderEntity.getBooks().iterator().next().getAuthorEntity().getLastName(),
                 orderEntity.getCreateDate(),
                 orderEntity.getTakeDate(),
-                orderEntity.getExpireDate());
+                orderEntity.getExpireDate(),
+                orderEntity.getBooks().stream().map(BookConverter::fromEntity).collect(Collectors.toSet()));
     }
 }

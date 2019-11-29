@@ -10,7 +10,7 @@ public interface AuthorDao {
 
     Author findById(Long id);
 
-    Author findByName(String lastName);
+    Author findByName(String firstName, String lastName);
 
     void updateAuthor(Author author);
 

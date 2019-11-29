@@ -1,6 +1,6 @@
 package com.github.DonBirnam.library.web.servlet.user;
 
-import com.github.DonBirnam.library.model.Book;
+import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.User.AuthUser;
 import com.github.DonBirnam.library.model.User.UserFull;
 import com.github.DonBirnam.library.service.BookService;
@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.github.DonBirnam.library.web.WebUtils.forward;
 
@@ -31,10 +33,16 @@ public class UserAdminServlet extends HttpServlet {
         UserFull user = userService.getUserById(authUser.getId());
         req.setAttribute("user", user);
 
+        Set<Long> oderdBooks = (Set<Long>)req.getSession().getAttribute("orderBooks");
+        if (oderdBooks == null){
+            Set<Long> orderBooks = new HashSet<>();
+            req.setAttribute("orderBooks",orderBooks);
+        }
+
             int page = 1;
             req.getSession().setAttribute("page", page);
             req.getSession().setAttribute("notLast", bookService.notLastPage(page));
-            List<Book> books = bookService.getAllBooks();
+            List<BookFull> books = bookService.getAllBooks();
             req.setAttribute("books",books);
 
         forward("user_admin", req, resp);
@@ -55,7 +63,7 @@ public class UserAdminServlet extends HttpServlet {
 
             req.getSession().setAttribute("page", currentPage);
             req.getSession().setAttribute("notLast", bookService.notLastPage(currentPage));
-            List<Book> books = bookService.getAllBooks();
+            List<BookFull> books = bookService.getAllBooks();
             req.setAttribute("books", books);
             forward("user_admin", req, resp);
         }

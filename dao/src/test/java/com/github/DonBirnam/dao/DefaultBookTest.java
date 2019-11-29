@@ -2,17 +2,14 @@
 //
 //import com.github.DonBirnam.library.dao.AuthorDao;
 //import com.github.DonBirnam.library.dao.BookDao;
-//import com.github.DonBirnam.library.dao.HibernateUtil;
 //import com.github.DonBirnam.library.dao.impl.DefaultAuthorDao;
 //import com.github.DonBirnam.library.dao.impl.DefaultBookDao;
 //import com.github.DonBirnam.library.model.Author;
 //import com.github.DonBirnam.library.model.Book;
 //import com.github.DonBirnam.library.model.BookStatus;
 //import com.github.DonBirnam.library.model.Genre;
-//import org.junit.jupiter.api.AfterAll;
 //import org.junit.jupiter.api.Test;
 //
-//import javax.persistence.EntityManager;
 //import java.util.List;
 //
 //import static org.junit.jupiter.api.Assertions.*;
@@ -80,14 +77,5 @@
 //        assertNull(bookDao.findByTitle("Песня моряка"));
 //
 //        authorDao.deleteAuthor(id);
-//    }
-//
-//
-//    @AfterAll
-//    public static void cleanUp() {
-//        EntityManager em = HibernateUtil.getSession();
-//        if (em != null) {
-//            em.close();
-//        }
 //    }
 //}

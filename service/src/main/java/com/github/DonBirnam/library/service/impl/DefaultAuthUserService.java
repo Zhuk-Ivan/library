@@ -3,7 +3,7 @@ package com.github.DonBirnam.library.service.impl;
 import com.github.DonBirnam.library.dao.AuthUserDao;
 import com.github.DonBirnam.library.dao.impl.DefaultAuthUserDao;
 import com.github.DonBirnam.library.model.User.AuthUser;
-import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User.Role;
 import com.github.DonBirnam.library.model.User.User;
 import com.github.DonBirnam.library.service.AuthUserService;
 import com.github.DonBirnam.library.service.UserService;
@@ -68,6 +68,11 @@ public class DefaultAuthUserService implements AuthUserService {
     public void block(Role role, Long id) {
         authUserDao.blockUser(role,id);
 
+    }
+
+    @Override
+    public boolean canMakeAnOrder(Long id) {
+        return authUserDao.canMakeAnOrder(id);
     }
 
 }

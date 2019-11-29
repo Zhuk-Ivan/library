@@ -1,27 +1,25 @@
 package com.github.DonBirnam.library.model;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public class OrderFin {
     private Long id;
     private String login;
-    private String title;
-    private String authorFN;
-    private String authorLN;
     private LocalDateTime createOrder;
     private LocalDateTime takeDate;
     private LocalDateTime expireDate;
+    private Set<BookFull> books;
 
-    public OrderFin(Long id, String login, String title, String authorFN, String authorLN, LocalDateTime createOrder, LocalDateTime takeDate, LocalDateTime expireDate) {
+    public OrderFin(Long id, String login, LocalDateTime createOrder, LocalDateTime takeDate, LocalDateTime expireDate, Set<BookFull> books) {
         this.id = id;
         this.login = login;
-        this.title = title;
-        this.authorFN = authorFN;
-        this.authorLN = authorLN;
         this.createOrder = createOrder;
         this.takeDate = takeDate;
         this.expireDate = expireDate;
+        this.books = books;
     }
+
 
     public Long getId() {
         return id;
@@ -39,28 +37,12 @@ public class OrderFin {
         this.login = login;
     }
 
-    public String getTitle() {
-        return title;
+    public Set<BookFull> getBooks() {
+        return books;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthorFN() {
-        return authorFN;
-    }
-
-    public void setAuthorFN(String authorFN) {
-        this.authorFN = authorFN;
-    }
-
-    public String getAuthorLN() {
-        return authorLN;
-    }
-
-    public void setAuthorLN(String authorLN) {
-        this.authorLN = authorLN;
+    public void setBooks(Set<BookFull> books) {
+        this.books = books;
     }
 
     public LocalDateTime getCreateOrder() {

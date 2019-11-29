@@ -1,6 +1,6 @@
 package com.github.DonBirnam.library.web.servlet.librarian;
 
-import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User.Role;
 import com.github.DonBirnam.library.service.AuthUserService;
 import com.github.DonBirnam.library.service.impl.DefaultAuthUserService;
 
@@ -24,15 +24,16 @@ public class LibrarianBlockServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long id = Long.valueOf(req.getParameter("id"));
+        String login = req.getParameter("login");
+        Long authUserId = authUserService.getByLogin(login).getId();
         Role currentRole = Role.valueOf(req.getParameter("role"));
         if (currentRole.equals(Role.USER)){
             Role role = Role.BLOCKED;
-            authUserService.block(role,id);
+            authUserService.block(role,authUserId);
             redirect("librarian",req,resp);
         } else {
             Role role = Role.USER;
-            authUserService.block(role,id);
+            authUserService.block(role,authUserId);
             redirect("librarian",req,resp);
         }
     }

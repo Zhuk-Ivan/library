@@ -2,10 +2,11 @@ package com.github.DonBirnam.library.dao.impl;
 
 import com.github.DonBirnam.library.dao.BookDao;
 import com.github.DonBirnam.library.dao.HibernateUtil;
-import com.github.DonBirnam.library.dao.converter.AuthorConverter;
 import com.github.DonBirnam.library.dao.converter.BookConverter;
+import com.github.DonBirnam.library.dao.entity.AuthorEntity;
 import com.github.DonBirnam.library.dao.entity.BookEntity;
 import com.github.DonBirnam.library.model.Book;
+import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
 import org.hibernate.Session;
@@ -35,6 +36,8 @@ public class DefaultBookDao implements BookDao {
     public Long createBook(Book book) {
         BookEntity bookEntity = BookConverter.toEntity(book);
         try (final Session session = HibernateUtil.getSession()) {
+            AuthorEntity authorEntity = session.get(AuthorEntity.class, book.getAuthorId());
+            bookEntity.setAuthorEntity(authorEntity);
             session.beginTransaction();
             session.save(bookEntity);
             session.getTransaction().commit();
@@ -46,7 +49,7 @@ public class DefaultBookDao implements BookDao {
     }
 
     @Override
-    public Book findById(Long id) {
+    public BookFull findById(Long id) {
         BookEntity book;
         try {
             book = (BookEntity) HibernateUtil.getSession().createQuery("from BookEntity b where b.id = :id")
@@ -60,7 +63,7 @@ public class DefaultBookDao implements BookDao {
     }
 
     @Override
-    public Book findByTitle(String title) {
+    public BookFull findByTitle(String title) {
         BookEntity book;
         try {
             book = (BookEntity) HibernateUtil.getSession().createQuery("from BookEntity b where b.title = :title")
@@ -76,16 +79,10 @@ public class DefaultBookDao implements BookDao {
 
     @Override
     public void updateBook(Book book) {
+        BookEntity bookEntity = BookConverter.toEntity(book);
         Session session = HibernateUtil.getSession();
-        BookEntity bookEntityUPD = session.get(BookEntity.class, book.getId());
         session.beginTransaction();
-        bookEntityUPD.setTitle(book.getTitle());
-        bookEntityUPD.setAuthorEntity(AuthorConverter.toEntity(book.getAuthor()));
-        bookEntityUPD.setPageCount(book.getPageCount());
-        bookEntityUPD.setIsbn(book.getIsbn());
-        bookEntityUPD.setGenre(book.getGenre());
-        bookEntityUPD.setStatus(book.getStatus());
-        bookEntityUPD.setInStock(book.getInStock());
+        session.update(bookEntity);
         session.getTransaction().commit();
         session.close();
     }
@@ -131,7 +128,7 @@ public class DefaultBookDao implements BookDao {
 //    }
 
     @Override
-    public List<Book> getAllBooks() {
+    public List<BookFull> getAllBooks() {
         Session session = HibernateUtil.getSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<BookEntity> criteria = cb.createQuery(BookEntity.class);
@@ -145,7 +142,7 @@ public class DefaultBookDao implements BookDao {
 
 
     @Override
-    public List<Book> getBooksByGenre(Genre genre) {
+    public List<BookFull> getBooksByGenre(Genre genre) {
         final List<BookEntity> books = HibernateUtil.getSession().createQuery("from BookEntity b where b.genre = :genre")
                 .setParameter("genre", genre)
                 .list();

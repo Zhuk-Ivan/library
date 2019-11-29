@@ -2,7 +2,7 @@ package com.github.DonBirnam.library.web.servlet;
 
 
 import com.github.DonBirnam.library.model.User.AuthUser;
-import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User.Role;
 import com.github.DonBirnam.library.service.AuthUserService;
 import com.github.DonBirnam.library.service.impl.DefaultAuthUserService;
 import org.slf4j.Logger;

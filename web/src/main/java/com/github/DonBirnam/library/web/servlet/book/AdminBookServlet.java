@@ -1,7 +1,7 @@
 package com.github.DonBirnam.library.web.servlet.book;
 
 
-import com.github.DonBirnam.library.model.Book;
+import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.service.BookService;
 import com.github.DonBirnam.library.service.impl.DefaultBookService;
 
@@ -22,7 +22,7 @@ public class AdminBookServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Book> books = bookService.getAllBooks();
+        List<BookFull> books = bookService.getAllBooks();
         req.setAttribute("books",books);
         forward("books_page", req, resp);
     }

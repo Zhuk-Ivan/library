@@ -1,10 +1,12 @@
 package com.github.DonBirnam.library.service;
 
+import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.Order;
 import com.github.DonBirnam.library.model.OrderFin;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface OrderService {
 
@@ -20,6 +22,12 @@ public interface OrderService {
 //
 //    List<Order> getAllUsersOrders();
 //
-//    List<Order> getOrdersByUserId(Long userId);
+    List<OrderFin> getOrdersByUserId(Long userId);
+
+    void addTempOrder(BookFull bookFull);
+
+    Set<BookFull> getTempOrders();
+
+    void removeTempOrders();
 
 }

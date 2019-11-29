@@ -1,7 +1,5 @@
 package com.github.DonBirnam.library.model.User;
 
-import com.github.DonBirnam.library.model.Role;
-
 public class UserFull {
     private Long id;
     private String firstName;

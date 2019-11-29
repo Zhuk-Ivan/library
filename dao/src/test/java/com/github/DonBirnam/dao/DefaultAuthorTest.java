@@ -55,7 +55,7 @@ public class DefaultAuthorTest {
         assertNotNull(authorDao.findById(id));
         authorDao.deleteAuthor(id);
         
-        assertNull(authorDao.findByName(author.getLastName()));
+        assertNull(authorDao.findByName(author.getFirstName(), author.getLastName()));
     }
 
 

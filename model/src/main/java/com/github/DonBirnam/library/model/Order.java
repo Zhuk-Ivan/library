@@ -1,39 +1,37 @@
 package com.github.DonBirnam.library.model;
 
-import com.github.DonBirnam.library.model.User.AuthUser;
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Order {
     private Long id;
-    private Set<Book> books = new HashSet<>();
-    private Book book;
-    private AuthUser authUser;
+    private Set<Long> booksId = new HashSet<>();
+    private Long bookId;
+    private Long authUserId;
     private LocalDateTime createDate;
     private LocalDateTime takeDate;
     private LocalDateTime expireDate;
 
-    public Order(Long id, Set<Book> books, AuthUser authUser, LocalDateTime createDate, LocalDateTime takeDate, LocalDateTime expireDate) {
+
+
+    public Order(Long id, Long bookId, Long authUserId, LocalDateTime createDate, LocalDateTime takeDate, LocalDateTime expireDate) {
         this.id = id;
-        this.books = books;
-        this.authUser = authUser;
+        this.bookId = bookId;
+        this.authUserId = authUserId;
         this.createDate = createDate;
         this.takeDate = takeDate;
         this.expireDate = expireDate;
     }
 
-    public Order(Long id, Book book, AuthUser authUser, LocalDateTime createDate, LocalDateTime takeDate, LocalDateTime expireDate) {
+    public Order(Long id, Set<Long> booksId,  Long authUserId, LocalDateTime createDate, LocalDateTime takeDate, LocalDateTime expireDate) {
         this.id = id;
-        this.book = book;
-        this.authUser = authUser;
+        this.booksId = booksId;
+        this.authUserId = authUserId;
         this.createDate = createDate;
         this.takeDate = takeDate;
         this.expireDate = expireDate;
     }
-
-
 
     public Long getId() {
         return id;
@@ -43,20 +41,28 @@ public class Order {
         this.id = id;
     }
 
-    public Set<Book> getBooks() {
-        return books;
+    public Set<Long> getBooks() {
+        return booksId;
     }
 
-    public void setBooks(Set<Book> books) {
-        this.books = books;
+    public void setBooks(Set<Long> books) {
+        this.booksId = books;
     }
 
-    public AuthUser getAuthUser() {
-        return authUser;
+    public Long getBookId() {
+        return bookId;
     }
 
-    public void setAuthUser(AuthUser authUser) {
-        this.authUser = authUser;
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
+    }
+
+    public Long getAuthUserId() {
+        return authUserId;
+    }
+
+    public void setAuthUserId(Long authUserId) {
+        this.authUserId = authUserId;
     }
 
     public LocalDateTime getCreateDate() {
@@ -81,13 +87,5 @@ public class Order {
 
     public void setExpireDate(LocalDateTime expireDate) {
         this.expireDate = expireDate;
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
     }
 }

@@ -2,6 +2,7 @@ package com.github.DonBirnam.library.dao.converter;
 
 import com.github.DonBirnam.library.dao.entity.BookEntity;
 import com.github.DonBirnam.library.model.Book;
+import com.github.DonBirnam.library.model.BookFull;
 
 public class BookConverter {
     public static BookEntity toEntity(Book book){
@@ -11,7 +12,6 @@ public class BookConverter {
         final BookEntity bookEntity = new BookEntity();
         bookEntity.setId(book.getId());
         bookEntity.setTitle(book.getTitle());
-        bookEntity.setAuthorEntity(AuthorConverter.toEntity(book.getAuthor()));
         bookEntity.setPageCount(book.getPageCount());
         bookEntity.setIsbn(book.getIsbn());
         bookEntity.setGenre(book.getGenre());
@@ -20,18 +20,19 @@ public class BookConverter {
         return bookEntity;
         }
 
-        public static Book fromEntity(BookEntity bookEntity){
+        public static BookFull fromEntity(BookEntity bookEntity){
             if (bookEntity == null) {
                 return null;
             }
-            return new Book (
+            return new BookFull (
                     bookEntity.getId(),
                     bookEntity.getTitle(),
-                    AuthorConverter.fromEntity(bookEntity.getAuthorEntity()),
                     bookEntity.getPageCount(),
                     bookEntity.getIsbn(),
                     bookEntity.getGenre(),
                     bookEntity.getStatus(),
-                    bookEntity.getInStock());
+                    bookEntity.getInStock(),
+                    bookEntity.getAuthorEntity().getFirstName(),
+                    bookEntity.getAuthorEntity().getLastName());
             }
 }

@@ -1,6 +1,7 @@
 package com.github.DonBirnam.library.dao;
 
 import com.github.DonBirnam.library.model.Book;
+import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
 
@@ -10,9 +11,9 @@ public interface BookDao {
 
     Long createBook(Book book);
 
-    Book findById(Long id);
+    BookFull findById(Long id);
 
-    Book findByTitle(String title);
+    BookFull findByTitle(String title);
 
     void updateBook(Book book);
 
@@ -20,9 +21,9 @@ public interface BookDao {
 
     void deleteBook(Long id);
 
-    List<Book> getAllBooks();
+    List<BookFull> getAllBooks();
 
-    List<Book> getBooksByGenre(Genre genre);
+    List<BookFull> getBooksByGenre(Genre genre);
 
     int countBooks();
 

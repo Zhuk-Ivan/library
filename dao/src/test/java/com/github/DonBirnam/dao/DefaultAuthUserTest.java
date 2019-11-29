@@ -6,7 +6,7 @@ import com.github.DonBirnam.library.dao.HibernateUtil;
 import com.github.DonBirnam.library.dao.entity.AuthUserEntity;
 import com.github.DonBirnam.library.dao.impl.DefaultAuthUserDao;
 
-import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User.Role;
 import com.github.DonBirnam.library.model.User.AuthUser;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +49,7 @@ public class DefaultAuthUserTest {
     void deleteAuthUser(){
         Long id = dao.saveAuthUser(new AuthUser(null, "TestUser", "56789", Role.USER));
         final AuthUser authUser = dao.getById(id);
-         dao.deleteAuthUser(id);
+        dao.deleteAuthUser(id);
         AuthUser authDelete = dao.getById(id);
         assertNull(authDelete);
     }

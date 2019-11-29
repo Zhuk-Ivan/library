@@ -36,11 +36,11 @@ public class DefaultAuthorServiceTest {
 
     @Test
     public void getByLastName() {
-        when(dao.findByName("Уэлш")).thenReturn(author);
-        Author author1 = service.findByLastName("Уэлш");
+        when(dao.findByName("Ирвин","Уэлш")).thenReturn(author);
+        Author author1 = service.findByFullName("Ирвин","Уэлш");
         assertEquals(author, author1);
-        when(dao.findByName("Кизи")).thenReturn(null);
-        Author wrongAuthor = service.findByLastName("Кизи");
+        when(dao.findByName("Кен","Кизи")).thenReturn(null);
+        Author wrongAuthor = service.findByFullName("Кен","Кизи");
         assertNull(wrongAuthor);
     }
 

@@ -10,7 +10,7 @@ public interface AuthorService {
 
     Author find(Long id);
 
-    Author findByLastName(String lastName);
+    Author findByFullName(String firstName, String lastName);
 
     void update(Author author);
 

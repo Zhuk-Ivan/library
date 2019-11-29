@@ -46,6 +46,7 @@
                                            <p><input type="submit" value="Выбрать"></p>
                                           </form>
                                         ${errorOrder}
+                                        ${errorMakeOrder}
 
                     <table width="60%" cellspacing="0" cellpadding="4" border="1">
                                             <tr>
@@ -62,7 +63,7 @@
                                             <tr>
                                                 <td style="display:none;">${book.id}</td>
                                                 <td>${book.title}</td>
-                                                <td>${book.author.firstName} ${book.author.lastName}</td>
+                                                <td>${book.authorFirstName} ${book.authorLastName}</td>
                                                 <td>${book.pageCount}</td>
                                                 <td>${book.isbn}</td>
                                                 <td><c:choose>
@@ -77,14 +78,17 @@
                                                     <c:when test="${book.status == 'OCCUPIED'}">Занята</c:when>
                                                 </c:choose></td>
                                                 <td>${book.inStock}</td>
-                                                <td><form method="post" action="${pageContext.request.contextPath}/userAddOrderServlet">
+                                                <td><form method="post" action="${pageContext.request.contextPath}/formAnOrder">
                                                 <input name="status" type="hidden" value="${book.status}"></input>
                                                 <input name="userId" type="hidden" value="${authUser.id}"></input>
+                                                <input name="inStock" type="hidden" value="${book.inStock}"></input>
                                                 <input name="id" type="hidden" value="${book.id}"></input>
-                                                <input type="submit" value="Добавить"></input>
+                                                <input type="submit" value="Добавить в корзину"></input>
                                                 </form></td>
                                             </tr>
                                             </c:forEach>
+                                            <br>
+
                     </table
                     <form method="post" action="${pageContext.request.contextPath}/user_admin">
                         <div style="margin-left: 140px;">

@@ -1,6 +1,6 @@
 package com.github.DonBirnam.library.web.servlet.book;
 
-import com.github.DonBirnam.library.model.Book;
+import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.Genre;
 import com.github.DonBirnam.library.model.User.User;
 import com.github.DonBirnam.library.service.BookService;
@@ -34,11 +34,11 @@ public class BookGenreSelectServlet  extends HttpServlet {
 
         Genre genre = Genre.valueOf(req.getParameter("genre"));
         if (genre.equals(Genre.ALL)) {
-            List<Book> books = bookService.getAllBooks();
+            List<BookFull> books = bookService.getAllBooks();
             req.setAttribute("books", books);
             forward("user_admin", req, resp);
         } else {
-            List<Book> books = bookService.getByGenre(genre);
+            List<BookFull> books = bookService.getByGenre(genre);
             req.setAttribute("books", books);
             forward("user_admin", req, resp);
         }

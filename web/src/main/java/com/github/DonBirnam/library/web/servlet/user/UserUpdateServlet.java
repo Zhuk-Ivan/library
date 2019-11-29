@@ -1,7 +1,7 @@
 package com.github.DonBirnam.library.web.servlet.user;
 
 
-import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User.Role;
 import com.github.DonBirnam.library.service.UserService;
 import com.github.DonBirnam.library.service.impl.DefaultUserService;
 

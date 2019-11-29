@@ -2,12 +2,15 @@ package com.github.DonBirnam.library.service.impl;
 
 import com.github.DonBirnam.library.dao.OrderDao;
 import com.github.DonBirnam.library.dao.impl.DefaultOrderDao;
+import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.Order;
 import com.github.DonBirnam.library.model.OrderFin;
 import com.github.DonBirnam.library.service.OrderService;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DefaultOrderService implements OrderService {
 
@@ -21,9 +24,12 @@ public class DefaultOrderService implements OrderService {
         return DefaultOrderService.SingletonHolder.HOLDER_INSTANCE;
     }
 
+    Set<BookFull> tempOrders = new HashSet<>();
+
     @Override
     public void save(Order order) {
         orderDao.createOrder(order);
+        removeTempOrders();
     }
 //
 //    @Override
@@ -55,9 +61,25 @@ public class DefaultOrderService implements OrderService {
 //    public List<Order> getAllUsersOrders() {
 //        return orderDao.getAllUsersOrders();
 //    }
-//
-//    @Override
-//    public List<Order> getOrdersByUserId(Long userId) {
-//        return orderDao.getOrderByUserId(userId);
-//    }
+
+    @Override
+    public List<OrderFin> getOrdersByUserId(Long userId) {
+        return orderDao.getOrderByUserId(userId);
+    }
+
+    @Override
+    public void addTempOrder(BookFull bookFull) {
+        tempOrders.add(bookFull);
+    }
+
+    @Override
+    public Set<BookFull> getTempOrders() {
+         return tempOrders;
+
+    }
+
+    @Override
+    public void removeTempOrders() {
+        tempOrders.clear();
+    }
 }

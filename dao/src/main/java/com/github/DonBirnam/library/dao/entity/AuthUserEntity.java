@@ -1,6 +1,6 @@
 package com.github.DonBirnam.library.dao.entity;
 
-import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User.Role;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;

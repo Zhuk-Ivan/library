@@ -58,10 +58,11 @@ public class DefaultAuthorDao implements AuthorDao {
 
 
     @Override
-    public Author findByName(String lastName) {
+    public Author findByName(String firstName, String lastName) {
         AuthorEntity author;
         try {
-            author = (AuthorEntity) HibernateUtil.getSession().createQuery("from AuthorEntity a where a.lastName = :lastName")
+            author = (AuthorEntity) HibernateUtil.getSession().createQuery("from AuthorEntity a where a.firstName = :firstName and a.lastName = :lastName")
+                    .setParameter("firstName", firstName)
                     .setParameter("lastName", lastName)
                     .getSingleResult();
         } catch (NoResultException e){

@@ -1,7 +1,7 @@
 package com.github.DonBirnam.library.service;
 
 import com.github.DonBirnam.library.model.User.AuthUser;
-import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User.Role;
 
 public interface AuthUserService {
 
@@ -18,5 +18,7 @@ public interface AuthUserService {
     boolean isExist(String login);
 
     void block(Role role, Long id);
+
+    boolean canMakeAnOrder(Long id);
 }
 

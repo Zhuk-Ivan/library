@@ -38,16 +38,16 @@ public class BookAddServlet extends HttpServlet {
         int inStock = Integer.valueOf(req.getParameter("inStock"));
         BookStatus staus = BookStatus.FREE;
 
-        if (authorService.findByLastName(authorLN) == null){
+        if (authorService.findByFullName(authorFN, authorLN) == null){
             Author authorSave = new Author(null,authorFN,authorLN);
-            authorService.save(authorSave);
-            Author savedAuthor = authorService.findByLastName(authorSave.getLastName());
-            Book book = new Book(null,title,savedAuthor,pageCount,isbn,genre,staus, inStock);
+            Long authorId = authorService.save(authorSave);
+            Book book = new Book(null,title,pageCount,isbn,genre,staus,inStock, authorId);
             bookService.save(book);
         }
         else {
-            Author author = authorService.findByLastName(authorLN);
-            Book book = new Book(null,title,author,pageCount,isbn,genre,staus, inStock);
+            Author author = authorService.findByFullName(authorFN, authorLN);
+            Long authorId = author.getId();
+            Book book = new Book(null,title,pageCount,isbn,genre,staus, inStock, authorId);
             bookService.save(book);
         }
         redirect("books_page",req,resp);

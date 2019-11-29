@@ -1,7 +1,7 @@
 package com.github.DonBirnam.library.dao;
 
 import com.github.DonBirnam.library.model.User.AuthUser;
-import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User.Role;
 
 public interface AuthUserDao {
 
@@ -16,5 +16,7 @@ public interface AuthUserDao {
     void deleteAuthUser(Long id);
 
     void blockUser(Role role, Long id);
+
+    boolean canMakeAnOrder(Long id);
 
 }

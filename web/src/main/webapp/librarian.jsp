@@ -40,18 +40,17 @@
                             <c:otherwise>Заблокирован</c:otherwise>
                        </c:choose></td>
                        <td><form method="post" action="${pageContext.request.contextPath}/librarianDelete">
-                            <button type="submit" name="id" value="${user.id}">Удалить</button>
+                            <button type="submit" name="login" value="${user.login}">Удалить</button>
                             </form>
                        </td>
                        <td><form method="post" action="${pageContext.request.contextPath}/librarianBlock">
-                       <input name="id" type="hidden" value="${user.id}"></input>
+                       <input name="login" type="hidden" value="${user.login}"></input>
                        <input name="role" type="hidden" value="${user.role}"></input>
                        <c:choose>
                            <c:when test="${user.role == 'USER'}"><input type="submit" value="Заблокировать"></input></c:when>
                             <c:otherwise><input type="submit" value="Разблокировать"></input></c:otherwise>
                        </c:choose>
                        </form></td>
-
                    </tr>
                </c:forEach>
            </table>

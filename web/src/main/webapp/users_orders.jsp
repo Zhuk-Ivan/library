@@ -28,8 +28,15 @@
                    <tr>
                        <td style="display:none;">${order.id}</td>
                        <td>${order.login}</td>
-                       <td>${order.title}</td>
-                       <td>${order.authorFN} ${order.authorLN}</td>
+                       <td>
+                            <c:forEach items="${books[order.id]}" var="book">
+                                <ol> ${book.title} </ol>
+                            </c:forEach>
+                       </td>
+                       <td>
+                            <c:forEach items="${books[order.id]}" var="book">
+                                <ol>${book.authorFirstName} ${book.authorLastName}</ol>
+                            </c:forEach></td>
                        <td>${order.createOrder}</td>
                        <td>${order.takeDate}</td>
                        <td>${order.expireDate}</td>

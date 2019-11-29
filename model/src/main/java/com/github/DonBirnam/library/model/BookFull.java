@@ -1,6 +1,6 @@
 package com.github.DonBirnam.library.model;
 
-public class Book {
+public class BookFull {
     private Long id;
     private String title;
     private int pageCount;
@@ -8,12 +8,10 @@ public class Book {
     private Genre genre;
     private BookStatus status;
     private int inStock;
-    private Long authorId;
+    private String authorFirstName;
+    private String authorLastName;
 
-    public Book() {
-    }
-
-    public Book(Long id, String title, int pageCount, String isbn, Genre genre, BookStatus status, int inStock, Long authorId) {
+    public BookFull(Long id, String title, int pageCount, String isbn, Genre genre, BookStatus status, int inStock, String authorFirstName, String authorLastName) {
         this.id = id;
         this.title = title;
         this.pageCount = pageCount;
@@ -21,7 +19,8 @@ public class Book {
         this.genre = genre;
         this.status = status;
         this.inStock = inStock;
-        this.authorId = authorId;
+        this.authorFirstName = authorFirstName;
+        this.authorLastName = authorLastName;
     }
 
     public Long getId() {
@@ -80,12 +79,23 @@ public class Book {
         this.inStock = inStock;
     }
 
-    public Long getAuthorId() {
-        return authorId;
+    public String getAuthorFirstName() {
+        return authorFirstName;
     }
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
+    public void setAuthorFirstName(String authorFirstName) {
+        this.authorFirstName = authorFirstName;
+    }
+
+    public String getAuthorLastName() {
+        return authorLastName;
+    }
+
+    public void setAuthorLastName(String authorLastName) {
+        this.authorLastName = authorLastName;
+    }
+
+    public String getFullAuthorName(){
+        return authorFirstName + " " + authorLastName;
     }
 }
-

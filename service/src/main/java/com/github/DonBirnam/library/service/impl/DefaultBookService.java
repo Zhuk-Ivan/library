@@ -3,6 +3,7 @@ package com.github.DonBirnam.library.service.impl;
 import com.github.DonBirnam.library.dao.BookDao;
 import com.github.DonBirnam.library.dao.impl.DefaultBookDao;
 import com.github.DonBirnam.library.model.Book;
+import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
 import com.github.DonBirnam.library.service.BookService;
@@ -28,8 +29,8 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
-    public Book find(Long id) {
-       Book book = bookDao.findById(id);
+    public BookFull find(Long id) {
+        BookFull book = bookDao.findById(id);
         if (book == null) {
             return null;
         } else {
@@ -53,12 +54,12 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
-    public List<Book> getAllBooks() {
+    public List<BookFull> getAllBooks() {
         return bookDao.getAllBooks();
     }
 
     @Override
-    public List<Book> getByGenre(Genre genre) {
+    public List<BookFull> getByGenre(Genre genre) {
         return bookDao.getBooksByGenre(genre);
     }
 

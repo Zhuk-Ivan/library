@@ -2,7 +2,7 @@ package com.github.DonBirnam.library.test;
 
 
 import com.github.DonBirnam.library.dao.UserDao;
-import com.github.DonBirnam.library.model.Role;
+import com.github.DonBirnam.library.model.User.Role;
 import com.github.DonBirnam.library.model.User.User;
 import com.github.DonBirnam.library.model.User.UserFull;
 import com.github.DonBirnam.library.service.impl.DefaultUserService;
@@ -17,7 +17,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class DefaultUserServiceTest {
@@ -56,6 +57,24 @@ public class DefaultUserServiceTest {
 
         assertNotNull(service.getUserById(100L));
         assertEquals("TestUser",service.getUserById(100L).getLogin());
+    }
+
+    @Test
+    void update() {
+        doNothing().when(dao).updateUser(any());
+
+        service.updateUser(user);
+
+        verify(dao, times(1)).updateUser(user);
+    }
+
+    @Test
+    void delete(){
+        doNothing().when(dao).deleteUser(anyLong());
+
+        service.delete(100L);
+
+        verify(dao, times(1)).deleteUser(100L);
     }
 
 }

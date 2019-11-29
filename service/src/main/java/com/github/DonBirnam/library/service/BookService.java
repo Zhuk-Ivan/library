@@ -1,6 +1,7 @@
 package com.github.DonBirnam.library.service;
 
 import com.github.DonBirnam.library.model.Book;
+import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
 
@@ -10,7 +11,7 @@ public interface BookService {
 
     Long save(Book book);
 
-    Book find(Long id);
+    BookFull find(Long id);
 
     void update(Book book);
 
@@ -18,9 +19,9 @@ public interface BookService {
 
     void delete(Long id);
 
-    List<Book> getAllBooks();
+    List<BookFull> getAllBooks();
 
-    List<Book> getByGenre(Genre genre);
+    List<BookFull> getByGenre(Genre genre);
 
     boolean notLastPage(int page);
 

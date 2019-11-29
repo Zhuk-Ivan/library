@@ -36,8 +36,8 @@ public class DefaultAuthorService implements AuthorService {
     }
 
     @Override
-    public Author findByLastName(String lastName) {
-        Author author = authorDao.findByName(lastName);
+    public Author findByFullName(String firstName, String lastName) {
+        Author author = authorDao.findByName(firstName, lastName);
         if (author == null) {
             return null;
         } else {

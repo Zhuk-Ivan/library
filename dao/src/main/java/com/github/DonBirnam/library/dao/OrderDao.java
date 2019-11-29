@@ -12,13 +12,12 @@ public interface OrderDao {
 
     OrderFin findById(Long id);
 
-//    void deleteOrder(Long id);
-//
+    void deleteOrder(Long id);
+
     List<OrderFin> getAllOrders();
 
     void approveOrder(LocalDateTime takeDate, LocalDateTime expireDate, Long id);
 
-//    List<Order> getOrderByUserId(Long userId);
-//
-//    List<Order> getAllUsersOrders();
+    List<OrderFin> getOrderByUserId(Long userId);
+
 }
