@@ -1,5 +1,7 @@
 package com.github.DonBirnam.library.dao.entity;
 
+import com.github.DonBirnam.library.model.OrderStatus;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -14,6 +16,7 @@ public class OrderEntity {
     private LocalDateTime createDate;
     private LocalDateTime takeDate;
     private LocalDateTime expireDate;
+    private OrderStatus orderStatus;
 
     public OrderEntity() {
     }
@@ -72,4 +75,15 @@ public class OrderEntity {
     public void setExpireDate(LocalDateTime expireDate) {
         this.expireDate = expireDate;
     }
+
+    @Column(name = "order_status")
+    @Enumerated(EnumType.STRING)
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
 }

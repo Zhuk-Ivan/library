@@ -2,20 +2,26 @@ package com.github.DonBirnam.dao;
 
 
 import com.github.DonBirnam.library.dao.AuthorDao;
-import com.github.DonBirnam.library.dao.HibernateUtil;
-import com.github.DonBirnam.library.dao.impl.DefaultAuthorDao;
+import com.github.DonBirnam.library.dao.config.DaoConfig;
 import com.github.DonBirnam.library.model.Author;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = DaoConfig.class)
+@Transactional
 public class DefaultAuthorTest {
 
-    private AuthorDao authorDao = DefaultAuthorDao.getInstance();
+    @Autowired
+    private AuthorDao authorDao;
 
     public Author testAuthor(){
         Author author = new Author();
@@ -34,13 +40,41 @@ public class DefaultAuthorTest {
         authorDao.deleteAuthor(id);
     }
 
+    @Test
+    void getById(){
+        Long id = authorDao.createAuthor(testAuthor());
+        final Author author = authorDao.findById(id);
+
+        assertNotNull(author);
+        assertEquals(author.getFirstName(), "Ирвин");
+    }
+
+    @Test
+    void getByName(){
+        Long id = authorDao.createAuthor(testAuthor());
+        final Author author = authorDao.findByName("Ирвин", "Уэлш");
+
+        assertNotNull(author);
+        assertEquals(author.getLastName(), "Уэлш");
+    }
+
+    @Test
+    void updateAuthor(){
+        Long id = authorDao.createAuthor(testAuthor());
+        Author newAuthor = new Author(null, "Кен", "Кизи");
+        authorDao.updateAuthor(newAuthor, id);
+
+        Author author = authorDao.findByName("Кен", "Кизи");
+        assertNotNull(author);
+        assertEquals(id, author.getId());
+    }
 
    @Test
      void getAuthors(){
        Author author = testAuthor();
        Long id = authorDao.createAuthor(author);
 
-       List<Author> authors = DefaultAuthorDao.getInstance().getAllAuthors();
+       List<Author> authors = authorDao.getAllAuthors();
        assertNotNull(authors);
 
        authorDao.deleteAuthor(id);
@@ -56,15 +90,6 @@ public class DefaultAuthorTest {
         authorDao.deleteAuthor(id);
         
         assertNull(authorDao.findByName(author.getFirstName(), author.getLastName()));
-    }
-
-
-    @AfterAll
-     static void cleanUp() {
-        EntityManager em = HibernateUtil.getSession();
-        if (em != null) {
-            em.close();
-        }
     }
 
 }

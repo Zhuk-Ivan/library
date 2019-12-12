@@ -2,58 +2,61 @@ package com.github.DonBirnam.dao;
 
 
 import com.github.DonBirnam.library.dao.AuthUserDao;
-import com.github.DonBirnam.library.dao.HibernateUtil;
 import com.github.DonBirnam.library.dao.UserDao;
-import com.github.DonBirnam.library.dao.entity.UserEntity;
-import com.github.DonBirnam.library.dao.impl.DefaultAuthUserDao;
-import com.github.DonBirnam.library.dao.impl.DefaultUserDao;
-import com.github.DonBirnam.library.model.User.Role;
+import com.github.DonBirnam.library.dao.config.DaoConfig;
 import com.github.DonBirnam.library.model.User.AuthUser;
+import com.github.DonBirnam.library.model.User.Role;
 import com.github.DonBirnam.library.model.User.User;
 import com.github.DonBirnam.library.model.User.UserFull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static junit.framework.TestCase.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = DaoConfig.class)
+@Transactional
 public class DefaultUserDaoTest {
-    private UserDao userDao = DefaultUserDao.getInstance();
-    private AuthUserDao authUserDao = DefaultAuthUserDao.getInstance();
-
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private AuthUserDao authUserDao;
 
     @Test
     void saveUser() {
         Long id = authUserDao.saveAuthUser(new AuthUser(null, "TestUser", "56789", Role.USER));
         User user = new User(null, "Test", "User","+375291111111", "Pes@samsobaka", id);
-        Long UserId = userDao.saveUser(user);
+        Long userId = userDao.saveUser(user);
 
 
-        final UserEntity userEntity = HibernateUtil.getSession().get(UserEntity.class, UserId);
+        UserFull test = userDao.getById(userId);
 
-        assertNotNull(userEntity);
-        assertEquals(userEntity.getFirstName(), user.getFirstName());
-        assertEquals(userEntity.getEmail(), user.getEmail());
+        assertNotNull(test);
+        assertEquals(test.getFirstName(), user.getFirstName());
+        assertEquals(test.getEmail(), user.getEmail());
 
-        userDao.deleteUser(UserId);
-        authUserDao.deleteAuthUser(id);
+        userDao.deleteUser(userId);
     }
 
     @Test
     void getById(){
         Long id = authUserDao.saveAuthUser(new AuthUser(null, "TestUser", "56789", Role.USER));
         User user = new User(null, "Test", "User","+375291111111", "Pes@samsobaka", id);
-        Long UserId = userDao.saveUser(user);
+        Long userId = userDao.saveUser(user);
 
-        UserFull userBD = userDao.getById(UserId);
+        UserFull userBD = userDao.getById(userId);
 
         assertEquals(userBD.getEmail(), "Pes@samsobaka");
         assertEquals(userBD.getFirstName(), "Test");
 
-        userDao.deleteUser(UserId);
-        authUserDao.deleteAuthUser(id);
+        userDao.deleteUser(userId);
     }
 
     @Test
@@ -65,16 +68,17 @@ public class DefaultUserDaoTest {
 
 
     @Test
-    void deleteUser() {
+    public void updateBook(){
         Long id = authUserDao.saveAuthUser(new AuthUser(null, "TestUser", "56789", Role.USER));
         User user = new User(null, "Test", "User","+375291111111", "Pes@samsobaka", id);
-        Long UserId = userDao.saveUser(user);
+        Long userId = userDao.saveUser(user);
 
-        assertNotNull(userDao.getById(UserId));
-        userDao.deleteUser(UserId);
+        User newUser = new User(null, "NewUser", "Pes","+6578895642", "Pes@samsobaka", id);
+        userDao.updateUser(newUser, userId);
 
-        assertNull(userDao.getById(id));
-        authUserDao.deleteAuthUser(id);
+        UserFull test = userDao.getById(userId);
+        assertEquals(test.getFirstName(), "NewUser");
+        assertEquals(test.getLastName(), "Pes");
     }
 }
 

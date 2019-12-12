@@ -4,6 +4,9 @@ package com.github.DonBirnam.library.dao.converter;
 import com.github.DonBirnam.library.dao.entity.AuthorEntity;
 import com.github.DonBirnam.library.model.Author;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AuthorConverter {
     public static AuthorEntity toEntity(Author author) {
         if (author == null) {
@@ -24,5 +27,16 @@ public class AuthorConverter {
                 authorEntity.getId(),
                 authorEntity.getFirstName(),
                 authorEntity.getLastName());
+    }
+
+    public static List<Author> fromEntityList(List<AuthorEntity> authorEntities) {
+        if (authorEntities == null){
+            return null;
+        }
+        final List<Author> authors = new ArrayList<>();
+        for (AuthorEntity authorEntity : authorEntities) {
+            authors.add(fromEntity(authorEntity));
+        }
+        return authors;
     }
 }

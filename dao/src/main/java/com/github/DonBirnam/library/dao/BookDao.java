@@ -15,7 +15,7 @@ public interface BookDao {
 
     BookFull findByTitle(String title);
 
-    void updateBook(Book book);
+    void updateBook(Book book, Long id);
 
     void updateBookStatus(BookStatus status, Long id);
 
@@ -26,5 +26,7 @@ public interface BookDao {
     List<BookFull> getBooksByGenre(Genre genre);
 
     int countBooks();
+
+    List<BookFull> paging(int pageNumber, int size);
 
 }

@@ -1,110 +1,64 @@
 package com.github.DonBirnam.library.dao.impl;
 
 import com.github.DonBirnam.library.dao.AuthUserDao;
-import com.github.DonBirnam.library.dao.HibernateUtil;
 import com.github.DonBirnam.library.dao.converter.AuthUserConverter;
 import com.github.DonBirnam.library.dao.entity.AuthUserEntity;
 import com.github.DonBirnam.library.dao.entity.OrderEntity;
+import com.github.DonBirnam.library.dao.repository.AuthUserRepository;
 import com.github.DonBirnam.library.model.User.AuthUser;
 import com.github.DonBirnam.library.model.User.Role;
-import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
-import javax.persistence.RollbackException;
 import java.util.Iterator;
 import java.util.Set;
 
+@Repository
 public class DefaultAuthUserDao implements AuthUserDao{
 
-    private static class SingletonHolder {
-        static final AuthUserDao HOLDER_INSTANCE = new DefaultAuthUserDao();
+    private final AuthUserRepository authUserRepository;
+
+    public DefaultAuthUserDao(AuthUserRepository authUserRepository) {
+        this.authUserRepository = authUserRepository;
     }
 
-    public static AuthUserDao getInstance() {
-        return DefaultAuthUserDao.SingletonHolder.HOLDER_INSTANCE;
-    }
 
     @Override
     public Long saveAuthUser(AuthUser authUser) {
         AuthUserEntity authUserEntity = AuthUserConverter.toEntity(authUser);
-        try ( Session session = HibernateUtil.getSession()) {
-            session.beginTransaction();
-            session.save(authUserEntity);
-            session.getTransaction().commit();
-        } catch (
-                RollbackException e) {
-            return null;
-        }
+        authUserRepository.save(authUserEntity);
         return authUserEntity.getId();
     }
 
     @Override
     public void changeAuthUserPass(String password, Long id) {
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
-        session.createQuery("update AuthUserEntity u set u.password = :password where u.id = :id")
-                .setParameter("password", password)
-                .setParameter("id", id)
-                .executeUpdate();
-        session.getTransaction().commit();
-        session.close();
+        authUserRepository.updatePassword(password, id);
     }
 
     @Override
     public AuthUser getById(Long id) {
-        AuthUserEntity authUserEntity;
-        try {
-            authUserEntity = (AuthUserEntity) HibernateUtil.getSession().createQuery("from AuthUserEntity au where au.id = :id")
-                    .setParameter("id", id)
-                    .getSingleResult();
-        } catch (NoResultException e){
-            authUserEntity = null;
-        }
-
+        final AuthUserEntity authUserEntity = authUserRepository.getOne(id);
         return AuthUserConverter.fromEntity(authUserEntity);
     }
 
     @Override
     public AuthUser getByLogin(String login) {
-        AuthUserEntity authUserEntity;
-        try {
-            authUserEntity = (AuthUserEntity) HibernateUtil.getSession().createQuery("from AuthUserEntity au where au.login = :login")
-                    .setParameter("login", login)
-                    .getSingleResult();
-        } catch (NoResultException e){
-            authUserEntity = null;
-        }
-
+        final AuthUserEntity authUserEntity = authUserRepository.findByLogin(login);
         return AuthUserConverter.fromEntity(authUserEntity);
     }
     @Override
-    public void deleteAuthUser(Long id) {
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
-        session.createQuery("delete from AuthUserEntity u where u.id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
-        session.getTransaction().commit();
-        session.close();
+    public void deleteById(Long id) {
+        authUserRepository.deleteById(id);
     }
 
     @Override
     public void blockUser(Role role, Long id) {
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
-        session.createQuery("update AuthUserEntity u set u.role = :role where u.id = :id")
-                .setParameter("role", role)
-                .setParameter("id", id)
-                .executeUpdate();
-        session.getTransaction().commit();
-        session.close();
+        authUserRepository.updateRole(role, id);
     }
 
     @Override
     public boolean canMakeAnOrder(Long id) {
-        Session session = HibernateUtil.getSession();
+        final AuthUserEntity authUserEntity = authUserRepository.getOne(id);
         int bookCount = 0;
-        AuthUserEntity authUserEntity = session.get(AuthUserEntity.class, id);
         Set<OrderEntity> userOrders = authUserEntity.getOrders();
         Iterator<OrderEntity> iter = userOrders.iterator();
         while (iter.hasNext()){

@@ -1,81 +1,122 @@
-//package com.github.DonBirnam.dao;
-//
-//import com.github.DonBirnam.library.dao.AuthorDao;
-//import com.github.DonBirnam.library.dao.BookDao;
-//import com.github.DonBirnam.library.dao.impl.DefaultAuthorDao;
-//import com.github.DonBirnam.library.dao.impl.DefaultBookDao;
-//import com.github.DonBirnam.library.model.Author;
-//import com.github.DonBirnam.library.model.Book;
-//import com.github.DonBirnam.library.model.BookStatus;
-//import com.github.DonBirnam.library.model.Genre;
-//import org.junit.jupiter.api.Test;
-//
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//public class DefaultBookTest {
-//    BookDao bookDao = DefaultBookDao.getInstance();
-//    AuthorDao authorDao = DefaultAuthorDao.getInstance();
-//
-//    private Author testAuthor(){
-//        Author author = new Author(null,"Кен","Кизи");
-//        authorDao.createAuthor(author);
-//        Author createdAuthor = authorDao.findByName(author.getLastName());
-//        return createdAuthor;
-//    }
-//
-//    private Book testBook() {
-//        Book book = new Book();
-//        book.setId(null);
-//        book.setTitle("Песня моряка");
-//        book.setAuthor(testAuthor());
-//        book.setIsbn("978-5911810808");
-//        book.setGenre(Genre.DRAMA);
-//        book.setPageCount(412);
-//        book.setInStock(2);
-//        book.setStatus(BookStatus.FREE);
-//        return book;
-//    }
-//
-//    @Test
-//    public void save(){
-//        Book book = testBook();
-//        bookDao.createBook(book);
-//        int pages = bookDao.findByTitle(book.getTitle()).getPageCount();
-//        assertEquals(412, pages);
-//    }
-//
-//    @Test
-//    public void findByTitle(){
-//        Book book = bookDao.findByTitle("Песня моряка");
-//        String firstName = book.getAuthor().getFirstName();
-//        assertEquals("Кен", firstName);
-//    }
-//
-//    @Test
-//    public void getBooksGenre(){
-//        Genre genre = Genre.DETECTIVE;
-//        List<Book> books = bookDao.getBooksByGenre(genre);
-//        Book book = books.iterator().next();
-//        assertEquals(Genre.DETECTIVE, book.getGenre());
-//    }
-//
-//    @Test
-//    public void getBooks(){
-//        List<Book> books = bookDao.getAllBooks();
-//        assertNotNull(books);
-//    }
-//
-//
-//    @Test
-//    public void deleteBook(){
-//        Book book = bookDao.findByTitle("Песня моряка");
-//        Long id = book.getAuthor().getId();
-//        assertNotNull(bookDao.findById(book.getId()));
-//        bookDao.deleteBook(book.getId());
-//        assertNull(bookDao.findByTitle("Песня моряка"));
-//
-//        authorDao.deleteAuthor(id);
-//    }
-//}
+package com.github.DonBirnam.dao;
+
+import com.github.DonBirnam.library.dao.AuthorDao;
+import com.github.DonBirnam.library.dao.BookDao;
+import com.github.DonBirnam.library.dao.config.DaoConfig;
+import com.github.DonBirnam.library.model.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = DaoConfig.class)
+@Transactional
+public class DefaultBookTest {
+    @Autowired
+    private BookDao bookDao;
+    @Autowired
+    private AuthorDao authorDao;
+
+
+    private Author testAuthor(){
+        Author author = new Author(100L,"Кен","Кизи");
+        authorDao.createAuthor(author);
+        Author createdAuthor = authorDao.findByName(author.getFirstName(), author.getLastName());
+        return createdAuthor;
+    }
+
+    private Book testBook() {
+        Book book = new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, testAuthor().getId());
+        return book;
+    }
+
+    @Test
+    public void save(){
+        Long id = bookDao.createBook(testBook());
+
+        int pages = bookDao.findById(id).getPageCount();
+
+        assertEquals(412, pages);
+    }
+
+    @Test
+    public void findByTitle(){
+        bookDao.createBook(testBook());
+
+        BookFull book = bookDao.findByTitle("Песня моряка");
+
+        String firstName = book.getAuthorFirstName();
+        assertEquals("Кен", firstName);
+    }
+
+    @Test
+    public void findById(){
+        Long id = bookDao.createBook(testBook());
+
+        BookFull book = bookDao.findById(id);
+
+        String firstName = book.getAuthorFirstName();
+        assertEquals("Кен", firstName);
+    }
+
+    @Test
+    public void getBooksGenre(){
+        bookDao.createBook(testBook());
+
+        Genre genre = Genre.DETECTIVE;
+        List<BookFull> books = bookDao.getBooksByGenre(genre);
+
+        BookFull book = books.iterator().next();
+        assertEquals(Genre.DETECTIVE, book.getGenre());
+    }
+
+    @Test
+    public void updateStatus(){
+        Long id = bookDao.createBook(testBook());
+
+        bookDao.updateBookStatus(BookStatus.OCCUPIED, id);
+
+        BookFull book = bookDao.findById(id);
+        assertEquals(book.getStatus(), BookStatus.OCCUPIED);
+    }
+
+    @Test
+    public void updateBook(){
+        Long id = bookDao.createBook(testBook());
+        Book newBook = new Book(null, "Американский психопат",350,"978-5911810808", Genre.DETECTIVE,BookStatus.OCCUPIED, 5, null);
+
+        bookDao.updateBook(newBook, id);
+
+        BookFull book = bookDao.findById(id);
+        assertEquals(book.getTitle(), "Американский психопат");
+        assertEquals(book.getInStock(), 5);
+    }
+
+    @Test
+    public void getBooks(){
+        bookDao.createBook(testBook());
+
+        List<BookFull> books = bookDao.getAllBooks();
+
+        assertNotNull(books);
+    }
+
+
+    @Test
+    public void deleteBook(){
+        Long id = bookDao.createBook(testBook());
+
+        BookFull book = bookDao.findById(id);
+        assertNotNull(bookDao.findById(book.getId()));
+
+        bookDao.deleteBook(book.getId());
+        assertNull(bookDao.findByTitle("Песня моряка"));
+    }
+}

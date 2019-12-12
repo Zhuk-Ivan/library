@@ -12,25 +12,17 @@ public class Order {
     private LocalDateTime createDate;
     private LocalDateTime takeDate;
     private LocalDateTime expireDate;
+    private OrderStatus orderStatus;
 
 
-
-    public Order(Long id, Long bookId, Long authUserId, LocalDateTime createDate, LocalDateTime takeDate, LocalDateTime expireDate) {
-        this.id = id;
-        this.bookId = bookId;
-        this.authUserId = authUserId;
-        this.createDate = createDate;
-        this.takeDate = takeDate;
-        this.expireDate = expireDate;
-    }
-
-    public Order(Long id, Set<Long> booksId,  Long authUserId, LocalDateTime createDate, LocalDateTime takeDate, LocalDateTime expireDate) {
+    public Order(Long id, Set<Long> booksId, Long authUserId, LocalDateTime createDate, LocalDateTime takeDate, LocalDateTime expireDate, OrderStatus orderStatus) {
         this.id = id;
         this.booksId = booksId;
         this.authUserId = authUserId;
         this.createDate = createDate;
         this.takeDate = takeDate;
         this.expireDate = expireDate;
+        this.orderStatus = orderStatus;
     }
 
     public Long getId() {
@@ -87,5 +79,21 @@ public class Order {
 
     public void setExpireDate(LocalDateTime expireDate) {
         this.expireDate = expireDate;
+    }
+
+    public Set<Long> getBooksId() {
+        return booksId;
+    }
+
+    public void setBooksId(Set<Long> booksId) {
+        this.booksId = booksId;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

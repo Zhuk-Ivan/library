@@ -1,32 +1,31 @@
 package com.github.DonBirnam.library.service.impl;
 
 import com.github.DonBirnam.library.dao.OrderDao;
-import com.github.DonBirnam.library.dao.impl.DefaultOrderDao;
 import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.Order;
 import com.github.DonBirnam.library.model.OrderFin;
 import com.github.DonBirnam.library.service.OrderService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Service
 public class DefaultOrderService implements OrderService {
 
-    private OrderDao orderDao = DefaultOrderDao.getInstance();
+    private final OrderDao orderDao;
 
-    private static class SingletonHolder {
-        static final OrderService HOLDER_INSTANCE = new DefaultOrderService();
-    }
-
-    public static OrderService getInstance(){
-        return DefaultOrderService.SingletonHolder.HOLDER_INSTANCE;
+    public DefaultOrderService(OrderDao orderDao) {
+        this.orderDao = orderDao;
     }
 
     Set<BookFull> tempOrders = new HashSet<>();
 
     @Override
+    @Transactional
     public void save(Order order) {
         orderDao.createOrder(order);
         removeTempOrders();
@@ -48,11 +47,13 @@ public class DefaultOrderService implements OrderService {
 //    }
 //
     @Override
+    @Transactional
     public List<OrderFin> getAllOrders() {
         return orderDao.getAllOrders();
     }
 
     @Override
+    @Transactional
     public void approve(LocalDateTime takeDate, LocalDateTime expireDate, Long id) {
         orderDao.approveOrder(takeDate,expireDate,id);
     }
@@ -63,6 +64,7 @@ public class DefaultOrderService implements OrderService {
 //    }
 
     @Override
+    @Transactional
     public List<OrderFin> getOrdersByUserId(Long userId) {
         return orderDao.getOrderByUserId(userId);
     }
@@ -76,6 +78,14 @@ public class DefaultOrderService implements OrderService {
     public Set<BookFull> getTempOrders() {
          return tempOrders;
 
+    }
+
+    @Override
+    public boolean canMakeTempOrder() {
+        if (tempOrders.size() < 3) {
+            return true;
+        }
+        else return false;
     }
 
     @Override

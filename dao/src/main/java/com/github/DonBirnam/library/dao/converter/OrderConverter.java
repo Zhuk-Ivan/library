@@ -4,6 +4,8 @@ import com.github.DonBirnam.library.dao.entity.OrderEntity;
 import com.github.DonBirnam.library.model.Order;
 import com.github.DonBirnam.library.model.OrderFin;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -19,6 +21,7 @@ public class OrderConverter {
         orderEntity.setCreateDate(order.getCreateDate());
         orderEntity.setTakeDate(order.getTakeDate());
         orderEntity.setExpireDate(order.getExpireDate());
+        orderEntity.setOrderStatus(order.getOrderStatus());
 
         return orderEntity;
     }
@@ -35,5 +38,16 @@ public class OrderConverter {
                 orderEntity.getTakeDate(),
                 orderEntity.getExpireDate(),
                 orderEntity.getBooks().stream().map(BookConverter::fromEntity).collect(Collectors.toSet()));
+    }
+
+    public static List<OrderFin> fromEntityList(List<OrderEntity> orderEntities) {
+        if (orderEntities == null){
+            return null;
+        }
+        final List<OrderFin> orders = new ArrayList<>();
+        for (OrderEntity orderEntity : orderEntities) {
+            orders.add(fromEntity(orderEntity));
+        }
+        return orders;
     }
 }

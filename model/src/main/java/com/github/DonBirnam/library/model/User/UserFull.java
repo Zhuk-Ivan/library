@@ -10,6 +10,7 @@ public class UserFull {
     private String password;
     private Role role;
 
+
     public UserFull(Long id, String firstName, String lastName, String phone, String email, String login, String password, Role role) {
         this.id = id;
         this.firstName = firstName;

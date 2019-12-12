@@ -79,5 +79,38 @@
     </tr>
     </form>
 </table>
+
+
+<h3>Добавить новую книгу</h3>
+<table border="1">
+    <tr>
+        <th>Название</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Количество страниц</th>
+        <th>isbn</th>
+        <th>Жанр</th>
+        <th>В наличии</th>
+    </tr>
+    <form >
+        <tr>
+            <td><input name="title" required type="text"  placeholder="Название"></td>
+            <td><input name="authorFN" required type="text"  placeholder="Имя автора"></td>
+            <td><input name="authorLN" required type="text"  placeholder="Фамилия автора"></td>
+            <td><input name="page_count" required type="text"  placeholder="Количество страниц"></td>
+            <td><input name="isbn" required type="text"  placeholder="isbn"></td>
+            <td><select name ="genre">
+                    <option selected value="FANTASY">Фантастика</option>
+                    <option selected value="DETECTIVE">Детектив</option>
+                    <option selected value="DYSTOPIA">Антиутопия</option>
+                    <option selected value="DRAMA">Драма</option>
+                    <option selected value="PHILOSOPHY">Философия</option>
+                </select>
+            </td>
+            <td><input name="inStock" required type="text"  placeholder="Количество страниц"></td>
+            <td><input formaction="${pageContext.request.contextPath}/addBook" formmethod="post" type="submit"  value="Добавить"></td>
+        </tr>
+    </form>
+</table>
 </body>
 </html>

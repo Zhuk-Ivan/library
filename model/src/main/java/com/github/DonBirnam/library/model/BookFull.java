@@ -1,5 +1,7 @@
 package com.github.DonBirnam.library.model;
 
+import java.time.LocalDateTime;
+
 public class BookFull {
     private Long id;
     private String title;
@@ -10,6 +12,20 @@ public class BookFull {
     private int inStock;
     private String authorFirstName;
     private String authorLastName;
+    private LocalDateTime nearestDateToReturn;
+
+    public BookFull(Long id, String title, int pageCount, String isbn, Genre genre, BookStatus status, int inStock, String authorFirstName, String authorLastName, LocalDateTime nearestDateToReturn) {
+        this.id = id;
+        this.title = title;
+        this.pageCount = pageCount;
+        this.isbn = isbn;
+        this.genre = genre;
+        this.status = status;
+        this.inStock = inStock;
+        this.authorFirstName = authorFirstName;
+        this.authorLastName = authorLastName;
+        this.nearestDateToReturn = nearestDateToReturn;
+    }
 
     public BookFull(Long id, String title, int pageCount, String isbn, Genre genre, BookStatus status, int inStock, String authorFirstName, String authorLastName) {
         this.id = id;
@@ -98,4 +114,15 @@ public class BookFull {
     public String getFullAuthorName(){
         return authorFirstName + " " + authorLastName;
     }
+
+    public LocalDateTime getNearestDateToReturn() {
+        return nearestDateToReturn;
+    }
+
+    public void setNearestDateToReturn(LocalDateTime nearestDateToReturn) {
+        this.nearestDateToReturn = nearestDateToReturn;
+    }
+
+
+
 }

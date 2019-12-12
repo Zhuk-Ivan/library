@@ -61,11 +61,11 @@ public class DefaultUserServiceTest {
 
     @Test
     void update() {
-        doNothing().when(dao).updateUser(any());
+        doNothing().when(dao).updateUser(any(), any());
 
-        service.updateUser(user);
+        service.updateUser(user, 100L);
 
-        verify(dao, times(1)).updateUser(user);
+        verify(dao, times(1)).updateUser(user, 100L);
     }
 
     @Test

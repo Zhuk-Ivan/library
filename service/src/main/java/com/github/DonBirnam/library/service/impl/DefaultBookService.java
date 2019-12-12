@@ -1,34 +1,34 @@
 package com.github.DonBirnam.library.service.impl;
 
 import com.github.DonBirnam.library.dao.BookDao;
-import com.github.DonBirnam.library.dao.impl.DefaultBookDao;
 import com.github.DonBirnam.library.model.Book;
 import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
 import com.github.DonBirnam.library.service.BookService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 public class DefaultBookService implements BookService {
 
-    private BookDao bookDao = DefaultBookDao.getInstance();
+    private final BookDao bookDao;
 
-    private static class SingletonHolder {
-        static final BookService HOLDER_INSTANCE = new DefaultBookService();
-    }
-
-    public static BookService getInstance(){
-        return DefaultBookService.SingletonHolder.HOLDER_INSTANCE;
+    public DefaultBookService(BookDao bookDao) {
+        this.bookDao = bookDao;
     }
 
     @Override
+    @Transactional
     public Long save(Book book) {
        Long bookId =  bookDao.createBook(book);
        return bookId;
     }
 
     @Override
+    @Transactional
     public BookFull find(Long id) {
         BookFull book = bookDao.findById(id);
         if (book == null) {
@@ -39,37 +39,46 @@ public class DefaultBookService implements BookService {
     }
 
     @Override
-    public void update(Book book) {
-        bookDao.updateBook(book);
+    @Transactional
+    public void update(Book book, Long id) {
+        bookDao.updateBook(book, id);
     }
 
     @Override
+    @Transactional
     public void updateBookStatus(BookStatus status, Long id) {
         bookDao.updateBookStatus(status,id);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         bookDao.deleteBook(id);
     }
 
     @Override
+    @Transactional
     public List<BookFull> getAllBooks() {
         return bookDao.getAllBooks();
     }
 
     @Override
+    @Transactional
     public List<BookFull> getByGenre(Genre genre) {
         return bookDao.getBooksByGenre(genre);
     }
 
     @Override
-    public boolean notLastPage(int page) {
-        int max = 2;
-        int countBooks = bookDao.countBooks();
-        int lastPage = countBooks / max;
-        return page < lastPage;
+    @Transactional
+    public int countBookPage(int size) {
+        int count = bookDao.countBooks();
+        return count / size + 1;
     }
 
+    @Override
+    @Transactional
+    public List<BookFull> paging(int pageNumber, int size) {
+        return bookDao.paging(pageNumber,size);
+    }
 
 }

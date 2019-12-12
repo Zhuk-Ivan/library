@@ -12,7 +12,7 @@ public interface AuthorDao {
 
     Author findByName(String firstName, String lastName);
 
-    void updateAuthor(Author author);
+    void updateAuthor(Author author, Long id);
 
     void deleteAuthor(Long id);
 

@@ -28,6 +28,8 @@ public interface OrderService {
 
     Set<BookFull> getTempOrders();
 
+    boolean canMakeTempOrder();
+
     void removeTempOrders();
 
 }

@@ -13,7 +13,7 @@ public interface AuthUserDao {
 
     AuthUser getByLogin(String login);
 
-    void deleteAuthUser(Long id);
+    void deleteById(Long id);
 
     void blockUser(Role role, Long id);
 

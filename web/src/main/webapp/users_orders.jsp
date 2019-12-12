@@ -6,10 +6,16 @@
 
 </head>
 <body>
-<a href="/library/">Главная</a>
- <a href="/library/logout">Выход</a>
- <a href="/library/libr_page">Администрирование авторов</a>
-  <a href="/library/books_page">Администрирование книг</a>
+     <a href="/library/logout">Выход</a>
+     <a href="/library/main">Главная страница</a>
+     <a href="/library/personal_details">Изменить персональные данные</a>
+     <a href="/library/authors">Авторы</a>
+      <c:if test="${user.role == 'USER'}">
+        <a href="/library/my_orders">Ваши заявки</a>
+      </c:if>
+      <c:if test="${user.role == 'LIBRARIAN'}">
+         <a href="/library/users">Все пользователи</a>
+      </c:if>
      <div class="container">
                 <h2>Welcome librarian</h2>
      <c:if test="${orders != null}">
@@ -40,7 +46,7 @@
                        <td>${order.createOrder}</td>
                        <td>${order.takeDate}</td>
                        <td>${order.expireDate}</td>
-                       <td><form method="post" action="${pageContext.request.contextPath}/librarian_approve">
+                       <td><form method="post" action="${pageContext.request.contextPath}/approve">
                        <input name="id" type="hidden" value="${order.id}"></input>
                        <input type="submit" value="Выдать"></input>
                        </form></td>

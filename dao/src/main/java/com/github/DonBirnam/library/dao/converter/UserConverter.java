@@ -4,6 +4,9 @@ import com.github.DonBirnam.library.dao.entity.UserEntity;
 import com.github.DonBirnam.library.model.User.User;
 import com.github.DonBirnam.library.model.User.UserFull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class UserConverter {
 
@@ -36,6 +39,17 @@ public class UserConverter {
                 userEntity.getAuthUserEntity().getLogin(),
                 userEntity.getAuthUserEntity().getPassword(),
                 userEntity.getAuthUserEntity().getRole());
+    }
+
+    public static List<UserFull> fromEntityList(List<UserEntity> userEntities) {
+        if (userEntities == null){
+            return null;
+        }
+        final List<UserFull> users = new ArrayList<>();
+        for (UserEntity userEntity : userEntities) {
+            users.add(fromEntity(userEntity));
+        }
+        return users;
     }
 
 }

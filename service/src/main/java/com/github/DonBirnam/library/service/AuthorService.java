@@ -12,7 +12,7 @@ public interface AuthorService {
 
     Author findByFullName(String firstName, String lastName);
 
-    void update(Author author);
+    void update(Author author, Long id);
 
     void delete(Long id);
 

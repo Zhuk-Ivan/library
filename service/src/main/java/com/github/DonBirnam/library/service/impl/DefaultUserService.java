@@ -2,27 +2,25 @@ package com.github.DonBirnam.library.service.impl;
 
 
 import com.github.DonBirnam.library.dao.UserDao;
-import com.github.DonBirnam.library.dao.impl.DefaultUserDao;
 import com.github.DonBirnam.library.model.User.User;
 import com.github.DonBirnam.library.model.User.UserFull;
 import com.github.DonBirnam.library.service.UserService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 public class DefaultUserService implements UserService {
 
-    private UserDao userDao = DefaultUserDao.getInstance();
+    private final UserDao userDao;
 
-    private static class SingletonHolder {
-        static final UserService HOLDER_INSTANCE = new DefaultUserService();
+    public DefaultUserService(UserDao userDao) {
+        this.userDao = userDao;
     }
-
-    public static UserService getInstance() {
-        return DefaultUserService.SingletonHolder.HOLDER_INSTANCE;
-    }
-
 
     @Override
+    @Transactional
     public Long save(User user) {
         Long userId = userDao.saveUser(user);
         return userId;
@@ -30,22 +28,27 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    @Transactional
     public UserFull getUserById(Long id) {
         return userDao.getById(id);
 
     }
 
     @Override
-    public void updateUser(User user) {
-        userDao.updateUser(user);
+    @Transactional
+    public void updateUser(User user, Long id) {
+        userDao.updateUser(user, id);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         userDao.deleteUser(id);
 
     }
 
+    @Override
+    @Transactional
     public List<UserFull> getAllUsers(){
        return userDao.getAllUsers();
     }

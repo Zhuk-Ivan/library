@@ -6,11 +6,18 @@
 
 </head>
 <body>
-
-     <a href="/library/">Главная</a>
      <a href="/library/logout">Выход</a>
-     <a href="/library/user_admin">Кабинет пользователя</a>
-     <br/>
+     <a href="/library/main">Главная страница</a>
+     <a href="/library/personal_details">Изменить персональные данные</a>
+     <a href="/library/authors">Авторы</a>
+      <c:if test="${user.role == 'USER'}">
+        <a href="/library/my_orders">Ваши заявки</a>
+      </c:if>
+      <c:if test="${user.role == 'LIBRARIAN'}">
+         <a href="/library/users_orders">Все заявки</a>
+         <a href="/library/users">Все пользователи</a>
+      </c:if>
+     <br>
                   <table width="60%" cellspacing="0" cellpadding="4" border="1">
                                <tr>
                                    <th style="display:none;">id</th>
@@ -25,7 +32,7 @@
                                    </tr>
                                </c:forEach>
                    </table>
-                    <form method="post" action="${pageContext.request.contextPath}/userAddOrderServlet">
+                    <form method="post" action="${pageContext.request.contextPath}/addOrder">
                               <input class="button" type="submit" value="Сформировать заказ">
                           </form>
 </body>

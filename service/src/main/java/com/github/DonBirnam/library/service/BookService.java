@@ -13,7 +13,7 @@ public interface BookService {
 
     BookFull find(Long id);
 
-    void update(Book book);
+    void update(Book book, Long id);
 
     void updateBookStatus(BookStatus status, Long id);
 
@@ -23,6 +23,8 @@ public interface BookService {
 
     List<BookFull> getByGenre(Genre genre);
 
-    boolean notLastPage(int page);
+    int countBookPage(int size);
+
+    List<BookFull> paging (int pageNumber, int size);
 
 }

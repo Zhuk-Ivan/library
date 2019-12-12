@@ -1,31 +1,32 @@
 package com.github.DonBirnam.library.service.impl;
 
 import com.github.DonBirnam.library.dao.AuthorDao;
-import com.github.DonBirnam.library.dao.impl.DefaultAuthorDao;
 import com.github.DonBirnam.library.model.Author;
 import com.github.DonBirnam.library.service.AuthorService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 public class DefaultAuthorService implements AuthorService {
 
-    private AuthorDao authorDao = DefaultAuthorDao.getInstance();
+    private final AuthorDao authorDao;
 
-    private static class SingletonHolder {
-        static final AuthorService HOLDER_INSTANCE = new DefaultAuthorService();
+    public DefaultAuthorService(AuthorDao authorDao) {
+        this.authorDao = authorDao;
     }
 
-    public static AuthorService getInstance(){
-        return DefaultAuthorService.SingletonHolder.HOLDER_INSTANCE;
-    }
 
     @Override
+    @Transactional
     public Long save(Author author) {
         Long authorId = authorDao.createAuthor(author);
         return authorId;
     }
 
     @Override
+    @Transactional
     public Author find(Long id) {
         Author author = authorDao.findById(id);
         if (author == null) {
@@ -36,6 +37,7 @@ public class DefaultAuthorService implements AuthorService {
     }
 
     @Override
+    @Transactional
     public Author findByFullName(String firstName, String lastName) {
         Author author = authorDao.findByName(firstName, lastName);
         if (author == null) {
@@ -46,16 +48,19 @@ public class DefaultAuthorService implements AuthorService {
     }
 
     @Override
-    public void update(Author author) {
-        authorDao.updateAuthor(author);
+    @Transactional
+    public void update(Author author, Long id) {
+        authorDao.updateAuthor(author, id);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         authorDao.deleteAuthor(id);
     }
 
     @Override
+    @Transactional
     public List<Author> getAuthors() {
         return authorDao.getAllAuthors();
     }
