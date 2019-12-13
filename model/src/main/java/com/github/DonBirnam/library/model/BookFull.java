@@ -14,6 +14,7 @@ public class BookFull {
     private String authorLastName;
     private LocalDateTime nearestDateToReturn;
 
+
     public BookFull(Long id, String title, int pageCount, String isbn, Genre genre, BookStatus status, int inStock, String authorFirstName, String authorLastName, LocalDateTime nearestDateToReturn) {
         this.id = id;
         this.title = title;

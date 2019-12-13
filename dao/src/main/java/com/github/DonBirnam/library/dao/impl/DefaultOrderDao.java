@@ -50,7 +50,9 @@ public class DefaultOrderDao implements OrderDao {
                 bookEntity.setInStock(--inStock);
                 bookEntity.setStatus(bookStatus);
             }
-            bookEntity.setInStock(--inStock);
+            else {
+                bookEntity.setInStock(--inStock);
+            }
             orderEntitySaved.getBooks().add(bookEntity);
             bookEntity.getOrders().add(orderEntitySaved);
             bookRepository.save(bookEntity);
