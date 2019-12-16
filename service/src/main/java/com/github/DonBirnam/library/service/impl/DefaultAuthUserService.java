@@ -78,8 +78,8 @@ public class DefaultAuthUserService implements AuthUserService {
 
     @Override
     @Transactional
-    public boolean canMakeAnOrder(Long id) {
-        return authUserDao.canMakeAnOrder(id);
+    public int countBooksInOrders(Long id) {
+        return authUserDao.countBooksInOrders(id);
     }
 
 }

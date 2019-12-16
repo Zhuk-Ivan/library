@@ -75,8 +75,24 @@ public class DefaultOrderDao implements OrderDao {
 
     @Override
     public void deleteOrder(Long id) {
-        orderRepository.deleteById(id);
-    }
+        OrderEntity orderEntity = orderRepository.getOne(id);
+            for (BookEntity bookEntity : orderEntity.getBooks()) {
+                int inStock = bookEntity.getInStock();
+                BookStatus bookStatus = BookStatus.FREE;
+                if (inStock == 0) {
+                    bookEntity.setInStock(++inStock);
+                    bookEntity.setStatus(bookStatus);
+                }
+                else {
+                    bookEntity.setInStock(++inStock);
+                }
+                bookEntity.getOrders().remove(orderEntity);
+//                orderEntity.getBooks().remove(bookEntity);
+                bookRepository.save(bookEntity);
+            }
+            orderRepository.deleteById(id);
+        }
+
 
     @Override
     public List<OrderFin> getAllOrders() {

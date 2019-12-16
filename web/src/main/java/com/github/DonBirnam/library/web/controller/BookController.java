@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping
@@ -32,8 +36,24 @@ public class BookController {
     public String doGet(HttpServletRequest req) {
 
         List<BookFull> books = bookService.paging(pageNumber, size);
+        Map<Long, String> nearestDatesToReturn = new HashMap<>();
+        for (BookFull book: books) {
+            if (book.getStatus().equals(BookStatus.OCCUPIED)){
+                LocalDateTime nearestDate = bookService.getNearestDateToReturn(book.getId());
+                if (nearestDate != null) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
+                    String date = "Книга будет доступна " + nearestDate.format(formatter);
+                    nearestDatesToReturn.put(book.getId(), date);
+                }
+                else {
+                    String message = "Все книги забронированы";
+                    nearestDatesToReturn.put(book.getId(), message);
+                }
+            }
+        }
 
         int maxResult = bookService.countBookPage(size);
+        req.setAttribute("dates",nearestDatesToReturn);
         req.setAttribute("pageNumber",pageNumber);
         req.setAttribute("maxResult",maxResult);
         req.setAttribute("books",books);
@@ -92,6 +112,18 @@ public class BookController {
         Long id = Long.valueOf(req.getParameter("id"));
         bookService.delete(id);
         return "redirect:/main";
+    }
+
+    @PostMapping("/findBooksByAuthorId")
+    public String findBooksByAuthorId(HttpServletRequest req) {
+        Long id = Long.valueOf(req.getParameter("id"));
+        List<BookFull> authorBooks = bookService.findByAuthorId(id);
+
+        List<Author> authors = authorService.getAuthors();
+
+        req.setAttribute("authors",authors);
+        req.setAttribute("authorBooks", authorBooks);
+        return "authors";
     }
 
     @PostMapping("/select")

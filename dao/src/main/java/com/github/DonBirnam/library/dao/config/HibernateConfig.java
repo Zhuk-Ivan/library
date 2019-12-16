@@ -22,7 +22,7 @@ public class HibernateConfig {
         this.settingsConfig = settingsConfig;
     }
 
-    @Bean
+    @Bean(destroyMethod = "close")
     public DataSource dataSource(){
         final DataSourceSettings dataSourceSettings = settingsConfig.dataSourceSettings();
 
@@ -31,7 +31,7 @@ public class HibernateConfig {
         hikariDataSource.setUsername(dataSourceSettings.getUser());
         hikariDataSource.setPassword(dataSourceSettings.getPassword());
         hikariDataSource.setDriverClassName(dataSourceSettings.getDriver());
-        hikariDataSource.setMaximumPoolSize(30);
+        hikariDataSource.setMaximumPoolSize(2);
         return hikariDataSource;
     }
 

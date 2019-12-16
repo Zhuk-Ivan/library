@@ -17,6 +17,6 @@ public interface AuthUserDao {
 
     void blockUser(Role role, Long id);
 
-    boolean canMakeAnOrder(Long id);
+    int countBooksInOrders(Long id);
 
 }

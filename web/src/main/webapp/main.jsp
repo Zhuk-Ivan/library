@@ -63,7 +63,9 @@ ${errorMakeOrder}
                     </td>
                     <td><c:choose>
                         <c:when test="${book.status == 'FREE'}">Свободна</c:when>
-                        <c:when test="${book.status == 'OCCUPIED'}">Ближайшее возвращение книги будет <br> ${book.nearestDateToReturn}</c:when>
+                        <c:when test="${book.status == 'OCCUPIED'}">
+                            <c:forEach items="${dates[book.id]}" var="date">${date}</c:forEach>
+                        </c:when>
                         </c:choose>
                     </td>
                     <td>${book.inStock}</td>

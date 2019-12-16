@@ -55,8 +55,25 @@ public class OrderController {
 
     @GetMapping("/my_orders")
     public String myTemporaryOrders(HttpServletRequest req) {
-        Set<BookFull> orderBooks = orderService.getTempOrders();
-        req.getSession().setAttribute("orderBooks", orderBooks);
+        AuthUser user = (AuthUser)req.getSession().getAttribute("user");
+
+        Set<BookFull> tempOrderBooks = orderService.getTempOrders(req.getSession());
+        req.getSession().setAttribute("orderBooks", tempOrderBooks);
+
+        List<OrderFin> myOrders = orderService.getOrdersByUserId(user.getId());
+        if (myOrders == null){
+            String emptyOrders = "У вас еще нет заказов";
+            req.setAttribute("emptyOrders", emptyOrders);
+            return "my_orders";
+        }
+        Map<Long, Set<BookFull>> booksMap = new HashMap<>();
+        for (OrderFin order : myOrders) {
+            booksMap.put(order.getId(), order.getBooks());
+        }
+
+        req.setAttribute("books", booksMap);
+        req.setAttribute("myOrders", myOrders);
+
         return "my_orders";
     }
 
@@ -78,8 +95,8 @@ public class OrderController {
 
 
         if (currentStatus.equals(BookStatus.FREE) ){
-            if (authUserService.canMakeAnOrder(userId) && orderService.canMakeTempOrder()){
-                orderService.addTempOrder(bookToOrder);
+            if (orderService.canMakeTempOrder(req.getSession())){
+                orderService.addTempOrder(bookToOrder, req.getSession());
                 return "main";
 
             } else {
@@ -99,7 +116,7 @@ public class OrderController {
         AuthUser authUser = (AuthUser) req.getSession().getAttribute("user");
         Long userId = authUser.getId();
         OrderStatus orderStatus = OrderStatus.CREATED;
-        Set<BookFull> orderBooks = orderService.getTempOrders();
+        Set<BookFull> orderBooks = orderService.getTempOrders(req.getSession());
         Set<Long> booksId = new HashSet<>();
         for (BookFull bookFull : orderBooks) {
             booksId.add(bookFull.getId());
@@ -107,7 +124,7 @@ public class OrderController {
         }
         LocalDateTime createOrder = LocalDateTime.now();
         Order order = new Order(null, booksId, userId, createOrder, null, null, orderStatus);
-        orderService.save(order);
+        orderService.save(order, req.getSession());
 
         return "redirect:/main";
     }
@@ -118,6 +135,21 @@ public class OrderController {
         LocalDateTime takeDate = LocalDateTime.now();
         LocalDateTime expireDate = takeDate.plusDays(7);
         orderService.approve(takeDate,expireDate,id);
+        return "redirect:/users_orders";
+    }
+
+    @PostMapping("/deleteTempBook")
+    public String deleteTempBook(HttpServletRequest req) {
+        Long id = Long.valueOf(req.getParameter("id"));
+        BookFull bookToDelete = bookService.find(id);
+        orderService.removeBookFromTempOrders(req.getSession(), bookToDelete);
+        return "redirect:/my_orders";
+    }
+
+    @PostMapping("/deleteOrder")
+    public String deleteOrder(HttpServletRequest req) {
+        Long orderId = Long.valueOf(req.getParameter("id"));
+        orderService.delete(orderId);
         return "redirect:/users_orders";
     }
 }

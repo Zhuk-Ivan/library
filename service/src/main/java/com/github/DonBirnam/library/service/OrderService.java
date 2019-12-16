@@ -4,32 +4,35 @@ import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.Order;
 import com.github.DonBirnam.library.model.OrderFin;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
 public interface OrderService {
 
-    void save(Order order);
+    void save(Order order, HttpSession session);
 
-//    Order find(Long id);
-//
-//    void delete(Long id);
+    OrderFin find(Long id);
+
+    void delete(Long id);
 
     List<OrderFin> getAllOrders();
 
     void approve(LocalDateTime takeDate, LocalDateTime expireDate, Long id);
-//
-//    List<Order> getAllUsersOrders();
-//
+
     List<OrderFin> getOrdersByUserId(Long userId);
 
-    void addTempOrder(BookFull bookFull);
+    void addTempOrder(BookFull bookFull, HttpSession session);
 
-    Set<BookFull> getTempOrders();
+    Set<BookFull> getTempOrders(HttpSession session);
 
-    boolean canMakeTempOrder();
+    boolean canMakeTempOrder(HttpSession session);
 
-    void removeTempOrders();
+    void removeTempOrders(HttpSession session);
+
+    void removeBookFromTempOrders(HttpSession session, BookFull bookFull);
+
+
 
 }

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Repository
 public class DefaultBookDao implements BookDao {
@@ -93,6 +94,17 @@ public class DefaultBookDao implements BookDao {
         Page<BookEntity> booksPage = bookRepository.findAll(PageRequest.of(pageNumber, size));
         List<BookEntity> books = booksPage.getContent();
         return BookConverter.fromEntityList(books);
+    }
+
+    @Override
+    public List<BookFull> findByAuthorId(Long id) {
+        List<BookEntity> books = bookRepository.findByAuthorId(id);
+        return BookConverter.fromEntityList(books);
+    }
+
+    @Override
+    public LocalDateTime nearestDateToReturn(Long id) {
+        return bookRepository.findNearestDate(id);
     }
 
 }

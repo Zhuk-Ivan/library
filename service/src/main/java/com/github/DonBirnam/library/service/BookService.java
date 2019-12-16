@@ -5,6 +5,7 @@ import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookService {
@@ -24,6 +25,10 @@ public interface BookService {
     List<BookFull> getByGenre(Genre genre);
 
     int countBookPage(int size);
+
+    LocalDateTime getNearestDateToReturn(Long id);
+
+    List<BookFull> findByAuthorId(Long id);
 
     List<BookFull> paging (int pageNumber, int size);
 

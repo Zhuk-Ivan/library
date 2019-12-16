@@ -2,13 +2,10 @@ package com.github.DonBirnam.library.dao.entity;
 
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
-import com.github.DonBirnam.library.model.OrderStatus;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,8 +21,6 @@ public class BookEntity {
     private Genre genre;
     private BookStatus status;
     private int inStock;
-    private LocalDateTime nearestDateToReturn;
-
 
     public BookEntity() {
     }
@@ -107,9 +102,9 @@ public class BookEntity {
         this.inStock = inStock;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "book_order", joinColumns = {@JoinColumn(name = "book_id")},
-            inverseJoinColumns = {@JoinColumn(name = "order_id")})
+            inverseJoinColumns = {@JoinColumn(name = "order_id") })
     public Set<OrderEntity> getOrders() {
         return orders;
     }
@@ -117,23 +112,4 @@ public class BookEntity {
     public void setOrders(Set<OrderEntity> orders) {
         this.orders = orders;
     }
-
-    @Transient
-    public LocalDateTime getNearestDateToReturn() {
-//        boolean isIssued = orders.stream().anyMatch(orderEntity -> orderEntity.getOrderStatus().equals(OrderStatus.ISSUED));
-        boolean isIssued = orders.stream().map(OrderEntity::getOrderStatus).anyMatch(orderStatus -> orderStatus.equals(OrderStatus.ISSUED));
-        if (!orders.isEmpty() && isIssued) {
-            return orders.stream().min(Comparator.comparing(OrderEntity::getExpireDate)).get().getExpireDate();
-        }
-        else {
-            return null;
-        }
-    }
-
-    public void setNearestDateToReturn(LocalDateTime nearestDateToReturn) {
-        this.nearestDateToReturn = nearestDateToReturn;
-    }
 }
-//                        bookEntity.getOrders().stream().map(orderEntity -> orderEntity.getExpireDate()).min(LocalDateTime::compareTo).get());
-//                        bookEntity.getOrders().stream().map(orderEntity -> orderEntity.getExpireDate()).min(LocalDateTime::compareTo).get());
-//                        bookEntity.getOrders().stream().min(Comparator.comparing(OrderEntity::getExpireDate)).get().getExpireDate());

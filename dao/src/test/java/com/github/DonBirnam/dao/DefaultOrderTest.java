@@ -39,9 +39,9 @@ public class DefaultOrderTest {
 
 
     private Author testAuthor(){
-        Author author = new Author(100L,"Кен","Кизи");
-        authorDao.createAuthor(author);
-        Author createdAuthor = authorDao.findByName(author.getFirstName(), author.getLastName());
+        Author author = new Author(null,"Кен","Кизи");
+        Long id = authorDao.createAuthor(author);
+        Author createdAuthor = authorDao.findById(id);
         return createdAuthor;
     }
     private BookFull testBook() {
@@ -129,6 +129,22 @@ public class DefaultOrderTest {
         OrderFin updatedOrder = orderDao.findById(id);
         assertNotNull(updatedOrder.getExpireDate());
     }
+//
+//    @Test
+//    public void selectNearestDate(){
+//        Set<Long> booksId = new HashSet<>();
+//        booksId.add(testBook().getId());
+//        Long userId = testUser().getId();
+//        Order order = new Order(null, booksId, userId , createDate, null, null, orderStatus);
+//        Long id = orderDao.createOrder(order);
+//
+//        orderDao.approveOrder(takeDate, expireDate, id);
+//
+//
+//        LocalDateTime nearestDate = bookDao.nearestDateToReturn(userId);
+//
+//        assertEquals(nearestDate, expireDate);
+//    }
 
 //    @Test
 //    public void deleteOrder(){

@@ -50,6 +50,9 @@
                        <input name="id" type="hidden" value="${order.id}"></input>
                        <input type="submit" value="Выдать"></input>
                        </form></td>
+                       <td><form method="post" action="${pageContext.request.contextPath}/deleteOrder">
+                           <input name="id" type="hidden" value="${order.id}"></input>
+                           <input type="submit" value="Принять книги"></input></form></td>
                    </tr>
                </c:forEach>
            </table>

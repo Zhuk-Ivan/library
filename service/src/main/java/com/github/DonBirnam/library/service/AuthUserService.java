@@ -19,6 +19,6 @@ public interface AuthUserService {
 
     void block(Role role, Long id);
 
-    boolean canMakeAnOrder(Long id);
+    int countBooksInOrders(Long id);
 }
 

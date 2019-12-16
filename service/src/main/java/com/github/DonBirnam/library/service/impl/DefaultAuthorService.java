@@ -17,7 +17,6 @@ public class DefaultAuthorService implements AuthorService {
         this.authorDao = authorDao;
     }
 
-
     @Override
     @Transactional
     public Long save(Author author) {

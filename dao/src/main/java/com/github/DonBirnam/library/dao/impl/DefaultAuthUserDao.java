@@ -56,7 +56,7 @@ public class DefaultAuthUserDao implements AuthUserDao{
     }
 
     @Override
-    public boolean canMakeAnOrder(Long id) {
+    public int countBooksInOrders(Long id) {
         final AuthUserEntity authUserEntity = authUserRepository.getOne(id);
         int bookCount = 0;
         Set<OrderEntity> userOrders = authUserEntity.getOrders();
@@ -65,10 +65,7 @@ public class DefaultAuthUserDao implements AuthUserDao{
             bookCount += iter.next().getBooks().size();
         }
 
-        if (bookCount < 3){
-            return true;
-        }
-        else return false;
+        return bookCount;
 
     }
 

@@ -52,7 +52,7 @@ public class WebConfig {
 
     @Bean
     public LogoutController logoutController(){
-        return new LogoutController(serviceConfig.orderService());
+        return new LogoutController();
     }
 
     @Bean

@@ -9,6 +9,7 @@ import com.github.DonBirnam.library.service.BookService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -73,6 +74,18 @@ public class DefaultBookService implements BookService {
     public int countBookPage(int size) {
         int count = bookDao.countBooks();
         return count / size + 1;
+    }
+
+    @Override
+    @Transactional
+    public LocalDateTime getNearestDateToReturn(Long id) {
+        return bookDao.nearestDateToReturn(id);
+    }
+
+    @Override
+    @Transactional
+    public List<BookFull> findByAuthorId(Long id) {
+        return bookDao.findByAuthorId(id);
     }
 
     @Override

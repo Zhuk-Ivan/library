@@ -7,7 +7,10 @@ import com.github.DonBirnam.library.model.BookFull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookConverter {
+public class BookConverter{
+
+
+
     public static BookEntity toEntity(Book book){
         if (book == null) {
             return null;
@@ -23,22 +26,10 @@ public class BookConverter {
         return bookEntity;
         }
 
-        public static BookFull fromEntity(BookEntity bookEntity){
+    public static BookFull fromEntity(BookEntity bookEntity){
             if (bookEntity == null) {
                 return null;
             }
-//            boolean isIssued = bookEntity.getOrders().stream().anyMatch(orderEntity -> orderEntity.getOrderStatus().equals(OrderStatus.ISSUED));
-//
-//
-//            if (!bookEntity.getOrders().isEmpty() && isIssued) {
-//
-//                NavigableSet<LocalDateTime> dates = new TreeSet<>();
-//                bookEntity.getOrders().stream().map(OrderEntity::getExpireDate).map(localDateTime -> dates.add(localDateTime));
-//                LocalDateTime nearestDate = dates.pollFirst();
-
-
-
-
                 return new BookFull(
                         bookEntity.getId(),
                         bookEntity.getTitle(),
@@ -48,8 +39,8 @@ public class BookConverter {
                         bookEntity.getStatus(),
                         bookEntity.getInStock(),
                         bookEntity.getAuthorEntity().getFirstName(),
-                        bookEntity.getAuthorEntity().getLastName(),
-                        bookEntity.getNearestDateToReturn());
+                        bookEntity.getAuthorEntity().getLastName());
+
             }
 
     public static List<BookFull> fromEntityList(List<BookEntity> booksEntity) {

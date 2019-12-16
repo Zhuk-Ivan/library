@@ -5,6 +5,7 @@ import com.github.DonBirnam.library.model.BookFull;
 import com.github.DonBirnam.library.model.BookStatus;
 import com.github.DonBirnam.library.model.Genre;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookDao {
@@ -28,5 +29,9 @@ public interface BookDao {
     int countBooks();
 
     List<BookFull> paging(int pageNumber, int size);
+
+    List<BookFull> findByAuthorId(Long id);
+
+    LocalDateTime nearestDateToReturn(Long id);
 
 }

@@ -23,18 +23,51 @@
                                    <th style="display:none;">id</th>
                                    <th>Название книги</th>
                                    <th>Автор</th>
-                                   <th>Сформировать заказ</th>
+                                   <th>Убрать из корзины</th>
                                </tr>
                                <c:forEach items="${orderBooks}" var="book">
                                    <tr>
+                                       <td style="display:none;">${book.id}</td>
                                        <td>${book.title}</td>
                                        <td>${book.authorFirstName} ${book.authorLastName}</td>
+                                        <td><form method="post" action="${pageContext.request.contextPath}/deleteTempBook">
+                                            <input name="id" type="hidden" value="${book.id}"></input>
+                                            <input type="submit" value="Убрать из корзины"></input></form></td>
                                    </tr>
                                </c:forEach>
                    </table>
                     <form method="post" action="${pageContext.request.contextPath}/addOrder">
                               <input class="button" type="submit" value="Сформировать заказ">
                           </form>
+                          <br>
+                          ${emptyOrders}
+                          <c:if test="${myOrders != null}">
+                                     <table width="60%" cellspacing="0" cellpadding="4" border="1">
+                                         <tr>
+                                             <th style="display:none;">id</th>
+                                             <th>Название книги</th>
+                                             <th width="13%">Автор</th>
+                                             <th>Дата выдачи книги</th>
+                                             <th>Дата возвращения</th>
+                                         </tr>
+                                         <c:forEach items="${myOrders}" var="order">
+                                             <tr>
+                                                 <td style="display:none;">${order.id}</td>
+                                                 <td>
+                                                      <c:forEach items="${books[order.id]}" var="book">
+                                                          <ol> ${book.title} </ol>
+                                                      </c:forEach>
+                                                 </td>
+                                                 <td>
+                                                      <c:forEach items="${books[order.id]}" var="book">
+                                                          <ol>${book.authorFirstName} ${book.authorLastName}</ol>
+                                                      </c:forEach></td>
+                                                 <td>${order.takeDate}</td>
+                                                 <td>${order.expireDate}</td>
+                                             </tr>
+                                         </c:forEach>
+                                     </table>
+                                 </c:if>
 </body>
 </html>
 

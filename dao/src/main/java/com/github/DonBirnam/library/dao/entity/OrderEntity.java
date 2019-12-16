@@ -30,7 +30,7 @@ public class OrderEntity {
         this.id = id;
     }
 
-    @ManyToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "orders")
     public Set<BookEntity> getBooks() {
         return books;
     }
