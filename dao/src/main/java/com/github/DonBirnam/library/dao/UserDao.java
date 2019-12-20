@@ -16,7 +16,9 @@ public interface UserDao {
 
     void deleteUser(Long id);
 
-    List<UserFull> getAllUsers();
+//    List<UserFull> getAllUsers();
+
+    List<UserFull> getAllNonBlockedUsers();
 
 
 }

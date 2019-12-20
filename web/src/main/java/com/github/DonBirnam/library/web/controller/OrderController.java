@@ -8,6 +8,7 @@ import com.github.DonBirnam.library.service.BookService;
 import com.github.DonBirnam.library.service.OrderService;
 import com.github.DonBirnam.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -96,8 +97,15 @@ public class OrderController {
 
         if (currentStatus.equals(BookStatus.FREE) ){
             if (orderService.canMakeTempOrder(req.getSession())){
-                orderService.addTempOrder(bookToOrder, req.getSession());
-                return "main";
+                if (!orderService.isBookInOrderAlready(userId, bookToOrder)) {
+                    orderService.addTempOrder(bookToOrder, req.getSession());
+                    return "main";
+                }
+                else {
+                    String error = "Книга уже у вас в заказе";
+                    req.setAttribute("errorBookInOrder", error);
+                    return "main";
+                }
 
             } else {
                 String error = "Вы не можете взять более трех книг";
@@ -130,6 +138,7 @@ public class OrderController {
     }
 
     @PostMapping("/approve")
+    @Secured("ROLE_LIBRARIAN")
     public String approveOrder(HttpServletRequest req) {
         Long id = Long.valueOf(req.getParameter("id"));
         LocalDateTime takeDate = LocalDateTime.now();
@@ -147,6 +156,7 @@ public class OrderController {
     }
 
     @PostMapping("/deleteOrder")
+    @Secured("ROLE_LIBRARIAN")
     public String deleteOrder(HttpServletRequest req) {
         Long orderId = Long.valueOf(req.getParameter("id"));
         orderService.delete(orderId);

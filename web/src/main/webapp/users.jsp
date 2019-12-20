@@ -1,32 +1,36 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
     <head>
         <title>Users</title>
     </head>
     <body>
-     <a href="/library/logout">Выход</a>
-     <a href="/library/main">Главная страница</a>
-     <a href="/library/personal_details">Изменить персональные данные</a>
-     <a href="/library/authors">Авторы</a>
-      <c:if test="${user.role == 'LIBRARIAN'}">
-         <a href="/library/users_orders">Все заявки</a>
-         <a href="/library/users">Все пользователи</a>
+<a href="/library/logout"><spring:message code="logout"/></a>
+<a href="/library/main"><spring:message code="page.main"/></a>
+     <a href="/library/personal_details"><spring:message code="page.change.personal.data"/></a>
+     <a href="/library/authors"><spring:message code="page.authors"/></a>
+      <c:if test="${user.role == 'USER'}">
+        <a href="/library/my_orders"><spring:message code="page.my.orders"/></a>
       </c:if>
+      <c:if test="${user.role == 'LIBRARIAN'}">
+         <a href="/library/users_orders"><spring:message code="page.users.orders"/></a>
+         <a href="/library/users"><spring:message code="page.users"/></a>
+      </c:if>
+      <br>
      <div class="container">
-<h2>Пользователи библиотеки</h2>
      <c:if test="${users != null}">
         <table width="60%" cellspacing="0" cellpadding="4" border="1">
             <tr>
                 <th style="display:none;">id</th>
-                <th>Логин</th>
-                <th>Имя</th>
-                <th>Фамилия</th>
-                <th>phone</th>
+                <th><spring:message code="placeholder.login"/></th>
+                <th><spring:message code="placeholder.name"/></th>
+                <th><spring:message code="placeholder.surname"/></th>
+                <th><spring:message code="placeholder.phone"/></th>
                 <th>email</th>
                 <th>Роль</th>
-                <th>Удалить пользователя</th>
-                <th>Заблокировать/разблокировать пользователя</th>
+                <th><spring:message code="button.delete.user"/></th>
+                <th><spring:message code="button.block.user"/></th>
             </tr>
             <c:forEach items="${users}" var="user">
             <tr>
@@ -43,7 +47,7 @@
                     </c:choose></td>
                 <td>
                     <form method="post" action="${pageContext.request.contextPath}/deleteUser">
-                    <button type="submit" name="login" value="${user.login}">Удалить</button>
+                    <button type="submit" name="login" value="${user.login}"><spring:message code="button.delete"/></button>
                     </form>
                 </td>
                 <td>
@@ -52,9 +56,9 @@
                        <input name="role" type="hidden" value="${user.role}"></input>
                        <c:choose>
                             <c:when test="${user.role == 'USER'}">
-                                <input type="submit" value="Заблокировать"></input></c:when>
+                                <input type="submit" value="<spring:message code="button.block"/>"></input></c:when>
                             <c:otherwise>
-                                <input type="submit" value="Разблокировать"></input>
+                                <input type="submit" value="<spring:message code="button.unblock"/>"></input>
                             </c:otherwise>
                        </c:choose>
                     </form>

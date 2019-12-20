@@ -8,10 +8,7 @@ import com.github.DonBirnam.library.dao.entity.OrderEntity;
 import com.github.DonBirnam.library.dao.repository.AuthUserRepository;
 import com.github.DonBirnam.library.dao.repository.BookRepository;
 import com.github.DonBirnam.library.dao.repository.OrderRepository;
-import com.github.DonBirnam.library.model.BookStatus;
-import com.github.DonBirnam.library.model.Order;
-import com.github.DonBirnam.library.model.OrderFin;
-import com.github.DonBirnam.library.model.OrderStatus;
+import com.github.DonBirnam.library.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -118,7 +115,6 @@ public class DefaultOrderDao implements OrderDao {
         List<OrderEntity> orders = orderRepository.findByUserId(userId);
         return OrderConverter.fromEntityList(orders);
     }
-
 
 }
 

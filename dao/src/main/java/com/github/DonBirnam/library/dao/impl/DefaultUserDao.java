@@ -55,10 +55,16 @@ public class DefaultUserDao implements UserDao {
     }
 
     @Override
-    public List<UserFull> getAllUsers() {
-        List<UserEntity> users = userRepository.findAll();
-        return UserConverter.fromEntityList(users);
+    public List<UserFull> getAllNonBlockedUsers() {
+       List<UserEntity> users = userRepository.findNonBlockedUsers();
+       return UserConverter.fromEntityList(users);
     }
+
+//    @Override
+//    public List<UserFull> getAllUsers() {
+//        List<UserEntity> users = userRepository.findAll();
+//        return UserConverter.fromEntityList(users);
+//    }
 }
 
 

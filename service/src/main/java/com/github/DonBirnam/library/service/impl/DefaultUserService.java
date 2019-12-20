@@ -50,7 +50,7 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional
     public List<UserFull> getAllUsers(){
-       return userDao.getAllUsers();
+       return userDao.getAllNonBlockedUsers();
     }
 }
 

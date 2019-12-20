@@ -45,6 +45,7 @@ public class HibernateConfig {
         return sf;
     }
 
+
     @Bean
     public PlatformTransactionManager transactionManager() {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();

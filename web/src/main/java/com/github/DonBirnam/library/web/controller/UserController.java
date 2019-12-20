@@ -8,6 +8,7 @@ import com.github.DonBirnam.library.service.AuthUserService;
 import com.github.DonBirnam.library.service.BookService;
 import com.github.DonBirnam.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +51,7 @@ public class UserController {
     }
 
     @PostMapping("/block")
+    @Secured("ROLE_LIBRARIAN")
     public String blockUser(HttpServletRequest req) {
         String login = req.getParameter("login");
         Long authUserId = authUserService.getByLogin(login).getId();
@@ -66,6 +68,7 @@ public class UserController {
     }
 
     @PostMapping("/deleteUser")
+    @Secured("ROLE_LIBRARIAN")
     public String deleteUser(HttpServletRequest req) {
         String login = req.getParameter("login");
         Long authUserId = authUserService.getByLogin(login).getId();

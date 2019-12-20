@@ -12,9 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,12 +40,12 @@ public class DefaultUserServiceTest {
 
     }
 
-    @Test
-    void getAllUsers() {
-        when(dao.getAllUsers()).thenReturn(new ArrayList<>());
-        List<UserFull> users = service.getAllUsers();
-        assertNotNull(users);
-    }
+//    @Test
+//    void getAllUsers() {
+//        when(dao.getAllUsers()).thenReturn(new ArrayList<>());
+//        List<UserFull> users = service.getAllUsers();
+//        assertNotNull(users);
+//    }
 
 
     @Test

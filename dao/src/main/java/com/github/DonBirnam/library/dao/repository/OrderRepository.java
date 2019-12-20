@@ -28,4 +28,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     @Modifying(clearAutomatically = true)
     @Query("from OrderEntity oe where oe.authUserEntity.id = :id")
     List<OrderEntity> findByUserId(@Param("id") Long id);
+
 }

@@ -33,6 +33,8 @@ public interface OrderService {
 
     void removeBookFromTempOrders(HttpSession session, BookFull bookFull);
 
+    boolean isBookInOrderAlready(Long id, BookFull bookFull);
+
 
 
 }

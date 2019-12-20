@@ -4,6 +4,7 @@ import com.github.DonBirnam.library.model.*;
 import com.github.DonBirnam.library.service.AuthorService;
 import com.github.DonBirnam.library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -81,6 +82,7 @@ public class BookController {
 
 
     @PostMapping("/addBook")
+    @Secured("ROLE_LIBRARIAN")
     public String addBook(HttpServletRequest req) {
         String title = req.getParameter("title");
         String authorFN = req.getParameter("authorFN");
@@ -108,6 +110,7 @@ public class BookController {
     }
 
     @PostMapping("/deleteBook")
+    @Secured("ROLE_LIBRARIAN")
     public String deleteBook(HttpServletRequest req) {
         Long id = Long.valueOf(req.getParameter("id"));
         bookService.delete(id);
@@ -145,6 +148,7 @@ public class BookController {
     }
 
     @PostMapping("/updateBook")
+    @Secured("ROLE_LIBRARIAN")
     public String updateBook(HttpServletRequest req) {
         Long id = Long.valueOf(req.getParameter("id"));
         String title = req.getParameter("title");

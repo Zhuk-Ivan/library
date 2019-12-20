@@ -129,9 +129,12 @@ public class DefaultOrderTest {
         OrderFin updatedOrder = orderDao.findById(id);
         assertNotNull(updatedOrder.getExpireDate());
     }
-//
+
+
+
 //    @Test
 //    public void selectNearestDate(){
+//
 //        Set<Long> booksId = new HashSet<>();
 //        booksId.add(testBook().getId());
 //        Long userId = testUser().getId();

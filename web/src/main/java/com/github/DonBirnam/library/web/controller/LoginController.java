@@ -7,12 +7,19 @@ import com.github.DonBirnam.library.service.AuthUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -29,8 +36,8 @@ public class LoginController {
 
     @GetMapping("/login")
     public String loginGet(HttpServletRequest req) {
-        AuthUser authUser = (AuthUser) req.getSession().getAttribute("user");
-        if (authUser == null) {
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || "anonymousUser".equals(auth.getPrincipal())) {
             return "login";
         } else {
                 return "redirect:/main";
@@ -49,6 +56,8 @@ public class LoginController {
             return "login";
         }
         log.info("user {} logged", login);
+        Authentication auth = new UsernamePasswordAuthenticationToken(authUser, null, getAuthorities(authUser));
+        SecurityContextHolder.getContext().setAuthentication(auth);
         req.getSession().setAttribute("user", authUser);
         if (authUser.getRole().equals(Role.BLOCKED)) {
                 String error = "Вы не вернули книгу и были заблокированы";
@@ -56,5 +65,12 @@ public class LoginController {
                 return "login";
             }
         return "redirect:/main";
+    }
+
+    private List<GrantedAuthority> getAuthorities(AuthUser authUser) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        String role = String.valueOf(authUser.getRole());
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+        return authorities;
     }
 }

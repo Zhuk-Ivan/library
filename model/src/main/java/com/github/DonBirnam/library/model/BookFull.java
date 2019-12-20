@@ -1,6 +1,7 @@
 package com.github.DonBirnam.library.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class BookFull {
     private Long id;
@@ -124,6 +125,25 @@ public class BookFull {
         this.nearestDateToReturn = nearestDateToReturn;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookFull bookFull = (BookFull) o;
+        return pageCount == bookFull.pageCount &&
+                inStock == bookFull.inStock &&
+                Objects.equals(id, bookFull.id) &&
+                Objects.equals(title, bookFull.title) &&
+                Objects.equals(isbn, bookFull.isbn) &&
+                genre == bookFull.genre &&
+                status == bookFull.status &&
+                Objects.equals(authorFirstName, bookFull.authorFirstName) &&
+                Objects.equals(authorLastName, bookFull.authorLastName) &&
+                Objects.equals(nearestDateToReturn, bookFull.nearestDateToReturn);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, pageCount, isbn, genre, status, inStock, authorFirstName, authorLastName, nearestDateToReturn);
+    }
 }

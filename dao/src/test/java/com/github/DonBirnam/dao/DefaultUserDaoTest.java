@@ -15,8 +15,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -59,12 +57,12 @@ public class DefaultUserDaoTest {
         userDao.deleteUser(userId);
     }
 
-    @Test
-    void getUsers() {
-        List<UserFull> users = userDao.getAllUsers();
-
-        assertNotNull(users);
-    }
+//    @Test
+//    void getUsers() {
+//        List<UserFull> users = userDao.getAllUsers();
+//
+//        assertNotNull(users);
+//    }
 
 
     @Test

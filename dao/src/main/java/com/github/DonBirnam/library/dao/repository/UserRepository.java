@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Transactional
@@ -15,4 +17,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             " where id=:id")
     void update(@Param("id") Long id, @Param("firstName") String firstName, @Param("lastName") String lastName,
                 @Param("phone") String phone);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query("from UserEntity ue where ue.authUserEntity.role = 'USER'")
+    List<UserEntity> findNonBlockedUsers();
 }

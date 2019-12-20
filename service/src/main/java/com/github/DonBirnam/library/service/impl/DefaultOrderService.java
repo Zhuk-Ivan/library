@@ -102,7 +102,7 @@ public class DefaultOrderService implements OrderService {
             }
         }
         else {
-            if (booksInUserOrders < 3 && books.size() < (booksInUserOrders-1)){
+            if (booksInUserOrders < 3 && (books.size() + booksInUserOrders) < 3){
                 return true;
             }
             else {
@@ -122,5 +122,22 @@ public class DefaultOrderService implements OrderService {
         tempBooks.remove(bookFull);
         session.setAttribute("tempBooks", tempBooks);
     }
+
+    @Override
+    @Transactional
+    public boolean isBookInOrderAlready(Long id, BookFull bookFull) {
+        List<OrderFin> usersOrders = orderDao.getOrderByUserId(id);
+        if (usersOrders != null){
+            for (OrderFin order: usersOrders) {
+                if (order.getBooks().contains(bookFull)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        else {
+            return false;
+        }
+
+    }
 }
- 

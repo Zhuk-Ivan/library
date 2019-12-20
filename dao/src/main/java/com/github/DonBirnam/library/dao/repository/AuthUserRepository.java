@@ -22,4 +22,5 @@ public interface AuthUserRepository extends JpaRepository<AuthUserEntity, Long> 
     @Modifying(clearAutomatically = true)
     @Query(value = "update AuthUserEntity set role = :role where id = :id")
     void updateRole(@Param("role") Role role, @Param("id") Long id);
+
 }
