@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,19 +39,6 @@ public class DefaultOrderTest {
     private AuthorDao authorDao;
 
 
-    private Author testAuthor(){
-        Author author = new Author(null,"Кен","Кизи");
-        Long id = authorDao.createAuthor(author);
-        Author createdAuthor = authorDao.findById(id);
-        return createdAuthor;
-    }
-    private BookFull testBook() {
-        Book book = new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, testAuthor().getId());
-        Long id = bookDao.createBook(book);
-        BookFull bookFull = bookDao.findById(id);
-        return bookFull;
-    }
-
     private AuthUser testUser() {
         AuthUser user = new AuthUser(null, "TestUser",  "Pes", Role.USER);
         Long id = authUserDao.saveAuthUser(user);
@@ -67,8 +55,10 @@ public class DefaultOrderTest {
 
     @Test
     void saveOrder() {
+        Long authorId = authorDao.createAuthor(new Author(null,"Кен","Кизи"));
+        Long bookId = bookDao.createBook(new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, authorId));
         Set<Long> booksId = new HashSet<>();
-        booksId.add(testBook().getId());
+        booksId.add(bookId);
         Order order = new Order(null, booksId, testUser().getId() , createDate, null, null, orderStatus);
         Long id = orderDao.createOrder(order);
 
@@ -79,8 +69,10 @@ public class DefaultOrderTest {
 
     @Test
     public void findById(){
+        Long authorId = authorDao.createAuthor(new Author(null,"Кен","Кизи"));
+        Long bookId = bookDao.createBook(new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, authorId));
         Set<Long> booksId = new HashSet<>();
-        booksId.add(testBook().getId());
+        booksId.add(bookId);
         Order order = new Order(null, booksId, testUser().getId() , createDate, null, null, orderStatus);
         Long id = orderDao.createOrder(order);
 
@@ -91,8 +83,10 @@ public class DefaultOrderTest {
 
     @Test
     public void getOrders(){
+        Long authorId = authorDao.createAuthor(new Author(null,"Кен","Кизи"));
+        Long bookId = bookDao.createBook(new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, authorId));
         Set<Long> booksId = new HashSet<>();
-        booksId.add(testBook().getId());
+        booksId.add(bookId);
         Order order = new Order(null, booksId, testUser().getId() , createDate, null, null, orderStatus);
         Long id = orderDao.createOrder(order);
 
@@ -103,8 +97,10 @@ public class DefaultOrderTest {
 
     @Test
     public void getOrderByUserId(){
+        Long authorId = authorDao.createAuthor(new Author(null,"Кен","Кизи"));
+        Long bookId = bookDao.createBook(new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, authorId));
         Set<Long> booksId = new HashSet<>();
-        booksId.add(testBook().getId());
+        booksId.add(bookId);
         Order order = new Order(null, booksId, testUser().getId() , createDate, null, null, orderStatus);
         Long id = orderDao.createOrder(order);
 
@@ -118,8 +114,10 @@ public class DefaultOrderTest {
 
     @Test
     public void updateOrder(){
+        Long authorId = authorDao.createAuthor(new Author(null,"Кен","Кизи"));
+        Long bookId = bookDao.createBook(new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, authorId));
         Set<Long> booksId = new HashSet<>();
-        booksId.add(testBook().getId());
+        booksId.add(bookId);
         Order order = new Order(null, booksId, testUser().getId() , createDate, null, null, orderStatus);
         Long id = orderDao.createOrder(order);
 
@@ -130,36 +128,40 @@ public class DefaultOrderTest {
         assertNotNull(updatedOrder.getExpireDate());
     }
 
+    @Test
+    public void countBooksInOrder(){
+        Long authorId = authorDao.createAuthor(new Author(null,"Кен","Кизи"));
+        Long bookId = bookDao.createBook(new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, authorId));
+        Long anotherBookId = bookDao.createBook(new Book(null, "Пролетая над гнездом кукушки", 360, "978-5911810808", Genre.DRAMA, BookStatus.FREE, 3, authorId));
+        Set<Long> booksId = new HashSet<>(Arrays.asList(bookId, anotherBookId));
+        Long userId = authUserDao.saveAuthUser(new AuthUser(null, "User",  "Pes", Role.USER));
+        Order order = new Order(null, booksId, userId , createDate, null, null, orderStatus);
+        Long id = orderDao.createOrder(order);
+
+        int booksCount = authUserDao.countBooksInOrders(userId);
+
+        assertEquals(booksCount, 2);
+    }
+
+    @Test
+    public void selectNearestDate(){
+        Long authorId = authorDao.createAuthor(new Author(null,"Кен","Кизи"));
+        Long bookId = bookDao.createBook(new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 1, authorId));
+        Long anotherBookId = bookDao.createBook(new Book(null, "Пролетая над гнездом кукушки", 360, "978-5911810808", Genre.DRAMA, BookStatus.FREE, 3, authorId));
+        Set<Long> booksId = new HashSet<>(Arrays.asList(bookId, anotherBookId));
+        Long userId = authUserDao.saveAuthUser(new AuthUser(null, "User",  "Pes", Role.USER));
+        Order order = new Order(null, booksId, userId , createDate, null, null, orderStatus);
+        Long id = orderDao.createOrder(order);
+
+        orderDao.approveOrder(takeDate, expireDate, id);
 
 
-//    @Test
-//    public void selectNearestDate(){
-//
-//        Set<Long> booksId = new HashSet<>();
-//        booksId.add(testBook().getId());
-//        Long userId = testUser().getId();
-//        Order order = new Order(null, booksId, userId , createDate, null, null, orderStatus);
-//        Long id = orderDao.createOrder(order);
-//
-//        orderDao.approveOrder(takeDate, expireDate, id);
-//
-//
-//        LocalDateTime nearestDate = bookDao.nearestDateToReturn(userId);
-//
-//        assertEquals(nearestDate, expireDate);
-//    }
+        LocalDateTime nearestDate = bookDao.nearestDateToReturn(bookId);
 
-//    @Test
-//    public void deleteOrder(){
-//        Order order = new Order(null, testBook().getId(), testUser().getId() , createDate, null, null);
-//        Long id = orderDao.createOrder(order);
-//
-//        OrderFin savedOrder = orderDao.findById(id);
-//        assertNotNull(savedOrder);
-//
-//        orderDao.deleteOrder(savedOrder.getId());
-//        assertNull(orderDao.findById(id));
-//    }
+        assertEquals(nearestDate, expireDate);
+    }
+
+
 
 }
 

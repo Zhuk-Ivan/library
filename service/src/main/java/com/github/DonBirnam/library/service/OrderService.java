@@ -11,7 +11,7 @@ import java.util.Set;
 
 public interface OrderService {
 
-    void save(Order order, HttpSession session);
+    Long save(Order order, HttpSession session);
 
     OrderFin find(Long id);
 

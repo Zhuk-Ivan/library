@@ -6,6 +6,7 @@ import com.github.DonBirnam.library.dao.entity.AuthUserEntity;
 import com.github.DonBirnam.library.dao.entity.UserEntity;
 import com.github.DonBirnam.library.dao.repository.AuthUserRepository;
 import com.github.DonBirnam.library.dao.repository.UserRepository;
+import com.github.DonBirnam.library.model.User.BlockedUser;
 import com.github.DonBirnam.library.model.User.User;
 import com.github.DonBirnam.library.model.User.UserFull;
 import org.slf4j.Logger;
@@ -60,11 +61,11 @@ public class DefaultUserDao implements UserDao {
        return UserConverter.fromEntityList(users);
     }
 
-//    @Override
-//    public List<UserFull> getAllUsers() {
-//        List<UserEntity> users = userRepository.findAll();
-//        return UserConverter.fromEntityList(users);
-//    }
+    @Override
+    public List<BlockedUser> getAllBlockedUsers() {
+        List<UserEntity> users = userRepository.findBlockedUsers();
+        return UserConverter.fromBlockedEntityList(users);
+    }
 }
 
 

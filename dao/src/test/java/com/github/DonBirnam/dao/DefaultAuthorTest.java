@@ -2,8 +2,9 @@ package com.github.DonBirnam.dao;
 
 
 import com.github.DonBirnam.library.dao.AuthorDao;
+import com.github.DonBirnam.library.dao.BookDao;
 import com.github.DonBirnam.library.dao.config.DaoConfig;
-import com.github.DonBirnam.library.model.Author;
+import com.github.DonBirnam.library.model.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,35 @@ public class DefaultAuthorTest {
     @Autowired
     private AuthorDao authorDao;
 
+    @Autowired
+    private BookDao bookDao;
+
     public Author testAuthor(){
         Author author = new Author();
         author.setId(null);
         author.setFirstName("Ирвин");
         author.setLastName("Уэлш");
         return author;
+    }
+
+    private Author testAuthor1(){
+        Author author = new Author(null,"Кен","Кизи");
+        Long id = authorDao.createAuthor(author);
+        Author createdAuthor = authorDao.findById(id);
+        return createdAuthor;
+    }
+
+    private Author testAutor2(){
+        Author author = new Author(null,"Ирвин","Уэлш");
+        Long id = authorDao.createAuthor(author);
+        Author createdAuthor = authorDao.findById(id);
+        return createdAuthor;
+    }
+
+    private Book testBook() {
+        Book book = new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, testAuthor1().getId());
+
+        return book;
     }
 
     @Test
@@ -91,6 +115,7 @@ public class DefaultAuthorTest {
         
         assertNull(authorDao.findByName(author.getFirstName(), author.getLastName()));
     }
+
 
 }
 

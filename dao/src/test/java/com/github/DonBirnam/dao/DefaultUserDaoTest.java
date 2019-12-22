@@ -57,12 +57,6 @@ public class DefaultUserDaoTest {
         userDao.deleteUser(userId);
     }
 
-//    @Test
-//    void getUsers() {
-//        List<UserFull> users = userDao.getAllUsers();
-//
-//        assertNotNull(users);
-//    }
 
 
     @Test
@@ -79,5 +73,3 @@ public class DefaultUserDaoTest {
         assertEquals(test.getLastName(), "Pes");
     }
 }
-
-

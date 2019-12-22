@@ -11,7 +11,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 public class DefaultAuthUserServiceTest {
@@ -21,8 +23,10 @@ public class DefaultAuthUserServiceTest {
 
     @InjectMocks
     DefaultAuthUserService service;
+
     private AuthUser authUser = new AuthUser(1L, "TestUser", "56789", Role.USER);
     private AuthUser differentAuthUser = new AuthUser(2L, "User", "11111", Role.LIBRARIAN);
+
 
 
 
@@ -34,11 +38,12 @@ public class DefaultAuthUserServiceTest {
 
         assertEquals(true, Exist);
     }
+
     @Test
     public void getById() {
         when(dao.getById(2L)).thenReturn(differentAuthUser);
 
-        assertNotNull(service.getById(2l));
+        assertNotNull(service.getById(2L));
     }
 
 
@@ -52,6 +57,40 @@ public class DefaultAuthUserServiceTest {
         assertNull(wrongUser);
     }
 
+    @Test
+    void update() {
+        doNothing().when(dao).changeAuthUserPass(any(), any());
 
+        service.changePass("12345", 1L);
+
+        verify(dao, times(1)).changeAuthUserPass("12345", 1L);
+    }
+
+    @Test
+    void delete(){
+        doNothing().when(dao).deleteById(anyLong());
+
+        service.deleteAuthUser(1L);
+
+        verify(dao, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void blockUser(){
+        doNothing().when(dao).blockUser(any(), anyLong());
+
+        service.block(Role.BLOCKED,1L);
+
+        verify(dao, times(1)).blockUser(Role.BLOCKED,1L);
+    }
+
+    @Test
+    public void countBooksInOrders() {
+        when(dao.countBooksInOrders(anyLong())).thenReturn(3);
+
+        int booksInUsersOrders = service.countBooksInOrders(1L);
+
+        assertEquals(booksInUsersOrders, 3);
+
+    }
 }
-

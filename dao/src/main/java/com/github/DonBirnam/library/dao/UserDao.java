@@ -1,6 +1,7 @@
 package com.github.DonBirnam.library.dao;
 
 
+import com.github.DonBirnam.library.model.User.BlockedUser;
 import com.github.DonBirnam.library.model.User.User;
 import com.github.DonBirnam.library.model.User.UserFull;
 
@@ -16,9 +17,9 @@ public interface UserDao {
 
     void deleteUser(Long id);
 
-//    List<UserFull> getAllUsers();
-
     List<UserFull> getAllNonBlockedUsers();
+
+    List<BlockedUser> getAllBlockedUsers();
 
 
 }

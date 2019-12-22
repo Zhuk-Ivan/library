@@ -1,15 +1,17 @@
 package com.github.DonBirnam.dao;
 
 import com.github.DonBirnam.library.dao.AuthUserDao;
+import com.github.DonBirnam.library.dao.UserDao;
 import com.github.DonBirnam.library.dao.config.DaoConfig;
-import com.github.DonBirnam.library.model.User.AuthUser;
-import com.github.DonBirnam.library.model.User.Role;
+import com.github.DonBirnam.library.model.User.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,6 +22,9 @@ public class DefaultAuthUserTest {
 
     @Autowired
     private AuthUserDao dao;
+
+    @Autowired
+    private UserDao userDao;
 
     @Test
     void saveAuthUser() {
@@ -82,4 +87,33 @@ public class DefaultAuthUserTest {
         assertEquals(authUser.getPassword(), "NewPass");
     }
 
+    @Test
+    void getBlockedUsers() {
+        Long id = dao.saveAuthUser(new AuthUser(null, "TestUser", "56789", Role.BLOCKED));
+        User user = new User(null, "Test", "User","+375291111111", "Pes@samsobaka", id);
+        Long userId = userDao.saveUser(user);
+
+        List<BlockedUser> users = userDao.getAllBlockedUsers();
+
+        assertNotNull(users);
+        assertEquals(users.get(0).getPhone(), user.getPhone());
+        assertEquals(users.get(0).getRole(), Role.BLOCKED);
+    }
+
+    @Test
+    void getNonBlockedUsers() {
+        Long id = dao.saveAuthUser(new AuthUser(null, "TestUser", "56789", Role.USER));
+        User user = new User(null, "Test", "User","+375291111111", "Pes@samsobaka", id);
+        Long userId = userDao.saveUser(user);
+
+        UserFull userBD = userDao.getById(userId);
+
+        List<UserFull> users = userDao.getAllNonBlockedUsers();
+
+        assertNotNull(users);
+        assertEquals(users.get(0).getLogin(), userBD.getLogin());
+        assertEquals(users.get(0).getRole(), userBD.getRole());
+    }
+
 }
+

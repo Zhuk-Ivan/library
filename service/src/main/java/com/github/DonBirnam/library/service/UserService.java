@@ -1,6 +1,7 @@
 package com.github.DonBirnam.library.service;
 
 
+import com.github.DonBirnam.library.model.User.BlockedUser;
 import com.github.DonBirnam.library.model.User.User;
 import com.github.DonBirnam.library.model.User.UserFull;
 
@@ -17,4 +18,6 @@ public interface UserService {
         void delete(Long id);
 
         List<UserFull> getAllUsers();
+
+        List<BlockedUser> getAllBlockedUsers();
 }

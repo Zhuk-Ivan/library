@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class DefaultAuthorServiceTest {
@@ -59,6 +61,24 @@ public class DefaultAuthorServiceTest {
 
         assertEquals(id, 100L);
 
+    }
+
+    @Test
+    void update() {
+        doNothing().when(dao).updateAuthor(any(), any());
+
+        service.update(author, 1L);
+
+        verify(dao, times(1)).updateAuthor(author, 1L);
+    }
+
+    @Test
+    void delete(){
+        doNothing().when(dao).deleteAuthor(anyLong());
+
+        service.delete(1L);
+
+        verify(dao, times(1)).deleteAuthor(1L);
     }
 
 }

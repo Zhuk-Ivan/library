@@ -22,4 +22,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Modifying(clearAutomatically = true)
     @Query("from UserEntity ue where ue.authUserEntity.role = 'USER'")
     List<UserEntity> findNonBlockedUsers();
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query("from UserEntity ue where ue.authUserEntity.role = 'BLOCKED'")
+    List<UserEntity> findBlockedUsers();
 }

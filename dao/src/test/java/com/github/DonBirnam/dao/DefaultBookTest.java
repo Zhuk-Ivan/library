@@ -26,14 +26,22 @@ public class DefaultBookTest {
 
 
     private Author testAuthor(){
-        Author author = new Author(100L,"Кен","Кизи");
-        authorDao.createAuthor(author);
-        Author createdAuthor = authorDao.findByName(author.getFirstName(), author.getLastName());
+        Author author = new Author(null,"Кен","Кизи");
+        Long id = authorDao.createAuthor(author);
+        Author createdAuthor = authorDao.findById(id);
+        return createdAuthor;
+    }
+
+    private Author testAutor2(){
+        Author author = new Author(null,"Ирвин","Уэлш");
+        Long id = authorDao.createAuthor(author);
+        Author createdAuthor = authorDao.findById(id);
         return createdAuthor;
     }
 
     private Book testBook() {
         Book book = new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, testAuthor().getId());
+
         return book;
     }
 
@@ -119,4 +127,34 @@ public class DefaultBookTest {
         bookDao.deleteBook(book.getId());
         assertNull(bookDao.findByTitle("Песня моряка"));
     }
+
+    @Test
+    public void findByAuthorId(){
+        Long authorId = authorDao.createAuthor(new Author(null,"Кен","Кизи"));
+        Long anotherAuthorId = authorDao.createAuthor(new Author(null,"Ирвин","Уэлш"));
+
+        Long id = bookDao.createBook(new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, authorId));
+
+        List<BookFull> authorBooks = bookDao.findByAuthorId(authorId);
+        BookFull book =  bookDao.findById(id);
+        assertNotNull(authorBooks);
+        assertEquals(authorBooks.get(0).getTitle(), book.getTitle());
+
+
+        List<BookFull> emptyBooks = bookDao.findByAuthorId(anotherAuthorId);
+        assertEquals(emptyBooks.size(), 0);
+    }
+
+    @Test
+    public void countBooks(){
+        Long authorId = authorDao.createAuthor(new Author(null,"Кен","Кизи"));
+        bookDao.createBook(new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, authorId));
+        bookDao.createBook(new Book(null, "Пролетая над гнездом кукушки", 360, "978-5911810808", Genre.DRAMA, BookStatus.FREE, 3, authorId));
+        int booksSize = bookDao.countBooks();
+
+        assertEquals(booksSize, 2);
+    }
+
+
 }
+

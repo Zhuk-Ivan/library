@@ -1,9 +1,6 @@
 package com.github.DonBirnam.library.web.controller;
 
-import com.github.DonBirnam.library.model.User.AuthUser;
-import com.github.DonBirnam.library.model.User.Role;
-import com.github.DonBirnam.library.model.User.User;
-import com.github.DonBirnam.library.model.User.UserFull;
+import com.github.DonBirnam.library.model.User.*;
 import com.github.DonBirnam.library.service.AuthUserService;
 import com.github.DonBirnam.library.service.BookService;
 import com.github.DonBirnam.library.service.UserService;
@@ -47,6 +44,9 @@ public class UserController {
     public String getAllUsers(HttpServletRequest req) {
         List<UserFull> users = userService.getAllUsers();
         req.setAttribute("users", users);
+
+        List<BlockedUser> blockedUsers = userService.getAllBlockedUsers();
+        req.setAttribute("blockedUsers", blockedUsers);
         return "users";
     }
 

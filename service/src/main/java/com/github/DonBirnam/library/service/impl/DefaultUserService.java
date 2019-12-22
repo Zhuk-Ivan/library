@@ -2,6 +2,7 @@ package com.github.DonBirnam.library.service.impl;
 
 
 import com.github.DonBirnam.library.dao.UserDao;
+import com.github.DonBirnam.library.model.User.BlockedUser;
 import com.github.DonBirnam.library.model.User.User;
 import com.github.DonBirnam.library.model.User.UserFull;
 import com.github.DonBirnam.library.service.UserService;
@@ -51,6 +52,12 @@ public class DefaultUserService implements UserService {
     @Transactional
     public List<UserFull> getAllUsers(){
        return userDao.getAllNonBlockedUsers();
+    }
+
+    @Override
+    @Transactional
+    public List<BlockedUser> getAllBlockedUsers() {
+        return userDao.getAllBlockedUsers();
     }
 }
 

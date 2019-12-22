@@ -54,13 +54,7 @@
                     <form method="post" action="${pageContext.request.contextPath}/block">
                        <input name="login" type="hidden" value="${user.login}"></input>
                        <input name="role" type="hidden" value="${user.role}"></input>
-                       <c:choose>
-                            <c:when test="${user.role == 'USER'}">
-                                <input type="submit" value="<spring:message code="button.block"/>"></input></c:when>
-                            <c:otherwise>
-                                <input type="submit" value="<spring:message code="button.unblock"/>"></input>
-                            </c:otherwise>
-                       </c:choose>
+                       <input type="submit" value="<spring:message code="button.block"/>"></input>
                     </form>
                 </td>
             </tr>
@@ -68,5 +62,50 @@
         </table>
     </c:if>
     </div>
+
+   <br>
+   <c:choose>
+            <c:when test="${empty blockedUsers}"><h2><spring:message code="error.blocked.users.empty"/></h2></c:when>
+            <c:when test="${not empty blockedUsers}">
+                <table width="60%" cellspacing="0" cellpadding="4" border="1">
+                            <tr>
+                                <th style="display:none;">id</th>
+                                <th><spring:message code="placeholder.login"/></th>
+                                <th><spring:message code="placeholder.name"/></th>
+                                <th><spring:message code="placeholder.surname"/></th>
+                                <th><spring:message code="placeholder.phone"/></th>
+                                <th>email</th>
+                                <th>Роль</th>
+                                <th>Books to return</th>
+                                <th>Expire date</th>
+                                <th><spring:message code="button.block.user"/></th>
+                            </tr>
+                            <c:forEach items="${blockedUsers}" var="blockedUser">
+                            <tr>
+                                <td style="display:none;">${blockedUser.id}</td>
+                                <td>${blockedUser.login}</td>
+                                <td>${blockedUser.firstName}</td>
+                                <td>${blockedUser.lastName}</td>
+                                <td>${blockedUser.phone}</td>
+                                <td>${blockedUser.email}</td>
+                                <td>${blockedUser.role}</td>
+                                <td><c:forEach items="${blockedUser.booksToReturn}" var="books">
+                                        <c:forEach items="${books.value}" var="book">
+                                            <ol>${book.title}</ol>
+                                    </c:forEach></c:forEach></td>
+                                <td><c:forEach items="${blockedUser.booksToReturn}" var="books">
+                                        <ol>${books.key}</ol>
+                                    </c:forEach></td></td>
+                                <td>
+                                    <form method="post" action="${pageContext.request.contextPath}/block">
+                                       <input name="login" type="hidden" value="${blockedUser.login}"></input>
+                                       <input name="role" type="hidden" value="${blockedUser.role}"></input>
+                                       <input type="submit" value="<spring:message code="button.unblock"/>"></input>
+                                       </form>
+            </tr>
+            </c:forEach>
+        </table>
+            </c:when>
+   </c:choose>
 </body>
 </html>

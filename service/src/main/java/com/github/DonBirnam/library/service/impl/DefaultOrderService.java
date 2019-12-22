@@ -29,9 +29,9 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     @Transactional
-    public void save(Order order, HttpSession session) {
-        orderDao.createOrder(order);
+    public Long save(Order order, HttpSession session) {
         removeTempOrders(session);
+        return orderDao.createOrder(order);
     }
 
 
