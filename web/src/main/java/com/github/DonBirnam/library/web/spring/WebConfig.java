@@ -92,8 +92,4 @@ public class WebConfig {
         return new OrderController( serviceConfig.userService(), serviceConfig.authUserService(), serviceConfig.bookService(), serviceConfig.orderService());
     }
 
-    @Bean
-    public IndexController indexController(){
-        return new IndexController();
-    }
 }
