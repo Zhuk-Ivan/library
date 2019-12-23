@@ -67,7 +67,7 @@ public class UserEntity {
         this.email = email;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn (name = "auth_id")
     public AuthUserEntity getAuthUserEntity() {
         return authUserEntity;

@@ -45,7 +45,7 @@ public class BookEntity {
         this.title = title;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "author_id")
     public AuthorEntity getAuthorEntity() {
         return authorEntity;

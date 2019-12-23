@@ -39,7 +39,7 @@ public class OrderEntity {
         this.books = books;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     public AuthUserEntity getAuthUserEntity() {
         return authUserEntity;
