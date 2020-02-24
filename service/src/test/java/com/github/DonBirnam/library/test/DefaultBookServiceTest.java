@@ -88,12 +88,12 @@ public class DefaultBookServiceTest {
         verify(dao, times(1)).deleteBook(100L);
     }
 
-    @Test
-    void countBookPage() {
-        when(dao.countBooks()).thenReturn(5);
-
-        assertEquals(service.countBookPage(5), 2);
-    }
+//    @Test
+//    void countBookPage() {
+//        when(dao.countBooks()).thenReturn(5);
+//
+//        assertEquals(service.countBookPage(5), 2);
+//    }
 
     @Test
     void findByAuthorId() {

@@ -71,13 +71,6 @@ public class DefaultBookService implements BookService {
 
     @Override
     @Transactional
-    public int countBookPage(int size) {
-        int count = bookDao.countBooks();
-        return count / size + 1;
-    }
-
-    @Override
-    @Transactional
     public LocalDateTime getNearestDateToReturn(Long id) {
         return bookDao.nearestDateToReturn(id);
     }
@@ -90,8 +83,14 @@ public class DefaultBookService implements BookService {
 
     @Override
     @Transactional
-    public List<BookFull> paging(int pageNumber, int size) {
-        return bookDao.paging(pageNumber,size);
+    public List<BookFull> paging(Integer pageNumber) {
+        return bookDao.paging(pageNumber);
+    }
+
+    @Override
+    @Transactional
+    public boolean isNotLastPage(Integer pageNumber) {
+        return !bookDao.isLastPage(pageNumber);
     }
 
 }

@@ -6,7 +6,6 @@ import com.github.DonBirnam.library.model.User.Role;
 import com.github.DonBirnam.library.service.AuthUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,8 +26,7 @@ import java.util.List;
 public class LoginController {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
-    @Autowired
-    private AuthUserService service;
+    private final AuthUserService service;
 
     public LoginController(AuthUserService service) {
         this.service = service;

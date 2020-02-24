@@ -54,7 +54,7 @@
                                              <c:when test="${book.genre == 'FANTASY'}"><spring:message code="book.genre.fantasy"/></c:when>
                                              <c:when test="${book.genre == 'DETECTIVE'}"><spring:message code="book.genre.detective"/></c:when>
                                              <c:when test="${book.genre == 'DYSTOPIA'}"><spring:message code="book.genre.dystopia"/></c:when>
-                                             <c:when test="${book.genre == 'DRAMA'}"><spring:message code="book.genre.drama"/><</c:when>
+                                             <c:when test="${book.genre == 'DRAMA'}"><spring:message code="book.genre.drama"/></c:when>
                                              <c:when test="${book.genre == 'PHILOSOPHY'}"><spring:message code="book.genre.philosophy"/></c:when>
                                             </c:choose>
                                         </td>

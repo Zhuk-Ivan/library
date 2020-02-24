@@ -26,6 +26,8 @@ public class DefaultBookDao implements BookDao {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
 
+    private Integer size = 5;
+
     public DefaultBookDao(BookRepository bookRepository, AuthorRepository authorRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
@@ -84,16 +86,27 @@ public class DefaultBookDao implements BookDao {
     }
 
     @Override
-    public int countBooks() {
+    public Integer countBooksPages() {
         List<BookEntity> books = bookRepository.findAll();
-        return books.size();
+        return books.size() / size + 1;
     }
 
     @Override
-    public List<BookFull> paging(int pageNumber, int size) {
+    public boolean isLastPage(Integer page) {
+        Page<BookEntity> orderPage = getPage(page);
+        return orderPage.isLast();
+    }
+
+    @Override
+    public List<BookFull> paging(Integer pageNumber) {
         Page<BookEntity> booksPage = bookRepository.findAll(PageRequest.of(pageNumber, size));
         List<BookEntity> books = booksPage.getContent();
         return BookConverter.fromEntityList(books);
+    }
+
+    private Page<BookEntity> getPage(Integer page) {
+        Page<BookEntity> booksPage = bookRepository.findAll(PageRequest.of(page, size));
+        return booksPage;
     }
 
     @Override

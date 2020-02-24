@@ -2,7 +2,6 @@ package com.github.DonBirnam.library.web.controller;
 
 import com.github.DonBirnam.library.model.Author;
 import com.github.DonBirnam.library.service.AuthorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +14,8 @@ import java.util.List;
 @Controller
 @RequestMapping
 public class AuthorController {
-    @Autowired
-    private AuthorService authorService;
+
+    private final AuthorService authorService;
 
     public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
@@ -57,4 +56,6 @@ public class AuthorController {
         authorService.delete(id);
         return "redirect:/authors";
     }
+
+
 }

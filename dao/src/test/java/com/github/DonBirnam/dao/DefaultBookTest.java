@@ -145,15 +145,15 @@ public class DefaultBookTest {
         assertEquals(emptyBooks.size(), 0);
     }
 
-    @Test
-    public void countBooks(){
-        Long authorId = authorDao.createAuthor(new Author(null,"Кен","Кизи"));
-        bookDao.createBook(new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, authorId));
-        bookDao.createBook(new Book(null, "Пролетая над гнездом кукушки", 360, "978-5911810808", Genre.DRAMA, BookStatus.FREE, 3, authorId));
-        int booksSize = bookDao.countBooks();
-
-        assertEquals(booksSize, 2);
-    }
+//    @Test
+//    public void countBooks(){
+//        Long authorId = authorDao.createAuthor(new Author(null,"Кен","Кизи"));
+//        bookDao.createBook(new Book(null, "Песня моряка", 412, "978-5911810808", Genre.DETECTIVE, BookStatus.FREE, 2, authorId));
+//        bookDao.createBook(new Book(null, "Пролетая над гнездом кукушки", 360, "978-5911810808", Genre.DRAMA, BookStatus.FREE, 3, authorId));
+//        int booksSize = bookDao.countBooks();
+//
+//        assertEquals(booksSize, 2);
+//    }
 
 
 }

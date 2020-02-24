@@ -26,9 +26,11 @@ public interface BookDao {
 
     List<BookFull> getBooksByGenre(Genre genre);
 
-    int countBooks();
+    Integer countBooksPages();
 
-    List<BookFull> paging(int pageNumber, int size);
+    public boolean isLastPage(Integer page);
+
+    List<BookFull> paging(Integer pageNumber);
 
     List<BookFull> findByAuthorId(Long id);
 

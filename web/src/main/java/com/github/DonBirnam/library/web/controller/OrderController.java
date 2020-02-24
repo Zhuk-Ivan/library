@@ -7,9 +7,9 @@ import com.github.DonBirnam.library.service.AuthUserService;
 import com.github.DonBirnam.library.service.BookService;
 import com.github.DonBirnam.library.service.OrderService;
 import com.github.DonBirnam.library.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,14 +21,11 @@ import java.util.*;
 @Controller
 @RequestMapping
 public class OrderController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private AuthUserService authUserService;
-    @Autowired
-    private BookService bookService;
-    @Autowired
-    private OrderService orderService;
+
+    private final UserService userService;
+    private final AuthUserService authUserService;
+    private final BookService bookService;
+    private final OrderService orderService;
 
     public OrderController(UserService userService, AuthUserService authUserService, BookService bookService, OrderService orderService) {
         this.userService = userService;
@@ -36,9 +33,6 @@ public class OrderController {
         this.bookService = bookService;
         this.orderService = orderService;
     }
-
-    int pageNumber = 1;
-    int size = 5;
 
     @GetMapping("/users_orders")
     public String allUsersOrders(HttpServletRequest req) {
@@ -55,7 +49,7 @@ public class OrderController {
     }
 
     @GetMapping("/my_orders")
-    public String myTemporaryOrders(HttpServletRequest req) {
+    public String myTemporaryOrders(HttpServletRequest req, ModelMap modelMap) {
         AuthUser user = (AuthUser)req.getSession().getAttribute("user");
 
         Set<BookFull> tempOrderBooks = orderService.getTempOrders(req.getSession());
@@ -63,8 +57,7 @@ public class OrderController {
 
         List<OrderFin> myOrders = orderService.getOrdersByUserId(user.getId());
         if (myOrders == null){
-            String emptyOrders = "У вас еще нет заказов";
-            req.setAttribute("emptyOrders", emptyOrders);
+            modelMap.addAttribute("emptyOrders", true);
             return "my_orders";
         }
         Map<Long, Set<BookFull>> booksMap = new HashMap<>();
@@ -79,16 +72,10 @@ public class OrderController {
     }
 
     @PostMapping("/form_order")
-    public String formAnOrder(HttpServletRequest req) {
+    public String formAnOrder(HttpServletRequest req,  ModelMap modelMap) {
         Long userId = Long.valueOf(req.getParameter("userId"));
         UserFull user = userService.getUserById(userId);
         req.setAttribute("user", user);
-
-        List<BookFull> books = bookService.paging(pageNumber, size);
-        int maxResult = bookService.countBookPage(size);
-        req.setAttribute("pageNumber",pageNumber);
-        req.setAttribute("maxResult",maxResult);
-        req.setAttribute("books",books);
 
         Long bookId = Long.valueOf(req.getParameter("id"));
         BookFull bookToOrder = bookService.find(bookId);
@@ -102,23 +89,18 @@ public class OrderController {
                     return "main";
                 }
                 else {
-                    String error = "Книга уже у вас в заказе";
-                    req.setAttribute("errorBookInOrder", error);
+                    modelMap.addAttribute("errorBookInOrder", true);
                     return "main";
                 }
-
             } else {
-                String error = "Вы не можете взять более трех книг";
-                req.setAttribute("errorMakeOrder", error);
+                modelMap.addAttribute("errorNotMoreThanThreeBooks", true);
                 return "main";
             }
         } else {
-            String error = "Книга отсутствует в библиотеке";
-            req.setAttribute("errorOrder", error);
+            modelMap.addAttribute("errorNoBookInLibrary", true);
             return "main";
         }
     }
-
     @PostMapping("/addOrder")
     public String addOrder(HttpServletRequest req) {
         AuthUser authUser = (AuthUser) req.getSession().getAttribute("user");

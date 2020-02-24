@@ -3,9 +3,9 @@ package com.github.DonBirnam.library.web.controller;
 import com.github.DonBirnam.library.model.*;
 import com.github.DonBirnam.library.service.AuthorService;
 import com.github.DonBirnam.library.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,26 +17,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.DonBirnam.library.web.WebUtils.getPage;
+
 @Controller
-@RequestMapping
+@RequestMapping("/main")
 public class BookController {
-    @Autowired
-    private BookService bookService;
-    @Autowired
-    private AuthorService authorService;
+
+    private final BookService bookService;
+    private final AuthorService authorService;
 
     public BookController(BookService bookService, AuthorService authorService) {
         this.bookService = bookService;
         this.authorService = authorService;
     }
 
-    int pageNumber = 1;
-    int size = 5;
-
-    @GetMapping("/main")
-    public String doGet(HttpServletRequest req) {
-
-        List<BookFull> books = bookService.paging(pageNumber, size);
+    @GetMapping
+    public String doGet(HttpServletRequest req, ModelMap modelMap) {
+        Integer page = getPage(req);
+        List<BookFull> books = bookService.paging(page);
         Map<Long, String> nearestDatesToReturn = new HashMap<>();
         for (BookFull book: books) {
             if (book.getStatus().equals(BookStatus.OCCUPIED)){
@@ -53,32 +51,14 @@ public class BookController {
             }
         }
 
-        int maxResult = bookService.countBookPage(size);
         req.setAttribute("dates",nearestDatesToReturn);
-        req.setAttribute("pageNumber",pageNumber);
-        req.setAttribute("maxResult",maxResult);
+        req.setAttribute("pageNum",page);
+        req.setAttribute("notLast",bookService.isNotLastPage(page));
         req.setAttribute("books",books);
 
         return "main";
     }
 
-    @PostMapping("/main")
-    public String doPost(HttpServletRequest req) {
-        if (req.getParameter("next") != null) {
-            pageNumber++;
-            req.setAttribute("pageNumber", pageNumber);
-            List<BookFull> books = bookService.paging(pageNumber, size);
-            req.setAttribute("books", books);
-        }
-
-        if (req.getParameter("prev") != null) {
-            pageNumber--;
-            req.setAttribute("pageNumber", pageNumber);
-            List<BookFull> books = bookService.paging(pageNumber, size);
-            req.setAttribute("books", books);
-        }
-        return "redirect:/main";
-    }
 
 
     @PostMapping("/addBook")
@@ -105,7 +85,6 @@ public class BookController {
             Book book = new Book(null,title,pageCount,isbn,genre,staus, inStock, authorId);
             bookService.save(book);
         }
-//        redirect("books_page",req,resp);
         return "redirect:/main";
     }
 
@@ -134,12 +113,7 @@ public class BookController {
 
         Genre genre = Genre.valueOf(req.getParameter("genre"));
         if (genre.equals(Genre.ALL)) {
-            List<BookFull> books = bookService.paging(pageNumber, size);
-            int maxResult = bookService.countBookPage(size);
-            req.setAttribute("pageNumber",pageNumber);
-            req.setAttribute("maxResult",maxResult);
-            req.setAttribute("books",books);
-            return "main";
+            return "redirect:/main";
         } else {
             List<BookFull> books = bookService.getByGenre(genre);
             req.setAttribute("books", books);

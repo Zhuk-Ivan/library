@@ -52,7 +52,7 @@ public class WebConfig {
     @Bean(name = "localeResolver")
     public LocaleResolver getLocaleResolver()  {
         CookieLocaleResolver resolver= new CookieLocaleResolver();
-        resolver.setDefaultLocale(Locale.forLanguageTag("en"));
+        resolver.setDefaultLocale(Locale.forLanguageTag("ru"));
         resolver.setCookieDomain("LocaleCookie");
         resolver.setCookieMaxAge(3600);
         return resolver;

@@ -58,6 +58,5 @@ public class DefaultAuthorDao implements AuthorDao {
     public List<Author> getAllAuthors() {
         List<AuthorEntity> authors = authorRepository.findAll();
         return AuthorConverter.fromEntityList(authors);
-
     }
 }

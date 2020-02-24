@@ -4,7 +4,6 @@ import com.github.DonBirnam.library.model.User.*;
 import com.github.DonBirnam.library.service.AuthUserService;
 import com.github.DonBirnam.library.service.BookService;
 import com.github.DonBirnam.library.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +16,10 @@ import java.util.List;
 @Controller
 @RequestMapping
 public class UserController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private AuthUserService authUserService;
-    @Autowired
-    private BookService bookService;
+
+    private final UserService userService;
+    private final AuthUserService authUserService;
+    private final BookService bookService;
 
     public UserController(UserService userService, AuthUserService authUserService, BookService bookService) {
         this.userService = userService;

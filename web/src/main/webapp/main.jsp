@@ -33,9 +33,15 @@
      </form>
 
 <div align="center">
-<p style="color: red">${errorOrder}</p>
-<p style="color: red">${errorMakeOrder}</p>
-<p style="color: red">${errorBookInOrder}</p>
+    <c:if test="${errorBookInOrder}">
+        <p style="color:red"><spring:message code="error.you.already.have.book"/></p>
+    </c:if>
+    <c:if test="${errorNotMoreThanThreeBooks}">
+        <p style="color:red"><spring:message code="error.you.already.have.three.books"/></p>
+    </c:if>
+    <c:if test="${errorNoBookInLibrary}">
+        <p style="color:red"><spring:message code="error.no.book.in.library"/></p>
+    </c:if>
 </div>
 
 
@@ -75,7 +81,7 @@
                     </td>
                     <td>${book.inStock}</td>
                     <td>
-                        <form method="post" action="${pageContext.request.contextPath}/form_order">
+                        <form method="post" action="${pageContext.request.contextPath}/main/form_order">
                             <input name="status" type="hidden" value="${book.status}"></input>
                             <input name="userId" type="hidden" value="${user.id}"></input>
                             <input name="inStock" type="hidden" value="${book.inStock}"></input>
@@ -165,16 +171,14 @@
 
       <br>
 
-      <form method="post" action="${pageContext.request.contextPath}/main">
-          <input name="pageNumber" type="hidden" value="${pageNumber}">
-
-          <c:if test="${pageNumber>1}">
-              <input name="prev" type="submit" value="<spring:message code="button.next"/>">
+      <div style="overflow: auto">
+         <c:if test="${pageNum>0}">
+             <a href="${requestScope['javax.servlet.forward.request_uri']}?pageNum=${pageNum-1}">&lt;&lt;</a>
           </c:if>
-
-          <c:if test="${pageNumber<maxResult}">
-              <input name="next" type="submit" value="<spring:message code="button.prev"/>">
+              ${pageNum + 1}
+          <c:if test="${notLast}">
+              <a href="${requestScope['javax.servlet.forward.request_uri']}?pageNum=${pageNum+1}">&gt;&gt;</a>
           </c:if>
-      </form>
+       </div>
     </body>
 </html>

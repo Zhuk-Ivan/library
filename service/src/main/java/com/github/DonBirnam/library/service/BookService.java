@@ -24,12 +24,12 @@ public interface BookService {
 
     List<BookFull> getByGenre(Genre genre);
 
-    int countBookPage(int size);
-
     LocalDateTime getNearestDateToReturn(Long id);
 
     List<BookFull> findByAuthorId(Long id);
 
-    List<BookFull> paging (int pageNumber, int size);
+    List<BookFull> paging (Integer pageNumber);
+
+    boolean isNotLastPage(Integer pageNumber);
 
 }
